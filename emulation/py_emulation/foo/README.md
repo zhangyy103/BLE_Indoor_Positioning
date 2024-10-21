@@ -2,7 +2,13 @@
 
 This project is the emulation of AOA BLE Indoor Positioning  
 
++ 在[one Tag two Anchor(each two antenna).py](one%20Tag%20two%20Anchor%28each%20two%20antenna%29.py)
+中，由于仅仅通过相位差无法判断Tag在Anchor的哪一侧，所以无法确定Tag的位置。  
+仅仅当Tag的y轴坐标都大于Anchor的y轴坐标时，可以实现精准定位。
 
+
+
+---
 
 ### version of Packs
 

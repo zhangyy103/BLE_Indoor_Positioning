@@ -9,9 +9,9 @@ wavelength = speed / frequency  # 波长
 pre_phase = 0  # 信号初始相位
 
 # 基站和标签位置
-base_station1_position = np.array([500, 500])  # 基站1位置 (x, y)
-base_station2_position = np.array([-500, 835])  # 基站2位置 (x, y)
-tag_position = np.array([2999, -500])  # 标签位置 (x, y)
+base_station1_position = np.array([-1534, 835])  # 基站1位置 (x, y)
+base_station2_position = np.array([1241, -1500])  # 基站2位置 (x, y)
+tag_position = np.array([-678,  2200])  # 标签位置 (x, y)
 
 # 打印基站和标签的位置
 print(f"基站1位置: {base_station1_position}")
@@ -20,11 +20,11 @@ print(f"标签位置: {tag_position}")
 
 # 基站天线设置
 antenna_distance = 0.5  # 两个天线之间的距离
-antenna1r_position = base_station1_position + np.array([-antenna_distance / 2, 0])
-antenna1l_position = base_station1_position + np.array([antenna_distance / 2, 0])
+antenna1r_position = base_station1_position + np.array([antenna_distance / 2, 0])
+antenna1l_position = base_station1_position + np.array([-antenna_distance / 2, 0])
 
-antenna2r_position = base_station2_position + np.array([-antenna_distance / 2, 0])
-antenna2l_position = base_station2_position + np.array([antenna_distance / 2, 0])
+antenna2r_position = base_station2_position + np.array([antenna_distance / 2, 0])
+antenna2l_position = base_station2_position + np.array([-antenna_distance / 2, 0])
 
 # 计算到达基站天线的距离和相位
 tag_to_antenna1r_distance = np.linalg.norm(tag_position - antenna1r_position)
@@ -97,7 +97,7 @@ plt.plot(tag_position[0], tag_position[1], 'rx', label="实际标签位置")
 plt.plot(intersection[0], intersection[1], 'kx', label="估计标签位置")
 
 # 绘制基站1和基站2的方向射线
-line_range = 1500  # 射线延伸的长度
+line_range = 6000  # 射线延伸的长度
 plt.plot([base_station1_position[0], base_station1_position[0] + dir_vector1[0] * line_range],
          [base_station1_position[1], base_station1_position[1] + dir_vector1[1] * line_range],
          'b--', label="基站1方向射线")
@@ -112,4 +112,3 @@ plt.grid(True)
 plt.legend()
 plt.title("标签位置估计与基站方向射线")
 plt.show()
-
