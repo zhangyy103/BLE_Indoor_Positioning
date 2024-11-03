@@ -9,9 +9,9 @@ wavelength = speed / frequency  # 波长
 pre_phase = 0  # 信号初始相位
 
 # 基站和标签位置
-base_station1_position = np.array([-1534, 835])  # 基站1位置 (x, y)
-base_station2_position = np.array([1241, -1500])  # 基站2位置 (x, y)
-tag_position = np.array([-678,  2200])  # 标签位置 (x, y)
+base_station1_position = np.array([-1534, 3000])  # 基站1位置 (x, y)
+base_station2_position = np.array([1241, 3000])  # 基站2位置 (x, y)
+tag_position = np.array([-678,  -2200])  # 标签位置 (x, y)
 
 # 打印基站和标签的位置
 print(f"基站1位置: {base_station1_position}")
@@ -57,8 +57,8 @@ aoa1 = (90 + aoa1) % 360 - 180
 aoa2 = (90 + aoa2) % 360 - 180
 """
 # 调整坐标系的角度
-aoa1 = (90 - aoa1)  # 将AOA调整为从北方顺时针方向
-aoa2 = (90 - aoa2)  # 将AOA调整为从北方顺时针方向
+aoa1 = -(90 - aoa1)  # 将AOA调整为从北方顺时针方向
+aoa2 = -(90 - aoa2)  # 将AOA调整为从北方顺时针方向
 
 # 输出 AOA
 print(f"基站1 AOA: {aoa1:.2f} 度")
