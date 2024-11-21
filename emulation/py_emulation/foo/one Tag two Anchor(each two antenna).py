@@ -10,7 +10,7 @@ pre_phase = 0  # 信号初始相位
 
 # 基站和标签位置
 base_station1_position = np.array([-1534, 3000])  # 基站1位置 (x, y)
-base_station2_position = np.array([1241, 3000])  # 基站2位置 (x, y)
+base_station2_position = np.array([-1234, 3000])  # 基站2位置 (x, y)
 tag_position = np.array([-678,  -2200])  # 标签位置 (x, y)
 
 # 打印基站和标签的位置
