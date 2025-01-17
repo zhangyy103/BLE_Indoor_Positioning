@@ -1,0 +1,182 @@
+  Success: aci_hal_set_tx_power_level command
+  Success: aci_gatt_srv_profile_init command
+  Success: aci_hal_set_antenna_switch_parameters command
+  Success: aci_gap_init command
+  Static Random Bluetooth Address: de:3b:66:93:8e:9b
+  Success: Gap_profile_set_dev_name - Device Name
+  Success: Gap_profile_set_appearance - Appearance
+  Success: aci_gap_set_io_capability command
+hci_le_set_event_mask --> SUCCESS
+  Success: aci_gap_set_security_requirements command
+==>> End BLE_Init function
+aci_gap_set_scan_configuration --> SUCCESS
+aci_gap_start_procedure --> SUCCESS
+hci_le_periodic_advertising_create_sync --> SUCCESS
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+ExtAdv Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+hci_le_periodic_advertising_sync_established_event --> EVENT
+aci_gap_terminate_proc --> SUCCESS
+hci_le_set_connectionless_iq_sampling_enable --> SUCCESS
+Periodic Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+>>== ACI_GAP_PROC_COMPLETE_VSEVT_CODE
+aci_gap_proc_complete_event --> EVENT
+Sync lost! Restart the scanner device to get again the Beacon AoA Tag IQ samples !
+  Success: aci_hal_set_tx_power_level command
+  Success: aci_gatt_srv_profile_init command
+  Success: aci_hal_set_antenna_switch_parameters command
+  Success: aci_gap_init command
+  Static Random Bluetooth Address: de:3b:66:93:8e:9b
+  Success: Gap_profile_set_dev_name - Device Name
+  Success: Gap_profile_set_appearance - Appearance
+  Success: aci_gap_set_io_capability command
+hci_le_set_event_mask --> SUCCESS
+  Success: aci_gap_set_security_requirements command
+==>> End BLE_Init function
+aci_gap_set_scan_configuration --> SUCCESS
+aci_gap_start_procedure --> SUCCESS
+hci_le_periodic_advertising_create_sync --> SUCCESS
+ExtAdv Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+hci_le_periodic_advertising_sync_established_event --> EVENT
+aci_gap_terminate_proc --> SUCCESS
+hci_le_set_connectionless_iq_sampling_enable --> SUCCESS
+Periodic Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+>>== ACI_GAP_PROC_COMPLETE_VSEVT_CODE
+aci_gap_proc_complete_event --> EVENT
+*** IQ samples
+IQ samples (AoA): (-40,-120)(120,-32)(27,121)(-123,18)(-8,-125)(125,-3)(-4,124)(-125,-14)(123,22)(-116,-48)(111,55)(-100,-75)(95,79)(-83,-94)(75,98)(-62,-109)(48,114)(-36,-121)(18,123)(-6,-125)(-16,123)(22,-123)(-40,118)(51,-115)(-66,107)(77,-98)(-87,88)(97,-78)(-107,65)(114,-52)(-119,40)(122,-26)(-125,7)(124,7)(-123,-22)(118,35)(-118,-44)(110,59)(-98,-77)(91,87)(-79,-97)(70,102)(-54,-111)(39,118)(-34,-120)(17,123)(-1,-124)(-10,124)(30,-122)(-46,116)(56,-111)(-69,103)(81,-94)(-93,84)(102,-71)(-111,57)(115,-46)(-121,30)(123,-19)(-125,-2)(124,6)(-122,-27)(119,38)(-115,-49)(108,61)(-95,-82)(90,86)(-75,-101)(66,106)(-51,-114)(38,118)(-25,-122)(5,124)(8,-124)(-24,122)(33,-120)(-48,115)(62,-108)(-75,100)(86,-90)(-96,79)(104,-65)
+*** IQ samples
+IQ samples (AoA): (-85,17)(-15,-85)(84,-9)(-1,86)(-85,-9)(11,-85)(83,17)(-21,82)(28,-80)(-41,75)(51,-69)(-56,64)(62,-58)(-68,50)(77,-37)(-79,31)(83,-18)(-84,12)(85,-1)(-86,-7)(83,18)(-80,-32)(76,37)(-69,-50)(63,56)(-57,-64)(47,70)(-39,-77)(31,79)(-22,-83)(10,84)(-1,-86)(-12,84)(17,-84)(-27,80)(32,-79)(-48,72)(54,-66)(-60,60)(69,-52)(-75,42)(78,-33)(-84,22)(85,-12)(-85,7)(85,2)(-84,-15)(81,23)(-79,-36)(72,45)(-66,-54)(61,59)(-53,-66)(44,71)(-33,-79)(25,80)(-15,-84)(3,84)(5,-85)(-14,84)(26,-81)(-33,78)(42,-75)(-55,66)(60,-60)(-68,51)(72,-45)(-77,36)(81,-27)(-83,19)(85,-10)(-85,-2)(85,13)(-82,-25)(77,36)(-75,-42)(69,51)(-63,-59)(53,67)(-48,-71)(38,76)(-30,-80)
+*** IQ samples
+IQ samples (AoA): (-84,-56)(63,-80)(77,64)(-70,71)(-69,-75)(77,-65)(64,77)(-84,57)(90,-45)(-96,32)(97,-26)(-100,9)(101,-1)(-100,-10)(99,20)(-95,-38)(91,45)(-81,-61)(76,65)(-66,-78)(59,81)(-52,-87)(38,92)(-23,-99)(17,98)(-1,-101)(-11,100)(20,-100)(-34,94)(43,-91)(-57,82)(63,-79)(-74,68)(79,-62)(-89,49)(92,-41)(-96,29)(99,-16)(-100,8)(100,7)(-100,-21)(96,31)(-90,-46)(86,51)(-82,-58)(72,69)(-65,-78)(59,83)(-44,-92)(32,94)(-20,-100)(10,100)(-1,-102)(-13,100)(27,-98)(-36,94)(46,-91)(-59,82)(70,-73)(-76,67)(80,-61)(-89,48)(94,-36)(-98,23)(99,-20)(-100,3)(101,6)(-100,-22)(95,33)(-91,-43)(85,54)(-77,-67)(71,71)(-62,-80)(54,84)(-41,-93)(34,95)(-21,-100)(6,100)(7,-101)(-17,99)(33,-94)
+*** IQ samples
+IQ samples (AoA): (-5,68)(-68,-10)(13,-68)(65,19)(-23,64)(-64,-27)(31,-61)(58,35)(-54,-42)(51,44)(-42,-54)(36,57)(-33,-61)(22,64)(-16,-67)(9,68)(0,-69)(-9,68)(15,-67)(-23,64)(30,-61)(-40,55)(43,-53)(-51,46)(56,-39)(-60,33)(63,-25)(-67,17)(67,-11)(-69,3)(68,4)(-68,-13)(65,19)(-61,-32)(58,34)(-54,-42)(47,48)(-43,-53)(32,59)(-28,-63)(22,64)(-14,-67)(8,68)(3,-68)(-11,67)(17,-66)(-27,62)(33,-60)(-39,56)(46,-49)(-51,46)(57,-36)(-60,30)(64,-22)(-66,17)(67,-8)(-69,3)(68,6)(-68,-14)(65,20)(-63,-29)(58,35)(-54,-43)(46,50)(-41,-56)(36,57)(-29,-62)(21,64)(-15,-67)(3,68)(2,-69)(-10,67)(18,-66)(-28,62)(32,-60)(-40,55)(45,-52)(-51,45)(56,-39)(-60,32)(64,-23)(-66,17)
+Sync lost! Restart the scanner device to get again the Beacon AoA Tag IQ samples !
+  Success: aci_hal_set_tx_power_level command
+  Success: aci_gatt_srv_profile_init command
+  Success: aci_hal_set_antenna_switch_parameters command
+  Success: aci_gap_init command
+  Static Random Bluetooth Address: de:3b:66:93:8e:9b
+  Success: Gap_profile_set_dev_name - Device Name
+  Success: Gap_profile_set_appearance - Appearance
+  Success: aci_gap_set_io_capability command
+hci_le_set_event_mask --> SUCCESS
+  Success: aci_gap_set_security_requirements command
+==>> End BLE_Init function
+aci_gap_set_scan_configuration --> SUCCESS
+aci_gap_start_procedure --> SUCCESS
+hci_le_periodic_advertising_create_sync --> SUCCESS
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+ExtAdv Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+hci_le_periodic_advertising_sync_established_event --> EVENT
+aci_gap_terminate_proc --> SUCCESS
+hci_le_set_connectionless_iq_sampling_enable --> SUCCESS
+Periodic Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+>>== ACI_GAP_PROC_COMPLETE_VSEVT_CODE
+aci_gap_proc_complete_event --> EVENT
+Sync lost! Restart the scanner device to get again the Beacon AoA Tag IQ samples !
+  Success: aci_hal_set_tx_power_level command
+  Success: aci_gatt_srv_profile_init command
+  Success: aci_hal_set_antenna_switch_parameters command
+  Success: aci_gap_init command
+  Static Random Bluetooth Address: de:3b:66:93:8e:9b
+  Success: Gap_profile_set_dev_name - Device Name
+  Success: Gap_profile_set_appearance - Appearance
+  Success: aci_gap_set_io_capability command
+hci_le_set_event_mask --> SUCCESS
+  Success: aci_gap_set_security_requirements command
+==>> End BLE_Init function
+aci_gap_set_scan_configuration --> SUCCESS
+aci_gap_start_procedure --> SUCCESS
+hci_le_periodic_advertising_create_sync --> SUCCESS
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+ExtAdv Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+hci_le_periodic_advertising_sync_established_event --> EVENT
+aci_gap_terminate_proc --> SUCCESS
+hci_le_set_connectionless_iq_sampling_enable --> SUCCESS
+Periodic Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+>>== ACI_GAP_PROC_COMPLETE_VSEVT_CODE
+aci_gap_proc_complete_event --> EVENT
+*** IQ samples
+IQ samples (AoA): (-52,57)(-54,-57)(59,-51)(49,59)(-64,44)(-42,-67)(69,-35)(29,72)(-24,-74)(14,76)(-7,-78)(-6,77)(12,-78)(-23,74)(30,-73)(-37,68)(44,-64)(-53,57)(57,-53)(-64,44)(69,-36)(-73,28)(76,-18)(-77,9)(77,-2)(-78,-11)(75,17)(-74,-28)(70,34)(-66,-42)(61,47)(-55,-57)(49,60)(-40,-67)(33,70)(-25,-75)(12,76)(-3,-78)(-6,78)(12,-78)(-23,74)(30,-72)(-39,68)(48,-62)(-53,57)(60,-49)(-65,43)(67,-38)(-74,25)(76,-17)(-77,13)(78,-4)(-78,-9)(76,17)(-73,-27)(70,34)(-65,-44)(60,49)(-56,-55)(46,63)(-41,-67)(34,69)(-23,-75)(13,76)(-2,-78)(-7,77)(12,-76)(-23,74)(31,-71)(-40,67)(48,-62)(-53,57)(59,-50)(-66,42)(70,-34)(-73,27)(75,-20)(-78,9)(77,-5)(-78,-10)(75,17)(-73,-26)
+*** IQ samples
+IQ samples (AoA): (-63,42)(-40,-65)(67,-35)(30,69)(-72,24)(-23,-73)(74,-15)(11,75)(-6,-77)(-7,75)(12,-75)(-23,72)(31,-70)(-37,66)(46,-61)(-54,53)(60,-47)(-64,40)(69,-32)(-73,23)(74,-15)(-76,8)(75,1)(-76,-11)(73,20)(-71,-27)(66,34)(-62,-45)(56,50)(-50,-58)(43,61)(-37,-67)(31,68)(-21,-74)(11,74)(-3,-76)(-8,75)(16,-75)(-26,71)(32,-68)(-41,64)(50,-58)(-56,51)(61,-45)(-66,38)(69,-30)(-72,24)(74,-15)(-76,5)(75,2)(-75,-10)(72,21)(-70,-30)(66,37)(-61,-45)(57,49)(-50,-58)(43,62)(-33,-69)(25,70)(-19,-74)(10,75)(-1,-76)(-9,75)(17,-74)(-24,71)(33,-68)(-41,64)(45,-61)(-55,52)(60,-46)(-64,40)(68,-32)(-73,23)(74,-14)(-76,4)(75,6)(-75,-12)(73,21)(-70,-32)(63,41)(-62,-43)
+*** IQ samples
+IQ samples (AoA): (-17,76)(-76,-20)(25,-75)(73,28)(-32,71)(-70,-37)(40,-67)(64,44)(-59,-52)(51,59)(-45,-64)(36,69)(-29,-73)(21,75)(-12,-78)(3,78)(7,-79)(-17,76)(26,-74)(-38,68)(40,-67)(-49,60)(53,-57)(-62,47)(68,-40)(-72,31)(74,-24)(-77,15)(77,-12)(-78,3)(77,11)(-76,-22)(72,30)(-69,-39)(66,43)(-60,-51)(52,57)(-45,-65)(36,69)(-26,-75)(21,75)(-13,-77)(2,78)(7,-78)(-17,76)(24,-75)(-33,71)(42,-66)(-51,60)(54,-56)(-62,48)(66,-42)(-70,34)(72,-30)(-78,14)(78,-4)(-79,-3)(77,14)(-76,-20)(73,28)(-71,-35)(64,45)(-59,-52)(54,56)(-47,-64)(37,69)(-30,-74)(21,75)(-14,-78)(5,77)(6,-79)(-16,76)(20,-76)(-31,72)(38,-68)(-48,62)(53,-58)(-62,48)(66,-42)(-72,32)(73,-28)(-76,20)
+Sync lost! Restart the scanner device to get again the Beacon AoA Tag IQ samples !
+  Success: aci_hal_set_tx_power_level command
+  Success: aci_gatt_srv_profile_init command
+  Success: aci_hal_set_antenna_switch_parameters command
+  Success: aci_gap_init command
+  Static Random Bluetooth Address: de:3b:66:93:8e:9b
+  Success: Gap_profile_set_dev_name - Device Name
+  Success: Gap_profile_set_appearance - Appearance
+  Success: aci_gap_set_io_capability command
+hci_le_set_event_mask --> SUCCESS
+  Success: aci_gap_set_security_requirements command
+==>> End BLE_Init function
+aci_gap_set_scan_configuration --> SUCCESS
+aci_gap_start_procedure --> SUCCESS
+hci_le_periodic_advertising_create_sync --> SUCCESS
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+ExtAdv Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+hci_le_periodic_advertising_sync_established_event --> EVENT
+aci_gap_terminate_proc --> SUCCESS
+hci_le_set_connectionless_iq_sampling_enable --> SUCCESS
+Periodic Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+>>== ACI_GAP_PROC_COMPLETE_VSEVT_CODE
+aci_gap_proc_complete_event --> EVENT
+*** IQ samples
+IQ samples (AoA): (6,-81)(80,12)(-17,80)(-79,-19)(24,-78)(75,33)(-35,73)(-73,-37)(66,48)(-62,-53)(55,59)(-50,-65)(36,72)(-33,-76)(20,78)(-13,-81)(2,81)(2,-82)(-17,80)(24,-78)(-36,73)(41,-70)(-49,65)(55,-60)(-64,50)(69,-44)(-74,35)(77,-26)(-80,17)(81,-11)(-82,-1)(81,6)(-79,-21)(77,26)(-73,-36)(68,44)(-62,-54)(54,59)(-50,-65)(39,71)(-31,-76)(20,78)(-15,-80)(4,81)(6,-81)(-14,80)(26,-78)(-32,75)(45,-68)(-48,65)(55,-59)(-63,52)(70,-42)(-73,36)(76,-29)(-79,20)(81,-9)(-82,-2)(80,12)(-80,-20)(75,31)(-75,-34)(68,44)(-61,-55)(58,57)(-48,-67)(37,71)(-30,-76)(26,77)(-14,-81)(4,81)(6,-81)(-13,80)(24,-78)(-35,73)(42,-70)(-48,65)(57,-58)(-65,49)(69,-43)(-74,35)(74,-29)
+*** IQ samples
+IQ samples (AoA): (58,-57)(51,63)(-68,46)(-47,-67)(68,-44)(37,72)(-74,33)(-28,-77)(19,78)(-12,-81)(1,81)(13,-81)(-21,78)(26,-77)(-36,73)(43,-69)(-52,63)(59,-55)(-65,48)(70,-41)(-76,29)(79,-23)(-81,13)(80,-7)(-81,-6)(80,11)(-78,-27)(74,29)(-70,-43)(65,47)(-62,-54)(50,64)(-47,-67)(37,72)(-28,-78)(18,79)(-7,-81)(-5,81)(9,-82)(-20,78)(29,-76)(-36,73)(47,-66)(-51,63)(59,-56)(-64,50)(71,-39)(-76,29)(79,-21)(-81,12)(80,-4)(-82,-6)(80,15)(-79,-21)(74,35)(-70,-42)(64,51)(-59,-57)(47,65)(-42,-71)(33,74)(-26,-78)(13,80)(-11,-81)(-4,81)(10,-81)(-23,78)(31,-76)(-41,70)(44,-68)(-55,60)(61,-54)(-68,46)(70,-40)(-76,30)(78,-23)(-81,14)(81,-6)(-82,-8)(79,18)(-77,-26)(74,32)
+Sync lost! Restart the scanner device to get again the Beacon AoA Tag IQ samples !
+  Success: aci_hal_set_tx_power_level command
+  Success: aci_gatt_srv_profile_init command
+  Success: aci_hal_set_antenna_switch_parameters command
+  Success: aci_gap_init command
+  Static Random Bluetooth Address: de:3b:66:93:8e:9b
+  Success: Gap_profile_set_dev_name - Device Name
+  Success: Gap_profile_set_appearance - Appearance
+  Success: aci_gap_set_io_capability command
+hci_le_set_event_mask --> SUCCESS
+  Success: aci_gap_set_security_requirements command
+==>> End BLE_Init function
+aci_gap_set_scan_configuration --> SUCCESS
+aci_gap_start_procedure --> SUCCESS
+hci_le_periodic_advertising_create_sync --> SUCCESS
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+ExtAdv Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+hci_le_periodic_advertising_sync_established_event --> EVENT
+aci_gap_terminate_proc --> SUCCESS
+hci_le_set_connectionless_iq_sampling_enable --> SUCCESS
+Periodic Beacon UUID: 00010203-0405-0607-0809-0A0B0C0D0E0F Major: 1  Minor: 1 
+>>== ACI_GAP_PROC_COMPLETE_VSEVT_CODE
+aci_gap_proc_complete_event --> EVENT
+*** IQ samples
+IQ samples (AoA): (-20,62)(-60,-26)(28,-59)(57,30)(-36,54)(-54,-37)(39,-51)(48,43)(-44,-49)(36,54)(-29,-59)(24,60)(-9,-65)(10,64)(3,-66)(-10,64)(17,-63)(-24,61)(30,-58)(-39,52)(43,-49)(-48,44)(52,-39)(-58,30)(60,-24)(-64,14)(64,-8)(-65,0)(65,8)(-64,-15)(61,22)(-59,-29)(54,36)(-51,-40)(45,46)(-40,-52)(31,57)(-27,-61)(18,63)(-11,-64)(2,65)(4,-66)(-11,64)(19,-63)(-27,59)(32,-57)(-40,51)(46,-47)(-52,40)(55,-36)(-58,31)(61,-23)(-65,10)(65,-5)(-66,-2)(64,11)(-63,-18)(60,23)(-58,-31)(52,38)(-49,-44)(43,48)(-41,-52)(30,57)(-24,-62)(16,63)(-12,-65)(3,65)(4,-65)(-12,64)(21,-62)(-30,58)(35,-55)(-42,49)(47,-46)(-52,39)(57,-33)(-59,27)(62,-20)(-65,9)(65,-1)(-65,-7)
+*** IQ samples
+IQ samples (AoA): (-2,-66)(64,0)(-7,65)(-65,-5)(10,-65)(63,16)(-20,62)(-62,-22)(58,29)(-56,-36)(49,42)(-45,-48)(34,54)(-34,-56)(23,61)(-19,-62)(6,65)(0,-66)(-7,64)(15,-64)(-25,60)(27,-59)(-37,54)(43,-49)(-49,44)(52,-39)(-58,31)(60,-24)(-63,18)(64,-11)(-66,2)(65,5)(-64,-12)(62,18)(-60,-28)(55,34)(-53,-40)(47,44)(-39,-53)(32,56)(-28,-59)(20,61)(-14,-64)(3,65)(2,-65)(-9,64)(17,-63)(-27,60)(33,-57)(-37,53)(45,-48)(-48,44)(55,-35)(-58,30)(61,-23)(-64,15)(64,-5)(-66,0)(64,8)(-64,-16)(60,23)(-58,-31)(53,38)(-49,-44)(44,47)(-39,-52)(33,56)(-24,-62)(14,63)(-11,-65)(-1,65)(7,-65)(-16,63)(18,-63)(-31,57)(35,-56)(-42,50)(48,-44)(-53,39)(56,-33)(-60,25)(60,-21)
+Sync lost! Restart the scanner device to get again the Beacon AoA Tag IQ samples !

@@ -1,0 +1,649 @@
+(---------------------------------------------------------------------)
+(                                                                     )
+(    ARTWORK LOG                                                      )
+(                                                                     )
+(    Drawing          : MCU035_BOOSTXL-AoA_PCB.brd                    )
+(    Software Version : 17.2S032                                      )
+(    Date/Time        : Fri Mar 23 08:36:47 2018                      )
+(                                                                     )
+(---------------------------------------------------------------------)
+
+
+ ---- Photoplot outline rectangle not found; using drawing extents.
+
+
+
+Results from parameter file ...
+    DEVICE-TYPE           GERBER_RS274X
+    OUTPUT-UNITS          MM
+    FILM-SIZE             2400000 1600000
+    FORMAT                2.5
+    ABORT-ON-ERROR        NO
+    SCALE                 1
+    SUPPRESS-LEAD-ZEROES  YES
+    SUPPRESS-TRAIL-ZEROES NO
+    SUPPRESS-EQUAL        YES
+    UNDEF-APT-CONT        NO
+
+
+
+================================================================
+     PROCESSING FILM < paste_top >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_paste_top.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  SQUARE     0.90000                     0.000 NO     DARK 
+  OBLONG     0.40000     x 0.90000       0.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550            0.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH      0.000 NO     DARK 
+  PAD SHAPE  SHAPE_400RECTX500           0.000 NO     DARK 
+  PAD SHAPE  SHAPE_600X1700_ETCH         0.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH      0.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH     45.000 NO     DARK 
+  PAD SHAPE  SHAPE_750RECT750           90.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550           90.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH     90.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH     90.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550          180.000 NO     DARK 
+  PAD SHAPE  SHAPE_635X1000_ETCH       180.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH    180.000 NO     DARK 
+  PAD SHAPE  SHAPE_600X1700_ETCH       180.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH    180.000 NO     DARK 
+  PAD SHAPE  SHAPE_150RECT350          180.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH    270.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH    270.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550          270.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH    315.000 NO     DARK 
+
+     MCU035_BOOSTXL-AoA_paste_top created.
+
+
+================================================================
+     PROCESSING FILM < paste_bottom >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_paste_bottom.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_paste_bottom created.
+
+
+================================================================
+     PROCESSING FILM < soldmask_top >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_soldmask_top.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     1.15000                                  DARK 
+  CIRCLE     1.80000                                  DARK 
+  SQUARE     1.05000                     0.000 NO     DARK 
+  OBLONG     0.55000     x 1.05000       0.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECT650            0.000 NO     DARK 
+  PAD SHAPE  SHAPE_1350RECT1350          0.000 NO     DARK 
+  PAD SHAPE  SHAPE_550RECTX650           0.000 NO     DARK 
+  PAD SHAPE  SHAPE_300RECTX750_SM100     0.000 NO     DARK 
+  PAD SHAPE  SHAPE_740RECTX750_SM100     0.000 NO     DARK 
+  PAD SHAPE  SHAPE_600X1700_SM           0.000 NO     DARK 
+  PAD SHAPE  SHAPE_740RECTX750_SM100    45.000 NO     DARK 
+  PAD SHAPE  SHAPE_900RECT900           90.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECT650           90.000 NO     DARK 
+  PAD SHAPE  SHAPE_740RECTX750_SM100    90.000 NO     DARK 
+  PAD SHAPE  SHAPE_300RECTX750_SM100    90.000 NO     DARK 
+  PAD SHAPE  SHAPE_740RECTX750_SM100   180.000 NO     DARK 
+  PAD SHAPE  SHAPE_635X1000_SM         180.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECT650          180.000 NO     DARK 
+  PAD SHAPE  SHAPE_600X1700_SM         180.000 NO     DARK 
+  PAD SHAPE  SHAPE_225RECT425          180.000 NO     DARK 
+  PAD SHAPE  SHAPE_300RECTX750_SM100   180.000 NO     DARK 
+  PAD SHAPE  SHAPE_740RECTX750_SM100   270.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECT650          270.000 NO     DARK 
+  PAD SHAPE  SHAPE_300RECTX750_SM100   270.000 NO     DARK 
+  PAD SHAPE  SHAPE_740RECTX750_SM100   315.000 NO     DARK 
+
+     MCU035_BOOSTXL-AoA_soldmask_top created.
+
+
+================================================================
+     PROCESSING FILM < soldmask_bottom >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_soldmask_bottom.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     1.15000                                  DARK 
+  CIRCLE     1.80000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_soldmask_bottom created.
+
+
+================================================================
+     PROCESSING FILM < silk_top >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_silk_top.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+    WARNING: text composed 0 width line found at (36.358 53.154)
+           ... using undefined line width of 0.020
+
+    WARNING: text having Multiple 0 width lines; all will be treated the same as the first.
+           ... using undefined line width of 0.020
+
+    WARNING: Arc segment with end points of
+	(130.30, 36.70) and (130.22 36.47) converted to a line.
+	Its center location (11.24 76.26) is too large for
+	specified integer accuracy of 2 places.
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.00300                                  DARK 
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.10000                                  DARK 
+  CIRCLE     0.14000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_silk_top created with warnings
+
+
+================================================================
+     PROCESSING FILM < silk_bottom >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_silk_bottom.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+    WARNING: Arc segment with end points of
+	(110.16, 89.36) and (114.04 89.36) converted to a line.
+	Its center location (110.55 -1911.35) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(101.89, 98.93) and (101.24 99.35) converted to a line.
+	Its center location (261.23 346.27) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(113.95, 91.92) and (114.17 91.54) converted to a line.
+	Its center location (10.01 32.27) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(112.85, 92.05) and (113.61 91.84) converted to a line.
+	Its center location (158.41 260.09) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(97.99, 86.12) and (98.10 85.77) converted to a line.
+	Its center location (258.11 135.96) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(109.91, 85.55) and (109.85 85.80) converted to a line.
+	Its center location (233.09 117.11) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(102.86, 81.83) and (102.86 81.32) converted to a line.
+	Its center location (206.81 81.17) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(99.31, 81.84) and (99.31 81.33) converted to a line.
+	Its center location (208.22 81.38) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(99.84, 100.26) and (99.29 100.61) converted to a line.
+	Its center location (21.33 -19.22) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(98.75, 100.97) and (98.28 101.27) converted to a line.
+	Its center location (211.25 273.75) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(98.60, 101.82) and (99.05 101.50) converted to a line.
+	Its center location (11.79 -22.20) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(99.05, 101.50) and (99.59 101.13) converted to a line.
+	Its center location (-71.67 -140.95) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(93.43, 103.37) and (93.98 102.80) converted to a line.
+	Its center location (291.13 295.68) is too large for
+	specified integer accuracy of 2 places.
+
+    WARNING: Arc segment with end points of
+	(129.15, 36.80) and (129.23 36.57) converted to a line.
+	Its center location (248.21 76.36) is too large for
+	specified integer accuracy of 2 places.
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.10000                                  DARK 
+  CIRCLE     0.20000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_silk_bottom created with warnings
+
+
+================================================================
+     PROCESSING FILM < assembly_bottom >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_assembly_bottom.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+    WARNING: 0 width line found at (83.476 35.046)
+           ... using undefined line width of 0.020
+
+    WARNING: Multiple 0 width lines; all will be treated the same as the first.
+           ... using undefined line width of 0.020
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.05000                                  DARK 
+  CIRCLE     0.10000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_assembly_bottom created with warnings
+
+
+================================================================
+     PROCESSING FILM < assembly_top >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_assembly_top.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.00300                                  DARK 
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.05000                                  DARK 
+  CIRCLE     0.10000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_assembly_top created.
+
+
+================================================================
+     PROCESSING FILM < drill >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_drill.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.15000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_drill created.
+
+
+================================================================
+     PROCESSING FILM < Bottom >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_Bottom.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.15000                                  DARK 
+  CIRCLE     0.50000                                  DARK 
+  CIRCLE     1.00000                                  DARK 
+  CIRCLE     1.65000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_Bottom created.
+
+
+================================================================
+     PROCESSING FILM < Top >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_Top.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.020
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+    WARNING: Film contains objects with associated DRCs (1).
+           In the design editor view this film and enable visibility for the
+           associated DRC layer. Verify the DRCs are approved exceptions to your rules.
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.02000                                  DARK 
+  CIRCLE     0.15000                                  DARK 
+  CIRCLE     0.18000                                  DARK 
+  CIRCLE     0.50000                                  DARK 
+  CIRCLE     1.00000                                  DARK 
+  CIRCLE     1.65000                                  DARK 
+  SQUARE     0.90000                     0.000 NO     DARK 
+  OBLONG     0.02500     x 0.05100       0.000 NO     DARK 
+  OBLONG     0.40000     x 0.90000       0.000 NO     DARK 
+  PAD SHAPE  SHAPE_600X1700_ETCH         0.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550            0.000 NO     DARK 
+  PAD SHAPE  SHAPE_1200RECT1200          0.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH      0.000 NO     DARK 
+  PAD SHAPE  SHAPE_400RECTX500           0.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH      0.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH     45.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550           90.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH     90.000 NO     DARK 
+  PAD SHAPE  SHAPE_750RECT750           90.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH     90.000 NO     DARK 
+  PAD SHAPE  SHAPE_600X1700_ETCH       180.000 NO     DARK 
+  PAD SHAPE  SHAPE_635X1000_ETCH       180.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH    180.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH    180.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550          180.000 NO     DARK 
+  PAD SHAPE  SHAPE_150RECT350          180.000 NO     DARK 
+  PAD SHAPE  SHAPE_540RECT550          270.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH    270.000 NO     DARK 
+  PAD SHAPE  SHAPE_200RECTX650_ETCH    270.000 NO     DARK 
+  PAD SHAPE  SHAPE_640RECTX650_ETCH    315.000 NO     DARK 
+
+     MCU035_BOOSTXL-AoA_Top created with warnings
+
+
+================================================================
+     PROCESSING FILM < Layer2 >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_Layer2.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.000
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+    WARNING: rectangle or unfilled shape composed 0 width line found at (165.000 25.000)
+           ... ignored.
+
+    WARNING: rectangle or unfilled shape having Multiple 0 width lines; all will be treated the same as the first.
+           ... ignored.
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.15000                                  DARK 
+  CIRCLE     0.50000                                  DARK 
+  CIRCLE     1.65000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_Layer2 created with warnings
+
+
+================================================================
+     PROCESSING FILM < Layer3 >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_Layer3.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.000
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.50000                                  DARK 
+  CIRCLE     1.65000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_Layer3 created.
+
+
+================================================================
+     PROCESSING FILM < Layer4 >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_Layer4.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.000
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.20000                                  DARK 
+  CIRCLE     0.50000                                  DARK 
+  CIRCLE     1.65000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_Layer4 created.
+
+
+================================================================
+     PROCESSING FILM < Layer5 >
+     TO FILE < C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro/MCU035_BOOSTXL-AoA_Layer5.art > ...
+================================================================
+
+  FILM PARAMETERS :
+  ---------------------------------------------------------
+  Undefined line width                0.000
+  Mirror code                         NONE
+  Rotate angle                        NONE
+  Offset x:                           0.000
+  Offset y:                           0.000
+  Plot negative                       NO
+  Suppress unconnected internal pads  NO
+  Draw holes only                     NO
+
+
+
+  APERTURES USED:
+  ---------------------------------------------------------
+  TYPE       SIZE/NAME                   ROT   MIRROR MODE 
+  ---------------------------------------------------------
+  CIRCLE     0.15000                                  DARK 
+  CIRCLE     0.50000                                  DARK 
+  CIRCLE     1.65000                                  DARK 
+
+     MCU035_BOOSTXL-AoA_Layer5 created.
+
+
+------------------------------------------------------
+ SUMMARY:
+        MCU035_BOOSTXL-AoA_paste_top created.
+        MCU035_BOOSTXL-AoA_paste_bottom created.
+        MCU035_BOOSTXL-AoA_soldmask_top created.
+        MCU035_BOOSTXL-AoA_soldmask_bottom created.
+        MCU035_BOOSTXL-AoA_silk_top created with warnings
+        MCU035_BOOSTXL-AoA_silk_bottom created with warnings
+        MCU035_BOOSTXL-AoA_assembly_bottom created with warnings
+        MCU035_BOOSTXL-AoA_assembly_top created.
+        MCU035_BOOSTXL-AoA_drill created.
+        MCU035_BOOSTXL-AoA_Bottom created.
+        MCU035_BOOSTXL-AoA_Top created with warnings
+        MCU035_BOOSTXL-AoA_Layer2 created with warnings
+        MCU035_BOOSTXL-AoA_Layer3 created.
+        MCU035_BOOSTXL-AoA_Layer4 created.
+        MCU035_BOOSTXL-AoA_Layer5 created.
+
+ ARTWORK had warnings

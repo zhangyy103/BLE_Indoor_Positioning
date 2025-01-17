@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+  -->
+<html lang=""><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!-- Shady DOM styles for custom-style --><!-- Shady DOM styles for dom-template --><!-- Shady DOM styles for dom-repeat --><!-- Shady DOM styles for array-selector --><!-- Shady DOM styles for dom-if --><!-- Shady DOM styles for iron-image --><style scope="iron-image-1">.iron-image-1 {
+  display: inline-block;
+        overflow: hidden;
+        position: relative;
+}
+
+.iron-image-1 #sizedImgDiv.iron-image {
+  position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+        display: none;
+}
+
+.iron-image-1 #img.iron-image {
+  display: block;
+        width: auto;
+        height: auto;
+}
+
+.iron-image-1[sizing] #sizedImgDiv.iron-image {
+  display: block;
+}
+
+.iron-image-1[sizing] #img.iron-image {
+  display: none;
+}
+
+.iron-image-1 #placeholder.iron-image {
+  position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+        background-color: inherit;
+        opacity: 1;;
+}
+
+.iron-image-1 #placeholder.faded-out.iron-image {
+  transition: opacity 0.5s linear;
+        opacity: 0;
+}</style><style scope="iron-image-0">.iron-image-0 {
+  display: inline-block;
+        overflow: hidden;
+        position: relative;
+}
+
+.iron-image-0 #sizedImgDiv.iron-image {
+  position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+        display: none;
+}
+
+.iron-image-0 #img.iron-image {
+  display: block;
+        width: 100%;
+        height: auto;
+}
+
+.iron-image-0[sizing] #sizedImgDiv.iron-image {
+  display: block;
+}
+
+.iron-image-0[sizing] #img.iron-image {
+  display: none;
+}
+
+.iron-image-0 #placeholder.iron-image {
+  position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+        background-color: inherit;
+        opacity: 1;;
+}
+
+.iron-image-0 #placeholder.faded-out.iron-image {
+  transition: opacity 0.5s linear;
+        opacity: 0;
+}</style><!-- Shady DOM styles for iron-pages --><style scope="iron-pages">iron-pages {
+  display: block;
+}
+
+iron-pages  > :not(.iron-selected) {
+  display: none !important;
+}</style><!-- Shady DOM styles for iron-meta --><!-- Shady DOM styles for iron-meta-query --><!-- Shady DOM styles for iron-icon --><!-- Shady DOM styles for paper-ripple --><style scope="paper-ripple">paper-ripple {
+  display: block;
+        position: absolute;
+        border-radius: inherit;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        
+        pointer-events: none;
+}
+
+paper-ripple[animating] {
+  -webkit-transform: translate(0, 0);
+        transform: translate3d(0, 0, 0);
+}
+
+#background.paper-ripple,#waves.paper-ripple,.wave-container.paper-ripple,.wave.paper-ripple {
+  pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+}
+
+#background.paper-ripple,.wave.paper-ripple {
+  opacity: 0;
+}
+
+#waves.paper-ripple,.wave.paper-ripple {
+  overflow: hidden;
+}
+
+.wave-container.paper-ripple,.wave.paper-ripple {
+  border-radius: 50%;
+}
+
+paper-ripple.circle #background.paper-ripple,paper-ripple.circle #waves.paper-ripple {
+  border-radius: 50%;
+}
+
+paper-ripple.circle .wave-container.paper-ripple {
+  overflow: hidden;
+}</style><!-- Shady DOM styles for paper-icon-button --><!-- Shady DOM styles for iron-iconset-svg --><!-- Shady DOM styles for paper-tab --><!-- Shady DOM styles for paper-tabs --><!-- Shady DOM styles for paper-material --><!-- Shady DOM styles for paper-card --><style scope="paper-card-0">.paper-card-0 {
+  display: block;
+        position: relative;
+}
+
+.paper-card-0[elevation="1"] {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+
+.paper-card-0[elevation="2"] {
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
+}
+
+.paper-card-0[elevation="3"] {
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
+}
+
+.paper-card-0[elevation="4"] {
+  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
+}
+
+.paper-card-0[elevation="5"] {
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
+}
+
+.paper-card-0[animated] {
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paper-card-0 {
+  display: inline-block;
+        position: relative;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        border-radius: 2px;font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;;
+}
+
+.paper-card-0 [hidden].paper-card {
+  display: none !important;
+}
+
+.paper-card-0 .header.paper-card {
+  position: relative;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        overflow: hidden;;
+}
+
+.paper-card-0 .header.paper-card iron-image.paper-card {
+  display: block;
+        width: 100%;
+        pointer-events: none;;
+}
+
+.paper-card-0 .header.paper-card .title-text.paper-card {
+  padding: 16px;
+        font-size: 24px;
+        font-weight: 400;
+        color: #000;font-size: 2.6em;
+      color: #189;
+      font-family: 'Roboto', arial, sans-serif;
+      font-weight: 300;
+      line-height: 1.1em;
+}
+
+.paper-card-0 .header.paper-card .title-text.over-image.paper-card {
+  position: absolute;
+        bottom: 0px;;
+}
+
+.paper-card-0  .card-content {
+  padding: 16px;
+        position:relative;;
+}
+
+.paper-card-0  .card-actions {
+  border-top: 1px solid #e8e8e8;
+        padding: 5px 16px;
+        position:relative;;
+}</style><!-- Shady DOM styles for paper-progress --><!-- Shady DOM styles for iron-overlay-backdrop --><!-- Shady DOM styles for paper-dialog --><!-- Shady DOM styles for iron-a11y-keys --><!-- Shady DOM styles for fade-in-animation --><!-- Shady DOM styles for fade-out-animation --><!-- Shady DOM styles for paper-tooltip --><!-- Shady DOM styles for paper-button --><!-- Shady DOM styles for ti-widget-button --><!-- Shady DOM styles for ti-widget-image --><style scope="ti-widget-image">*.ti-widget-image {
+  -webkit-box-sizing : border-box;
+                -moz-box-sizing : border-box;
+                box-sizing : border-box;
+                
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+}
+
+ti-widget-image {
+  display : inline-block;
+                text-align: center;
+}
+
+#imageWidget.ti-widget-image {
+  width:auto; 
+                height:auto;
+                max-width: 100%;
+                max-height: 100%;
+                vertical-align: inherit;
+
+                -webkit-transition: all .3s ease-in-out;
+                 transition: all .3s ease-in-out;
+}
+
+#imageWidget.stretchHeight.ti-widget-image {
+  height: 100%;
+}
+
+#imageWidget.stretchWidth.ti-widget-image {
+  width: 100%;
+}
+
+#imageWidget.topAlign.ti-widget-image {
+  vertical-align: top;
+}
+
+#imageWidget.bottomAlign.ti-widget-image {
+  vertical-align: bottom;
+}
+
+#imageWidget.colorEffect.ti-widget-image,#imageWidget.colorEffect.disabled.ti-widget-image:hover,#imageWidget.colorEffect.ti-widget-image:hover:active,#imageWidget.disabled.ti-widget-image {
+  filter: grayscale(1); 
+				filter: gray; 
+				-webkit-filter: grayscale(1);
+}
+
+#imageWidget.colorEffect.ti-widget-image:hover {
+  filter: grayscale(0);
+				-webkit-filter: grayscale(0);
+}
+
+#imageWidget.enlargeEffect.ti-widget-image:hover {
+  -ms-transform: scale(1.1);
+                -webkit-transform: scale(1.1);
+                transform: scale(1.1);
+}
+
+#imageWidget.enlargeEffect.ti-widget-image,#imageWidget.enlargeEffect.disabled.ti-widget-image:hover,#imageWidget.enlargeEffect.ti-widget-image:hover:active {
+  -ms-transform: none;
+                -webkit-transform: none;
+                transform: none;
+}
+
+#imageWidget.buttonEffect.ti-widget-image,#imageWidget.buttonEffect.disabled.ti-widget-image:hover,#imageWidget.buttonEffect.disabled.ti-widget-image:active,#imageWidget.buttonEffect.disabled.ti-widget-image:hover:active {
+  border: 3px outset transparent;
+                border-radius: 9px;
+}
+
+#imageWidget.buttonEffect.ti-widget-image:hover:active {
+  border: 3px inset #F0F0F0;
+}
+
+#imageWidget.buttonEffect.ti-widget-image:hover {
+  border: 3px outset #F0F0F0;
+}
+
+.alignMiddleHelper.ti-widget-image {
+  height: 100%;
+                width:2px;
+                background-color: blue;
+                vertical-align: middle;
+}</style><!-- Shady DOM styles for ti-widget-label --><style scope="ti-widget-label">ti-widget-label {
+  display: inline;
+                background-color: transparent;
+                text-decoration: inherit;
+}
+
+#label.ti-widget-label {
+  display: inherit;
+                white-space: inherit;
+                text-decoration: inherit;
+                font-weight: inherit;
+                
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                color: inherit;
+}</style><!-- Shady DOM styles for ti-widget-panel --><style scope="ti-widget-panel">.panel-content.ti-widget-panel {
+  z-index: 1;
+}</style><!-- Shady DOM styles for ti-service-programloader-dialog --><!-- Shady DOM styles for ti-service-programloader --><style scope="ti-service-programloader">ti-service-programloader {
+  display: block;
+                width: 175px;
+                height: 175px;
+}</style><!-- Shady DOM styles for ti-core-backplane-installdialog --><!-- Shady DOM styles for iron-a11y-announcer --><style scope="iron-a11y-announcer">iron-a11y-announcer {
+  display: inline-block;
+        position: fixed;
+        clip: rect(0px,0px,0px,0px);
+}</style><!-- Shady DOM styles for paper-toast --><!-- Shady DOM styles for ti-widget-statusbar --><style scope="ti-widget-statusbar">ti-widget-statusbar {
+  display: block;
+                position: static;
+}
+
+body.ti-widget-statusbar {
+  height: 100%;
+                margin: 0;
+                padding: 0;
+                
+                position: static;
+}
+
+.iconimage.ti-widget-statusbar {
+  float: left;
+                background-color: transparent;
+                left: 0px;
+                top: 3px;
+                position: relative;
+                padding-left: 5px;
+                padding-right: 5px;
+}
+
+.statusinfo.ti-widget-statusbar {
+  float: left;
+                left: 10px;
+                top: 5px;
+                
+                font-size: 13px;
+                
+                
+                position: relative;
+                
+                
+                margin-left:5px;
+                padding-left: 5px;
+                padding-right: 5px;
+                white-space:nowrap;
+}
+
+a.ti-widget-statusbar:hover,a.ti-widget-statusbar:focus {
+  text-decoration: none;
+}
+
+.container.ti-widget-statusbar {
+  width: 100%;
+                height: 28px;
+                position: fixed;
+                font-size: 13px;
+                z-index:1000;
+                bottom:0px;
+                left:0px;
+                right:0px;
+                margin-bottom:0px;
+                border-top-style: outset;
+                border-width: 1px;
+                white-space:nowrap;
+}
+
+paper-progress.ti-widget-statusbar {
+  display: block;
+                width: 100%;
+                position: fixed;
+                z-index:1001;
+                bottom:0px;
+                left:0px;
+                right:0px;
+                margin-bottom:28px;
+                padding:0;
+}
+
+paper-progress.ti-widget-statusbar  #activeProgress {
+  background-color: lime;
+}
+
+.percentcomplete.ti-widget-statusbar {
+  background-color: transparent;
+                width: 100%;
+                height: 28px;
+                position: absolute;
+                z-index:1002;
+                bottom:0px;
+                left:0px;
+                right:0px;
+                margin-bottom:0px;
+}
+
+#logo.ti-widget-statusbar {
+  float: right;
+                white-space:nowrap;
+                font-style:italic;
+                padding-right:8px;
+                vertical-align:middle;
+                font-size:9px;
+                background-color:black;
+}
+
+paper-toast.ti-widget-statusbar {
+  bottom: 45px;
+                left: 0;
+                right:0;
+}</style><!-- Shady DOM styles for ti-core-backplane --><!-- Shady DOM styles for ti-widget-dialog --><!-- Shady DOM styles for ti-service-serialio-dialog --><!-- Shady DOM styles for ti-service-serialio --><style scope="ti-service-serialio">ti-service-serialio {
+  display: block;
+                width: 175px;
+                height: 175px;
+}
+
+paper-toast.ti-service-serialio {
+  bottom: 33px;
+                left: 0;
+                width: 100%;
+                max-height: 100px;
+}</style><!-- Shady DOM styles for ti-service-targetaccess --><!-- Shady DOM styles for ti-widget-progressbar --><!-- Shady DOM styles for iron-input --><!-- Shady DOM styles for paper-input-char-counter --><!-- Shady DOM styles for paper-input-container --><!-- Shady DOM styles for paper-input-error --><!-- Shady DOM styles for paper-input --><!-- Shady DOM styles for opaque-animation --><!-- Shady DOM styles for iron-dropdown --><style scope="iron-dropdown">iron-dropdown {
+  position: fixed;
+}
+
+#contentWrapper.iron-dropdown  > * {
+  overflow: auto;
+}
+
+#contentWrapper.animating.iron-dropdown  > * {
+  overflow: hidden;
+}</style><!-- Shady DOM styles for paper-menu-grow-height-animation --><!-- Shady DOM styles for paper-menu-grow-width-animation --><!-- Shady DOM styles for paper-menu-shrink-width-animation --><!-- Shady DOM styles for paper-menu-shrink-height-animation --><!-- Shady DOM styles for paper-menu-button --><!-- Shady DOM styles for paper-dropdown-menu --><!-- Shady DOM styles for paper-item --><!-- Shady DOM styles for paper-listbox --><!-- Shady DOM styles for ti-widget-flashtool --><style scope="ti-widget-flashtool">paper-dialog.ti-widget-flashtool {
+  height: 700px;
+}
+
+#flashBtnDiv.ti-widget-flashtool {
+  background-color: #323232;
+	            color: white;
+	            min-width: 180px;
+	            width: 180px;
+}
+
+.container.ti-widget-flashtool {
+  margin:  auto;
+	            width: 100%;
+	            display:inline-table;
+}
+
+.col1.ti-widget-flashtool {
+  float: left;
+	            width: auto;
+}
+
+.col2.ti-widget-flashtool {
+  float: left;
+	            width: auto;
+}
+
+.col3.ti-widget-flashtool {
+  float: right;
+				width: auto;
+}
+
+#inputToSerialPort.ti-widget-flashtool {
+  float: left;
+            		height: 100%;
+            		width: auto;
+ 			        margin-top: 10px;
+}
+
+#sendBtnDiv.ti-widget-flashtool {
+  background-color: #323232;
+		            color: white;
+            	    float: right;
+            		min-width: 80px;
+             		width: 80px;
+            		height: auto;
+            		top: 15px;
+            		margin-left:15px;
+}
+
+#statusbar.ti-widget-flashtool  .poweredby,#statusbar.ti-widget-flashtool   #imageWidget,#statusbar.ti-widget-flashtool   #toast {
+  display: none;
+			  position: relative;
+}
+
+#statusbar.ti-widget-flashtool  .container {
+  background-color: #ececec;
+		        width: 100%;
+		        height: auto;
+		        position: relative;
+		        font-size: small;
+		        z-index:1;
+		        bottom:0px;
+		        left:0px;
+		        right:0px;
+		        margin-bottom:0px;
+		        border-top-style: outset;
+		        border-width: 1px;
+		        white-space:nowrap;
+}
+
+#statusbar.ti-widget-flashtool  paper-progress {
+  display: block;
+                width: 100%;
+                position: relative;
+                z-index:1;
+                bottom:0px;
+                left:0px;
+                right:0px;
+                margin-bottom:0px;
+                padding:0;
+}
+
+#icon.ti-widget-flashtool {
+  float: left;
+		      left: 0px;
+		      top: 3px;
+		      position: relative;
+		      padding-left: 5px;
+		      padding-right: 5px;
+}
+
+#ti_widget_progressbar.ti-widget-flashtool {
+  position: sticky; 
+                  width:100%; 
+                  background-color:darkgray;
+}
+
+.poweredby.ti-widget-flashtool {
+  position: relative;
+	          bottom:24px;
+	          float: right;
+   		      clear: both;
+		      color: #b0b0b0;
+		      font-size: 0.9em;
+		      font-style: italic;
+		      background: #fff;
+}
+
+.poweredby.ti-widget-flashtool a.ti-widget-flashtool {
+  color: #b0b0b0;
+}
+
+a.ti-widget-flashtool {
+  color: #189;
+		      text-decoration: none;
+		      outline: 0;
+}</style><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to the Angle of Arrival BoosterPack</title>
+    <script src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/webcomponents-lite.min.js"></script>
+    <!-- Iron elements -->
+    <style>
+  /* IE 10 support for HTML5 hidden attr */
+  [hidden] {
+    display: none !important;
+  }
+</style><style></style><link rel="import" href="https://dev.ti.com/components/gc/1.0.0/iron-flex-layout/iron-flex-layout.html">
+    <link rel="import" href="https://dev.ti.com/components/gc/1.0.0/iron-image/iron-image.html">
+    <link rel="import" href="https://dev.ti.com/components/gc/1.0.0/iron-pages/iron-pages.html">
+    <link rel="import" href="https://dev.ti.com/components/gc/1.0.0/paper-tabs/paper-tabs.html">
+    <!-- Paper elements -->
+    <style></style><link rel="import" href="https://dev.ti.com/components/gc/1.0.0/paper-material/paper-material.html">
+    <style></style><link rel="import" href="https://dev.ti.com/components/gc/1.0.0/paper-card/paper-card.html">
+    <style></style><link rel="import" href="https://dev.ti.com/components/gc/1.0.0/paper-styles/color.html">
+    <!-- Add your elements here -->
+    <style>#drawerToolbar:not([style-scope]):not(.style-scope) {
+  color: #727272;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+}
+
+paper-scroll-header-panel:not([style-scope]):not(.style-scope) {
+  height: 100%;
+}
+
+paper-material:not([style-scope]):not(.style-scope) {
+  border-radius: 2px;
+    height: 100%;
+    padding: 16px 0 16px 0;
+    width: calc(98.66% - 16px);
+    margin: 16px auto;
+    background: white;
+}
+
+paper-menu iron-icon:not([style-scope]):not(.style-scope) {
+  margin-right: 33px;
+    opacity: 0.54;
+}
+
+.paper-menu > .iron-selected:not([style-scope]):not(.style-scope) {
+  color: #3F51B5;
+}
+
+paper-menu a:not([style-scope]):not(.style-scope) {
+  text-decoration: none;
+    color: #111111;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    min-height: 48px;
+    padding: 0 16px;
+}
+
+paper-toolbar.tall .app-name:not([style-scope]):not(.style-scope) {
+  font-size: 40px;
+    font-weight: 300;
+    
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+}
+
+#mainToolbar .middle-container:not([style-scope]):not(.style-scope) {
+  height: 100%;
+    margin-left: 48px;
+}
+
+#mainToolbar:not([style-scope]):not(.style-scope):not(.tall) .middle {
+  font-size: 18px;
+    padding-bottom: 0;
+}
+
+#mainToolbar .bottom:not([style-scope]):not(.style-scope) {
+  margin-left: 48px;
+    
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+}
+
+.content:not([style-scope]):not(.style-scope) {
+  height: 900px;
+}
+
+@media (max-width: 600px) {
+paper-material:not([style-scope]):not(.style-scope) {
+  width: calc(97.33% - 32px);
+      padding-left: 16px;
+      padding-right: 16px;
+}
+
+paper-toolbar.tall .app-name:not([style-scope]):not(.style-scope) {
+  font-size: 24px;
+      font-weight: 400;
+}
+
+#drawer .paper-toolbar:not([style-scope]):not(.style-scope) {
+  margin-left: 16px;
+}
+
+#overlay:not([style-scope]):not(.style-scope) {
+  min-width: 360px;
+}
+
+.bg:not([style-scope]):not(.style-scope) {
+  background: white;
+}
+
+}
+
+@media (min-width: 601px) {
+paper-material:not([style-scope]):not(.style-scope) {
+  width: calc(98% - 46px);
+      margin-bottom: 32px;
+      padding-left: 30px;
+      padding-right: 30px;
+}
+
+#drawer.paper-drawer-panel > [drawer]:not([style-scope]):not(.style-scope) {
+  border-right: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+iron-pages:not([style-scope]):not(.style-scope) {
+  padding: 48px 62px;
+}
+
+}
+
+</style><link rel="import" href="https://dev.ti.com/tirex/content/tirex-product-tree/cc26xx_devtools/.metadata/.tirex/project0_boostxl_aoa_bp/styles/app-theme.html">
+    <link rel="stylesheet" href="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/main.css">
+    <link rel="import" href="https://dev.ti.com/tirex/content/tirex-product-tree/cc26xx_devtools/.metadata/.tirex/project0_boostxl_aoa_bp/styles/shared-styles.html">
+    <link rel="stylesheet" href="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/css_002.css"><link rel="stylesheet" href="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/css.css"><style></style><link rel="import" href="https://dev.ti.com/components/gc/1.0.0/ti-widget-flashtool/ti-widget-flashtool.html">
+    <!-- endreplace-->
+    <!-- For shared styles, shared-styles.html import in elements.html -->
+    <!--<style is="custom-style" include="shared-styles">-->
+    <style is="custom-style">#editorDiv:not([style-scope]):not(.style-scope) {
+  margin-left:80px;
+      margin-right:80px;
+}
+
+#cards:not([style-scope]):not(.style-scope) {
+  max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+}
+
+.container:not([style-scope]):not(.style-scope) {
+  display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+
+      -ms-flex-direction: row;
+      -webkit-flex-direction: row;
+      flex-direction: row;-ms-flex-wrap: wrap;
+      -webkit-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+paper-card:not([style-scope]):not(.style-scope) {
+  width: 100%;
+      margin-bottom: 16px;
+}
+
+.fancy_inner:not([style-scope]):not(.style-scope) {
+  background-size: 100%;
+      background-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.8) 100%);
+      z-index:1;
+      position: absolute;
+      bottom: 20px;
+      left:16px;
+      width: 97%;
+      padding-top: 60px;
+      padding-bottom: 60px;
+}
+
+.fancy_inner .medium:not([style-scope]):not(.style-scope) {
+  font-size:48px;
+      color: #FFFFFF;
+      padding-bottom: 8px;
+      padding-left: 80px;
+      font-family: 'Roboto', arial, sans-serif;
+      font-weight: 300;
+      line-height: 1.1em;
+}
+
+.fancy_inner .small:not([style-scope]):not(.style-scope) {
+  font-size: 22px;
+      color: #FFFFFF;
+      padding-bottom: 8px;
+      padding-left: 80px;
+      font-family: 'Roboto', arial, sans-serif;
+      font-weight: 300;
+}
+
+.circle:not([style-scope]):not(.style-scope) {
+  -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      border-radius: 50%;
+      font-size:24px;
+      background-color:#555;
+      color:#fff;
+      min-width:30px;
+      max-width:30px;
+      height:30px;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      box-shadow: 2px 2px 2px #aaa;
+}
+
+.circle span:not([style-scope]):not(.style-scope) {
+  position:relative;
+      top:3px;
+}
+
+.notelayout:not([style-scope]):not(.style-scope) {
+  font-size: 12px;display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+
+      -ms-flex-direction: row;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      margin: 1em;
+      background: #F1FFF7;
+      border: 1px solid #C9F0DD;
+}
+
+iron-list:not([style-scope]):not(.style-scope) {
+  background-color: #eeeeee;
+      padding-bottom: 16px;
+}
+
+.item:not([style-scope]):not(.style-scope) {
+  display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+
+      -ms-flex-direction: row;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      padding-bottom: 16px;
+}
+
+.item:not([style-scope]):not(.style-scope):focus {
+  outline: 0;
+      border-color: #666;
+}
+
+.pad:not([style-scope]):not(.style-scope) {
+  padding: 0 16px;
+      width: 90%;display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+
+      -ms-flex-direction: column;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+}
+
+a:not([style-scope]):not(.style-scope) {
+  color: #189;
+      text-decoration: none;
+      outline: 0;
+}
+
+paper-tabs.ti-red:not([style-scope]):not(.style-scope)  #selectionBar {
+  background-color: #c00;
+}
+
+paper-tabs.ti-red:not([style-scope]):not(.style-scope) paper-tab:not([style-scope]):not(.style-scope)  #ink {
+  color: #c00;
+}
+
+.table:not([style-scope]):not(.style-scope) {
+  width: 97%;
+      text-align: left;
+      border-collapse: collapse;
+      border-spacing: 0;
+}
+
+tr:not([style-scope]):not(.style-scope),td:not([style-scope]):not(.style-scope) {
+  border: 1px solid #ddd;
+      padding: 5px;
+      padding-left: 10px;
+}
+
+th:not([style-scope]):not(.style-scope) {
+  border: 1px solid #ddd;
+      border-bottom: 2px solid #ddd;
+      padding: 5px;
+      padding-left: 10px;
+}
+
+.table-striped > tbody > tr:not([style-scope]):not(.style-scope):nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+</style>
+    <script>
+      var loadjsfile = function(filename) {
+      var fileref = document.createElement("script");
+      fileref.src = filename;
+      document.write( fileref.outerHTML );
+      };
+      var loadCSSFile = function( filename ){
+      var fileref = document.createElement("link");
+      fileref.href = filename;
+      fileref.type = "text/css";
+      fileref.rel = "stylesheet";
+      document.write( fileref.outerHTML );
+      };
+      //window.TI_CLOUD_AGENT_HOST = "dev.ti.com";
+      //window.TI_CLOUD_AGENT_PORT = "";
+      //var cloudServer = "http://" + window.TI_CLOUD_AGENT_HOST;
+      var cloudServer = "";
+      loadjsfile(cloudServer + "/ticloudagent/q.js");
+      loadjsfile(cloudServer + "/ticloudagent/agent.js");
+      loadCSSFile(cloudServer + "/ticloudagent/agent-flash.css");
+      loadjsfile(cloudServer + "/ticloudagent/agent-flash.js");
+    </script><script src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/q.js"></script><script src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/agent.js"></script><link href="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/agent-flash.css" type="text/css" rel="stylesheet"><script src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/agent-flash.js"></script>
+    <style scope="ti-widget-flashtool">
+      #flashBtnDiv.ti-widget-flashtool {
+                width: initial;
+      }
+    </style>
+  </head>
+  <body class="fullbleed layout vertical">
+    <span id="browser-sync-binding"></span>
+    <div id="cards">
+      <paper-card elevation="0" aria-label="" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card" hidden=""></div>
+    </div>
+
+    
+    <div class="card-content">
+      <center>
+      <iron-image style="width:872px;height:528px;" sizing="contain" src="images/boostxl-aoa_lp_perspective_3D_Model.jpg" class="x-scope iron-image-1">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" style="background-image: url(&quot;images/boostxl-aoa_lp_perspective_3D_Model.jpg&quot;); background-size: contain; background-position: center center; background-repeat: no-repeat;" aria-label="boostxl-aoa_lp_perspective_3D_Model.jpg"></div>
+    <img id="img" class="style-scope iron-image" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/boostxl-aoa_lp_perspective_3D_Model.jpg" hidden="">
+    <div id="placeholder" class="style-scope iron-image" style="background-size: contain; background-position: center center; background-repeat: no-repeat;" hidden=""></div>
+  </iron-image>
+      </center>
+      <div class="fancy_inner">
+        <div class="medium">Meet the Angle of Arrival BoosterPack™</div>
+      </div>
+    </div>
+    
+  </paper-card>
+    <paper-card heading="Getting Started" elevation="0" aria-label="Getting Started" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">Getting Started</div>
+    </div>
+
+    
+    <div class="card-content">
+      <h4>Introduction</h4>
+      <p>
+        The Angle of Arrival BoosterPack™ kit
+        (<a href="http://www.ti.com/tool/boostxl-aoa">BOOSTXL-AOA</a>) 
+is an
+        easy-to-use plug-in module equipped with antenna arrays suitable
+ for evaluation of Angle of Arrival applications. 
+        The 2 orthogonal antenna arrays each consist of 3 dipole 
+antennas tuned for operation at 2.4 GHz. The antennas are selected with 
+RF switches and then connected to a single JSC connector. 
+        The JSC Series connector is used to connect to an AoA compatible
+ RF receiver like the CC2640R2 LaunchPad™. 
+      </p>
+      <img id="Picture 1" style="width:550px;float:right;padding-right:1%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/boostxl-aoa_3D_Model.jpg">
+      <h4>Key Features</h4>
+      <p>
+        </p><ul>
+          <li>Two antenna arrays with three 2.4 GHz dipole antennas on each</li>
+          <li>RF switches to switch between the different antennas</li>
+          <li>JSC RF connector</li>
+          <li>Two LEDs</li>
+        </ul>
+      <p></p>
+      <h4>What's Included</h4>
+      <ul>
+        <li>1x <a href="http://www.ti.com/tool/boostxl-aoa">BOOSTXL-AoA</a></li>
+        <li>1x 100 mm JSC to JSC RF cable</li>
+        <li>1x <a href="http://www.ti.com/lit/pdf/swau110">Quick Start Guide</a></li>
+      </ul>
+      <h4>Requirements</h4>
+      <p>
+        BOOSTXL-AoA is designed to be used with the <a href="http://www.ti.com/tool/launchxl-cc2640r2">CC2640R2 LaunchPad</a> and are following
+        the <a href="https://www.ti.com/ww/en/LaunchPad/dl/boosterpack-pinout-v3.pdf">BoosterPack™
+        Module Pinout Standard</a>.<br> 
+      </p>
+    </div>
+    
+  </paper-card>
+
+    <paper-card heading="A Closer Look at the Hardware" elevation="0" aria-label="A Closer Look at the Hardware" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">A Closer Look at the Hardware</div>
+    </div>
+
+    
+    <div class="card-content">
+      <center><img id="Picture 2" width="85%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/BOOSTXL-AoA_explained_3D_Model.png"></center>
+      <p>
+      The BOOSTXL-AoA board contains two orthogonal arrays, each with 
+three dipole antennas.
+      Each antenna array can theoretically cover an angle on the 
+incoming signal up to ±90°. When using both arrays combined, a coverage 
+of up to ±135° is achievable
+      (The two antenna arrays overlap 45° on each side).<br>
+      Dipole antennas are by nature differential and needs to be fed 
+with a balanced signal.
+      A balanced signal is created using a marchand balun that is 
+integrated in the PCB. The single ended side of the baluns are fed to 
+the antenna switches (U2 and U3).
+      The array switch, U1, is used to connect each array to the JSC 
+connector.
+      </p>
+      <h2>Block schematic</h2>
+      <center><img id="Picture 2" width="85%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/BOOSTXL-AoA_BlockSch.png"></center>
+      <h2>Schematic</h2>
+      <center><img id="Picture 2" width="95%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/BOOSTXL-AoA_Schematic.png"></center>
+      <p>
+      <br>
+      The three RF antenna switches (U1, U2 and U3) are controlled by 
+DIO27 to DIO30. The control logic is shown in the table below.
+      </p>
+      <h2><center>Truth table</center></h2>
+        <center>
+        <thread>
+          </thread><table class="table table-striped" style="table-layout:auto;width:40%;">
+        <tbody><tr class="header">
+            <th>DIO27</th>
+            <th>DIO28</th>
+            <th>DIO29</th>
+            <th>DIO30</th>
+            <th>Antenna</th>
+          </tr>
+        
+        </tbody><tbody>
+          <tr><td><center>0</center></td><td><center>1</center></td><td><center>0</center></td><td><center>0</center></td><td><center>A2.1</center></td></tr>
+          <tr><td><center>0</center></td><td><center>0</center></td><td><center>1</center></td><td><center>0</center></td><td><center>A2.2</center></td></tr>
+          <tr><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td><td><center>1</center></td><td><center>A2.3</center></td></tr>
+          <tr><td><center>1</center></td><td><center>1</center></td><td><center>0</center></td><td><center>0</center></td><td><center>A1.1</center></td></tr>
+          <tr><td><center>1</center></td><td><center>0</center></td><td><center>1</center></td><td><center>0</center></td><td><center>A1.2</center></td></tr>
+          <tr><td><center>1</center></td><td><center>0</center></td><td><center>0</center></td><td><center>1</center></td><td><center>A1.3</center></td></tr>
+        </tbody>
+          </table>
+        </center>
+      <h5><center>0: 0.0V to 0.2V, 1: 2.5V to 5.0V</center></h5>
+      <h2>LEDs</h2>
+      <p>
+        The RED and GREEN LEDs are connected to DIO6 (RED) and DIO7 (GREEN) as on the CC2640R2 LaunchPad.
+      </p>
+      <h2>Design files</h2>
+      <p>
+        BOOSTXL-AoA design files can be found <a href="http://www.ti.com/lit/zip/swrc353">here</a>.
+      </p>
+    </div> 
+    
+  </paper-card>
+
+    <paper-card heading="Preparations" elevation="0" aria-label="Preparations" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">Preparations</div>
+    </div>
+
+    
+    <div class="card-content">
+      <p>
+        </p><h3>1. Configure the LaunchPad for external antenna</h3>
+        To use a CC2640R2 LaunchPad with BOOSTXL-AoA, the LaunchPad must be configured to use external antenna.<br>
+        This is done by moving capacitor C51 according to the rightmost image below.<br><br>
+        <table style="">
+           <tbody>
+              <tr>
+                 <td style="border: none;">
+                    <figure style="margin-inline-end:1px;margin-inline-start:1px;">
+                       <img src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/LAUNCHXL-CC2640R2-PCB_Antenna_3D_Model.jpg" align="left" style="max-width:100%;height:auto;">
+                       <figcaption><center>PCB antenna</center></figcaption>
+                    </figure>
+                 </td>
+                 <td style="border: none;">
+                    <figure style="margin-inline-end:1px;margin-inline-start:1px;">
+                       <img src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/LAUNCHXL-CC2640R2-External_Antenna_3D_Model.jpg" style="max-width:100%;height:auto;">
+                       <figcaption><center>External antenna</center></figcaption>
+                    </figure>
+                 </td>
+              </tr>
+           </tbody>
+        </table>
+        <h3>2. Connect JSC RF cable</h3>
+        Connect the included JSC cable from the LaunchPad JSC connector to the BOOSTXL-AOA JSC connector.
+        <center><img id="Picture 4" width="95%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/boostxl-aoa_lp_jsc_3D_Model.jpg"></center>
+        <h3>3. Mount BOOSTXL-AoA on top of the CC2640R2 LaunchPad</h3>
+        Make sure that all 40 BOOSTXL-AOA pins are aligned and connected to the 40 pins on the LaunchPad
+        <center><img id="Picture 5" width="95%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/boostxl-aoa_lp_connected_3D_Model.jpg"></center>
+      <p></p>
+    </div>
+    
+  </paper-card>
+
+    <paper-card heading="AoA performance" elevation="0" aria-label="AoA performance" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">AoA performance</div>
+    </div>
+
+    
+    <div class="card-content">
+      <p>      
+        Test setup for measuring AoA performance on a BOOSTXL-AoA in an anechoic RF chamber can be seen below.<br>
+        
+        </p><center><img id="Picture 5" width="80%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/TestSetup.png"></center>
+        
+        <br>The AoA transmitter is placed 2.8m from the AoA receiver and
+ the board is rotated so that the incoming signal arrives at angles (<b>phi</b>) from -100° to 100° degrees.<br> 
+        The AoA angle error graph shows the difference between the true angle on the incoming signal (<b>phi</b>) and the measured AoA.
+        <br><br>
+        <center><img id="Picture 5" width="95%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/AoA_vs_Phi.png"></center>
+        <center><img id="Picture 6" width="95%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/AoA_angle_%20error.png"></center>
+        <h3>Challenges</h3>
+        
+        When operating in a non-ideal environment the biggest challenge 
+is multipath propagations where the signals are coherent.<br> 
+        Coherent signals are signals having the same frequency but not 
+necessarily the same phase. 
+        Coherent signals can be the orginal signal reflected from walls 
+or other obstructions and are appearing slightly delayed at the receiver
+ since the signal have traveled a longer distance.
+        Since the signal have traveled longer it will also have a 
+different phase than the orginal signal.<br><br> 
+        The graphs below gives a simplified view of what happens when 
+multipath propagations with coherent signals are received. 
+        Green is the wanted signal while red is the signal seen by the 
+receiver. 
+        <center><img id="Picture 7" width="60%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/MultipathReflectionsSetup.png"></center>
+        <center><img id="Picture 8" width="60%" src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/MultipathReflections.png"></center>
+      <p></p>
+    </div>
+    
+  </paper-card>
+
+    <paper-card heading="Start Development" elevation="0" aria-label="Start Development" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">Start Development</div>
+    </div>
+
+    
+    <div class="card-content">
+      <p>
+        Before starting developing Angle of Arrival applications it's 
+recommended to read the Localization Toolbox section of the     
+        <a href="https://dev.ti.com/tirex/#/?link=Software%2FSimpleLink%20CC2640R2%20SDK%2FDocuments%2FBLE-Stack%2FBLE-Stack%20User's%20Guide">BLE-Stack User's Guide</a><br><br>
+        Software examples for the Angle of Arrival BoosterPack™ kit
+        (<a href="http://www.ti.com/tool/boostxl-aoa">BOOSTXL-AOA</a>) used together with a CC2640R2 LaunchPad can be found in the 
+        <a href="http://www.ti.com/tool/simplelink-cc2640r2-sdk">CC2640R2 SDK</a> (v2.40.00.xx or newer).
+      </p>
+    </div>
+    
+  </paper-card>
+
+    <paper-card heading="Learn more with SimpleLink Academy" elevation="0" aria-label="Learn more with SimpleLink Academy" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">Learn more with SimpleLink Academy</div>
+    </div>
+
+    
+    <div class="card-content">
+      <a href="https://dev.ti.com/tirex/#/?link=Software%2FSimpleLink%20CC2640R2%20SDK%2FSimpleLink%20Academy%2FBluetooth%204.2%2FFundamentals"><img src="Welcome%20to%20the%20Angle%20of%20Arrival%20BoosterPack_files/graduation-cap-laptop.png" alt="SimpleLink Academy"></a>
+      <p>
+        To learn more about software for BOOSTXL-AoA, visit SimpleLink Academy for  
+		<a href="https://dev.ti.com/tirex/#/?link=Software%2FSimpleLink%20CC2640R2%20SDK%2FSimpleLink%20Academy%2FRTLS%20Toolbox%2FAngle%20of%20Arrival%20(AoA)">CC2640R2</a> or 
+		<a href="https://dev.ti.com/tirex/#/?link=Software%2FSimpleLink%20CC13x2%2026x2%20SDK%2FSimpleLink%20Academy%2FRTLS%20Toolbox%2FAngle%20of%20Arrival%20(AoA)">CC26x2R</a> 		
+		which provides a comprehensive set of trainings for the SimpleLink MCU family.
+      </p>
+    </div>
+    
+  </paper-card>
+
+
+    <paper-card heading="General requirements" elevation="0" aria-label="General requirements" class="x-scope paper-card-0">
+    
+
+    <div class="header style-scope paper-card">
+      <iron-image class="style-scope paper-card x-scope iron-image-0" hidden="">
+    
+
+    <div id="sizedImgDiv" role="img" class="style-scope iron-image" aria-label="" hidden=""></div>
+    <img id="img" class="style-scope iron-image">
+    <div id="placeholder" class="style-scope iron-image" hidden=""></div>
+  </iron-image>
+      <div class="title-text style-scope paper-card">General requirements</div>
+    </div>
+
+    
+    <div class="card-content">
+      <h4>Power supply</h4>
+      <p>
+        The BoosterPack is designed to be powered from the 3V3 supply of a compatible LaunchPad
+        through the BoosterPack connector.
+      </p>
+      <h4>Temperature range</h4>
+      <p>
+        The BoosterPack is designed for operation from -40°C to +85°C. Note that other
+        BoosterPack accessories and LaunchPads may have different temperature ranges, and when
+        combined, the combination will be set by the most restrictive combined range. 
+      </p>
+    </div>
+    
+  </paper-card>
+
+    </div>
+  
+  <script>
+    var pages = document.querySelector('iron-pages');
+    var tabs = document.querySelector('paper-tabs');
+    tabs.addEventListener('iron-select', function() {
+    pages.selected = tabs.selected;
+    });
+  </script>
+
+</body></html>

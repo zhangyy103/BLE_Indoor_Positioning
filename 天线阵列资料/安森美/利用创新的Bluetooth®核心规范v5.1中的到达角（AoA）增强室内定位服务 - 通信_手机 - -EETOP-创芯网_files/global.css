@@ -1,0 +1,21 @@
+header, section, footer, aside, nav, main, article, figure {
+    display: block; 
+}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike,
+strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td ,textarea,input { margin:0; padding:0;  }
+address,cite,dfn,em,var, i {font-style:normal;}
+body {  color: #333; font-size: 14px;height: 100%; font-family:'Microsoft Yahei','simsun','arial','tahoma';background: #eee; }
+table { border-collapse:collapse; border-spacing:0; }
+h1, h2, h3, h4, h5, h6, th { font-weight: normal; }
+button,select,textarea{font-size:100%;}
+fieldset,img{border:0;}
+a {text-decoration: none; color: #333; background: none;}
+p{word-break: break-all;}
+ul li{list-style: none;}
+.clearfix{ clear: both; content: ""; display: block; overflow: hidden;}
+.w100{max-width: 100%;}
+.w1200{max-width: 1200px; margin: auto;}
+.header_con{margin: auto;}
+.fl{float: left;}
+.fr{float: right;}

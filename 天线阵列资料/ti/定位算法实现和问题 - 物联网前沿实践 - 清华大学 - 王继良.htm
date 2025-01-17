@@ -1,0 +1,2443 @@
+<!DOCTYPE html>
+<html lang="zh" class="js-focus-visible js" data-js-focus-visible=""><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="介绍物联网基础概念">
+      
+      
+        <meta name="author" content="WiSys Lab">
+      
+      
+      
+      
+      <link rel="icon" href="https://iot-book.github.io/assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.6">
+    
+    
+      
+        <title>定位算法实现和问题 - 物联网前沿实践 - 清华大学 - 王继良</title>
+      
+    
+    
+      <link rel="stylesheet" href="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/main.ded33207.min.css">
+      
+        
+        <link rel="stylesheet" href="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link rel="stylesheet" href="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/css.css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  <style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="Blue-Grey" data-md-color-accent="Deep-Orange"><div id="MathJax_Message" style="display: none;"></div>
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="https://iot-book.github.io/" title="物联网前沿实践" class="md-header__button md-logo" aria-label="物联网前沿实践" data-md-component="logo">
+      
+  <img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/nicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+    </label>
+    <div class="md-header__title md-header__title--active" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            物联网前沿实践
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              定位算法实现和问题
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">键入以开始搜索</div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" style="top: 53px;">
+                <div class="md-sidebar__scrollwrap" style="height: 623px;">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://iot-book.github.io/" title="物联网前沿实践" class="md-nav__button md-logo" aria-label="物联网前沿实践" data-md-component="logo">
+      
+  <img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/nicon.png" alt="logo">
+
+    </a>
+    物联网前沿实践
+  </label>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/0_%E5%89%8D%E8%A8%802/" class="md-nav__link">
+        第2版前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/0_%E5%89%8D%E8%A8%801/%E7%89%A9%E8%81%94%E7%BD%91%E5%AF%BC%E8%AE%BA/" class="md-nav__link">
+        第1版前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/1_%E7%89%A9%E8%81%94%E7%BD%91%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        第1章 物联网概述
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          第2章 信号处理基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          第2章 信号处理基础
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/2_%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/S1_%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%8F%91%E9%80%81%E5%92%8C%E6%8E%A5%E6%94%B6/" class="md-nav__link">
+        2.1 信号生成、发送和接收
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/2_%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/S2_%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7%E5%92%8C%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E4%BB%8B%E7%BB%8D/" class="md-nav__link">
+        2.2 从模拟到数字
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/2_%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/S3_%E4%BF%A1%E5%8F%B7%E9%87%87%E6%A0%B7%E4%B8%8E%E9%87%87%E6%A0%B7%E5%AE%9A%E7%90%86/" class="md-nav__link">
+        2.3 信号采样与采样定理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/2_%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/S4_%E4%BF%A1%E5%8F%B7%E9%87%8F%E5%8C%96/" class="md-nav__link">
+        2.4 信号量化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/2_%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/S5_%E6%A1%88%E4%BE%8B%EF%BC%9A%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BD%95%E9%9F%B3%E3%80%81%E6%94%BE%E9%9F%B3%E7%A8%8B%E5%BA%8F/" class="md-nav__link">
+        2.5 案例：声音采集与播放
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          第3章 傅里叶分析
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          第3章 傅里叶分析
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/3_%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90/S1_%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90%E4%B8%80%E6%AE%B5%E5%8E%86%E5%8F%B2/" class="md-nav__link">
+        3.1 历史与发展
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/3_%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90/S2_%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0/" class="md-nav__link">
+        3.2 傅里叶级数
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/3_%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90/S3_%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" class="md-nav__link">
+        3.3 傅里叶变换
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/3_%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90/S4_%E7%A6%BB%E6%95%A3%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90/" class="md-nav__link">
+        3.4 离散傅里叶分析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/3_%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90/S5_%E7%9F%AD%E6%97%B6%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" class="md-nav__link">
+        3.5 案例：短时傅里叶与频谱
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          第4章 无线信道
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          第4章 无线信道
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/4_%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93/S1_%E4%BF%A1%E9%81%93%E5%AE%9A%E4%B9%89/" class="md-nav__link">
+        4.1 定义与概念
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/4_%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93/S2_%E8%B7%AF%E5%BE%84%E6%8D%9F%E8%80%97%E4%B8%8E%E9%98%B4%E5%BD%B1%E8%A1%B0%E8%90%BD/" class="md-nav__link">
+        4.2 路径损耗与阴影衰落
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/4_%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93/S3_%E5%A4%9A%E5%BE%84%E4%BF%A1%E9%81%93%E6%A8%A1%E5%9E%8B/" class="md-nav__link">
+        4.3 多径信道模型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/4_%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93/S4_%E6%A1%88%E4%BE%8B/" class="md-nav__link">
+        4.4 案例：信道仿真与测量
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          第5章 信号滤波
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          第5章 信号滤波
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/5_%E4%BF%A1%E5%8F%B7%E6%BB%A4%E6%B3%A2/S1_%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+        5.1 数字滤波器简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/5_%E4%BF%A1%E5%8F%B7%E6%BB%A4%E6%B3%A2/S2_%E6%BB%91%E5%8A%A8%E5%B9%B3%E5%9D%87%E6%BB%A4%E6%B3%A2%E5%99%A8/" class="md-nav__link">
+        5.2 滑动平均滤波器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/5_%E4%BF%A1%E5%8F%B7%E6%BB%A4%E6%B3%A2/S3_FIR%E6%BB%A4%E6%B3%A2%E5%99%A8/" class="md-nav__link">
+        5.3 FIR数字滤波器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/5_%E4%BF%A1%E5%8F%B7%E6%BB%A4%E6%B3%A2/S4_IIR%E6%BB%A4%E6%B3%A2%E5%99%A8/" class="md-nav__link">
+        5.4 IIR数字滤波器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/5_%E4%BF%A1%E5%8F%B7%E6%BB%A4%E6%B3%A2/S5_%E5%88%87%E6%AF%94%E9%9B%AA%E5%A4%AB%26%E5%B7%B4%E7%89%B9%E6%B2%83%E6%96%AF/" class="md-nav__link">
+        5.5 高级IIR滤波器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/5_%E4%BF%A1%E5%8F%B7%E6%BB%A4%E6%B3%A2/S6_%E6%BB%A4%E6%B3%A2%E5%99%A8%E6%AF%94%E8%BE%83%E4%B8%8E%E9%80%89%E6%8B%A9/" class="md-nav__link">
+        5.6 案例：滤波器比较与选择
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          第6章 数据调制和解调
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          第6章 数据调制和解调
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S1_%E8%B0%83%E5%88%B6%E8%A7%A3%E8%B0%83%E4%BB%8B%E7%BB%8D/" class="md-nav__link">
+        6.1 引言
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S2_%E5%B9%85%E5%BA%A6%E8%B0%83%E5%88%B6/" class="md-nav__link">
+        6.2 幅度调制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S3_%E9%A2%91%E7%8E%87%E8%B0%83%E5%88%B6/" class="md-nav__link">
+        6.3 频率调制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S4_%E7%9B%B8%E4%BD%8D%E8%B0%83%E5%88%B6/" class="md-nav__link">
+        6.4 相位调制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S5_%E5%9F%BA%E5%B8%A6%E4%BF%A1%E5%8F%B7%E5%92%8C%E8%BD%BD%E6%B3%A2%E4%B8%8A%E5%8F%98%E9%A2%91/" class="md-nav__link">
+        6.5 载波上变频
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S6_%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8/" class="md-nav__link">
+        6.6 数据包检测与同步
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/6_%E6%95%B0%E5%AD%97%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/S7_%E7%9B%B8%E5%AF%B9%E5%AE%8C%E6%95%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" class="md-nav__link">
+        6.7 案例：简单无线通信系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          第7章 短距离无线通信技术
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          第7章 短距离无线通信技术
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/7_%E7%9F%AD%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF/S1_WiFi/" class="md-nav__link">
+        7.1 Wi-Fi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/7_%E7%9F%AD%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF/S2_%E8%93%9D%E7%89%99/" class="md-nav__link">
+        7.2 蓝牙
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/7_%E7%9F%AD%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF/S3_ZigBee/" class="md-nav__link">
+        7.3 ZigBee
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/7_%E7%9F%AD%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF/S4_%E6%A1%88%E4%BE%8B%EF%BC%88%E8%93%9D%E7%89%99%EF%BC%89/" class="md-nav__link">
+        7.4 案例：蓝牙连接实验
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          第8章 Backscatter通信
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          第8章 Backscatter通信
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/8_Backscatter%E9%80%9A%E4%BF%A1/S1_Backscatter%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        8.1 Backscatter基本原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/8_Backscatter%E9%80%9A%E4%BF%A1/S2_RFID/" class="md-nav__link">
+        8.2 RFID
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/8_Backscatter%E9%80%9A%E4%BF%A1/S3_%E6%96%B0%E5%BD%A2%E5%BC%8F%E7%9A%84Backscatter%EF%BC%9A%E4%BB%8EWiFi%E5%88%B0LoRa/" class="md-nav__link">
+        8.3 泛在信号Backscatter
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          第9章 LoRa
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          第9章 LoRa
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/9_LoRa/S1_LoRa%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+        9.1 LoRa 发展简史
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/9_LoRa/S2_LoRa%E9%80%9A%E4%BF%A1%E5%AE%9E%E9%AA%8C/" class="md-nav__link">
+        9.2 LoRa 通信技术
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/9_LoRa/S3_LoRa%E5%86%B2%E7%AA%81%E8%A7%A3%E7%A0%81/" class="md-nav__link">
+        9.3 LoRa 冲突解码算法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/9_LoRa/S4_LoRa%E6%B5%8B%E8%AF%95%E5%BA%8A/" class="md-nav__link">
+        9.4 LoRa 测试床介绍与实现
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/9_LoRa/S5_LoRa%E8%AE%BE%E5%A4%87%E8%BF%9C%E7%A8%8B%E6%9B%B4%E6%96%B0/" class="md-nav__link">
+        9.5 LoRa 设备远程更新
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          第10章 可见光通信
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          第10章 可见光通信
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/10_%E5%8F%AF%E8%A7%81%E5%85%89%E9%80%9A%E4%BF%A1/S1_%E5%8F%AF%E8%A7%81%E5%85%89%E9%80%9A%E4%BF%A1/" class="md-nav__link">
+        10.1 Li-Fi技术简介
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          第11章 毫米波通信
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          第11章 毫米波通信
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/11_%E6%AF%AB%E7%B1%B3%E6%B3%A2%E9%80%9A%E4%BF%A1/S1_%E6%AF%AB%E7%B1%B3%E6%B3%A2%E9%80%9A%E4%BF%A1%E7%9A%84%E5%85%B4%E8%B5%B7/" class="md-nav__link">
+        11.1 毫米波通信兴起与发展
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          第12章 无线测距
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          第12章 无线测距
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/12_%E6%97%A0%E7%BA%BF%E6%B5%8B%E8%B7%9D/S1_%E5%9F%BA%E4%BA%8E%E4%BF%A1%E5%8F%B7%E5%BC%BA%E5%BA%A6%E6%B5%8B%E8%B7%9D/" class="md-nav__link">
+        12.1 基于信号强度测距
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/12_%E6%97%A0%E7%BA%BF%E6%B5%8B%E8%B7%9D/S2_%E5%9F%BA%E4%BA%8E%E4%BC%A0%E6%92%AD%E6%97%B6%E9%97%B4%E6%B5%8B%E8%B7%9D/" class="md-nav__link">
+        12.2 基于传播时间测距
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          第13章 无线定位
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          第13章 无线定位
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/13_%E6%97%A0%E7%BA%BF%E5%AE%9A%E4%BD%8D/S1_%E4%B8%89%E8%BE%B9%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95/" class="md-nav__link">
+        13.1 三边定位
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/13_%E6%97%A0%E7%BA%BF%E5%AE%9A%E4%BD%8D/S2_TDOA%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95/" class="md-nav__link">
+        13.2 TDOA定位
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/13_%E6%97%A0%E7%BA%BF%E5%AE%9A%E4%BD%8D/S3_AOA%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95/" class="md-nav__link">
+        13.3 AOA定位
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/13_%E6%97%A0%E7%BA%BF%E5%AE%9A%E4%BD%8D/S4_%E4%BF%A1%E5%8F%B7%E6%8C%87%E7%BA%B9%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95/" class="md-nav__link">
+        13.4 无线指纹定位
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          第14章 无线追踪
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          第14章 无线追踪
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/14_%E6%97%A0%E7%BA%BF%E8%BF%BD%E8%B8%AA/S1_%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%99%AE%E5%8B%92%E6%95%88%E5%BA%94%E7%9A%84%E8%BF%BD%E8%B8%AA%E6%96%B9%E6%B3%95/" class="md-nav__link">
+        14.1 多普勒追踪
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/14_%E6%97%A0%E7%BA%BF%E8%BF%BD%E8%B8%AA/S2_%E5%9F%BA%E4%BA%8EFMCW%E7%9A%84%E8%BF%BD%E8%B8%AA%E6%96%B9%E6%B3%95/" class="md-nav__link">
+        14.2 FMCW追踪
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/14_%E6%97%A0%E7%BA%BF%E8%BF%BD%E8%B8%AA/S3_%E5%9F%BA%E4%BA%8E%E4%BF%A1%E5%8F%B7%E7%9B%B8%E4%BD%8D%E5%8F%98%E5%8C%96%E7%9A%84%E8%BF%BD%E8%B8%AA%E6%96%B9%E6%B3%95/" class="md-nav__link">
+        14.3 信号相位追踪
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          第15章 传感器感知
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          第15章 传感器感知
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/15_%E4%BC%A0%E6%84%9F%E5%99%A8%E6%84%9F%E7%9F%A5/S1_%E4%BC%A0%E6%84%9F%E5%99%A8%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        15.1 传感器原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/15_%E4%BC%A0%E6%84%9F%E5%99%A8%E6%84%9F%E7%9F%A5/S2_%E6%83%AF%E6%80%A7%E4%BC%A0%E6%84%9F%E5%99%A8%E6%84%9F%E7%9F%A5/" class="md-nav__link">
+        15.2 惯性传感器感知
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/15_%E4%BC%A0%E6%84%9F%E5%99%A8%E6%84%9F%E7%9F%A5/S3_%E6%A1%88%E4%BE%8B%EF%BC%9A%E5%AE%89%E5%8D%93%E4%BC%A0%E6%84%9F%E5%99%A8%E7%BC%96%E7%A8%8B/" class="md-nav__link">
+        15.3 案例：安卓传感器编程
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          第16章 声波感知
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          第16章 声波感知
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/16_%E5%A3%B0%E6%B3%A2%E6%84%9F%E7%9F%A5/S1_%E5%A3%B0%E6%B3%A2%E6%B5%8B%E8%B7%9D/" class="md-nav__link">
+        16.1 声波测距
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/16_%E5%A3%B0%E6%B3%A2%E6%84%9F%E7%9F%A5/S2_%E5%A3%B0%E6%B3%A2%E5%AE%9A%E4%BD%8D/" class="md-nav__link">
+        16.2 声波定位
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/16_%E5%A3%B0%E6%B3%A2%E6%84%9F%E7%9F%A5/S3_%E5%A3%B0%E6%B3%A2%E8%BF%BD%E8%B8%AA/" class="md-nav__link">
+        16.3 声波追踪
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/16_%E5%A3%B0%E6%B3%A2%E6%84%9F%E7%9F%A5/S4_%E5%A3%B0%E6%B3%A2%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB/" class="md-nav__link">
+        16.4 声波手势识别
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/16_%E5%A3%B0%E6%B3%A2%E6%84%9F%E7%9F%A5/S5_%E5%A3%B0%E6%B3%A2%E8%AE%BE%E5%A4%87%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        16.5 声波设备认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          第17章 Wi-Fi感知
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          第17章 Wi-Fi感知
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/17_WiFi%E6%84%9F%E7%9F%A5/S1_%E4%BF%A1%E9%81%93%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96/" class="md-nav__link">
+        17.1 信道状态信息获取
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/17_WiFi%E6%84%9F%E7%9F%A5/S2_CSI%E5%88%86%E6%9E%90%E5%AE%9E%E4%BE%8B/" class="md-nav__link">
+        17.2 CSI分析实例
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/17_WiFi%E6%84%9F%E7%9F%A5/S3_%E6%A1%88%E4%BE%8B%EF%BC%9AWiFI%20ToF%E6%B5%8B%E8%B7%9D/" class="md-nav__link">
+        17.3 WiFi测距
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/17_WiFi%E6%84%9F%E7%9F%A5/S4_Wi-Fi%E5%AE%9A%E4%BD%8D/" class="md-nav__link">
+        17.4 WiFi定位
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="0">
+          第18章 蓝牙感知
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_20">
+          <span class="md-nav__icon md-icon"></span>
+          第18章 蓝牙感知
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/18_%E8%93%9D%E7%89%99%E6%84%9F%E7%9F%A5/S1_%E8%93%9D%E7%89%99%E5%AF%BB%E5%90%91%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        18.1 蓝牙寻向原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        18.2 蓝牙定位设备
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        18.3 定位算法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        18.4 应用
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        第19章 Backscatter感知
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="0">
+          第20章 UWB感知
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_22">
+          <span class="md-nav__icon md-icon"></span>
+          第20章 UWB感知
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/20_UWB%E6%84%9F%E7%9F%A5/S1_UWB%E8%AE%BE%E5%A4%87%E4%B8%8E%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="md-nav__link">
+        20.1 UWB设备与开发环境
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        20.3 UWB定位算法
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        第21章 LoRa感知
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/404/" class="md-nav__link">
+        第22章 毫米波感知
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="0">
+          第23章 可见光感知
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_25">
+          <span class="md-nav__icon md-icon"></span>
+          第23章 可见光感知
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/23_%E5%8F%AF%E8%A7%81%E5%85%89%E6%84%9F%E7%9F%A5/S1_%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        23.1 概述
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/23_%E5%8F%AF%E8%A7%81%E5%85%89%E6%84%9F%E7%9F%A5/S2_%E4%B8%BB%E5%8A%A8%E5%BC%8F/" class="md-nav__link">
+        23.2 主动式设备定位
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/23_%E5%8F%AF%E8%A7%81%E5%85%89%E6%84%9F%E7%9F%A5/S3_%E8%A2%AB%E5%8A%A8%E5%BC%8F/" class="md-nav__link">
+        23.3 被动式标签定位和姿态估计
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="0">
+          附录
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_26">
+          <span class="md-nav__icon md-icon"></span>
+          附录
+        </label>
+        <ul class="md-nav__list">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/24_%E9%99%84%E5%BD%95/S1_%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/" class="md-nav__link">
+        1 Android 环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://iot-book.github.io/24_%E9%99%84%E5%BD%95/S2_MATLAB%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/" class="md-nav__link">
+        2 MATLAB 环境搭建
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" style="top: 53px;">
+                <div class="md-sidebar__scrollwrap" style="height: 623px;">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="#1-simplelink-cc26x2r" class="md-nav__link md-nav__link--passed">
+    1. 德州仪器 SimpleLink CC26X2R 背景
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link md-nav__link--passed">
+    2. 实验环境的配置和搭建
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link md-nav__link--passed">
+    3. 数据的获取和定位原理
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link md-nav__link--passed md-nav__link--active">
+    4. 数据处理
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">定位算法实现和问题<a class="headerlink" href="#_1" title="Permanent link">¶</a></h1>
+<h2 id="1-simplelink-cc26x2r">1. 德州仪器 SimpleLink CC26X2R 背景<a class="headerlink" href="#1-simplelink-cc26x2r" title="Permanent link">¶</a></h2>
+<p>下面介绍德州仪器最新的 AoA 定位模组的硬件部分和软件部分。</p>
+<p>AoA 定位模组的硬件部分包括 SimpleLink CC26X2R LaunchPad 开发板和 BOOSTXL-AoA 
+蓝牙天线模组。前者为一长方形可编程开发板，后者为一三角形电路板，两侧各有三根天线，可焊接在开发板上，用于接收蓝牙信号和计算入射角 
+AoA。一个完整的蓝牙 AoA 定位场景需要至少三片 SimpleLink CC26X2R LaunchPad 设备和至少两片 
+BOOSTXL-AoA 模组构成。
+</p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/CC26X2R1.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. SimpleLink CC26X2R LaunchPad 开发板</div>
+<p></p></center><p></p>
+<p></p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/BOOSTXL_AoA.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. BOOSTXL-AoA 蓝牙天线</div>
+<p></p></center><p></p>
+<p>软件部分包括在电脑中运行的控制代码和烧录到 LaunchPad 开发板中的固件组成。一共有三种固件，烧录后在蓝牙通信中分别扮演 
+Master，Passive 和 Slave 的角色；每个定位场景需要一个 Master，一个 Slave 和一个以上的 Passive 
+节点，其中烧录了 Slave 的开发板固定在被定位的物体上，位置未知，Master 和 Passive 位置固定且已知，并通过 usb 
+和同一台电脑相连。Master 给 Slave 发送控制信号使 Slave 广播定位信息，而后由 Master 和 Passive 
+接收这些广播，分别计算 AoA，由两个及以上的 AoA 结果即可算出 Slave 的位置。烧录 Master 和 Passive 
+的开发板需要装有 BOOSTXL-AoA 模组，以计算 AoA；烧录 Slave 的开发板由于只需要收发信号，不需要计算 
+AoA，可以通过开发板上自带的单根天线完成，不需要装备 BOOSTXL-AoA 模组。</p>
+<h2 id="2">2. 实验环境的配置和搭建<a class="headerlink" href="#2" title="Permanent link">¶</a></h2>
+<p>(1) 安装 SDK：从这个网址下载安装 SimpleLink CC13X2-26X2 SDK 。在安装目录下包含了需要用到的所有软件，包括电脑运行的控制代码和烧录用的 Master，Passive 和 Slave 三种固件。</p>
+<p>电脑端的控制代码在<simplelink cc13x2="" cc26x2="" sdk=""> → tools → ble5stack → rtls_agent 文件夹。使用时需要python3环境。在使用前需要按照该文件夹内Readme的指示，在 rtls_agent 目录下执行</simplelink></p>
+<div class="codehilite"><table class="codehilitetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>    pip.exe install -r requirements.txt
+</code></pre></div></td></tr></tbody></table></div>
+
+<p>安装所需要的 python 包，再执行</p>
+<div class="codehilite"><table class="codehilitetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>    package.bat -c -b -u -i
+</code></pre></div></td></tr></tbody></table></div>
+
+<p>将 rtls_agent 文件夹下的库文件安装好。注意，package.bat 中硬编码了 python 的路径，使用时需要编辑该文件的前 8 行，将 PYTHON3 和 PIP3 两个变量值设置为正确的 python.exe 和 pip.exe 的路径。</p>
+<p>(2) 烧录固件：烧录的固件在<simplelink cc13x2="" cc26x2="" sdk=""> → examples → 
+rtos → CC26X2R1_LAUNCHXL → ble5stack 目录下，有名为 rtls_master, rtls_slave, 
+rtls_passive三个文件夹，分别对应master，slave和passive三种角色的固件。这里rtls是real time 
+localization system的缩写。每个固件都是一个CCS项目，烧录时需要安装Code Composer 
+Studio，打开各个目录下的CCS工程文件，对工程进行编译，然后使用CCS的debug功能将代码载入开发板；如果这一过程受阻，也可以将编译好的
+二进制文件用其他工具烧录入开发板的flash中。</simplelink></p>
+<p>(3) 安装硬件：图 4.1 与图 4.2 为传统开发板与蓝牙天线示意图，每个开发板配有一套天线用于收发数据。根据 AoA 
+计算原理，需要使用天线阵列接收蓝牙信号。因此需要将 BOOSTXL_AoA 模组与 CC26X2R1 组件连接起来，使用 BOOSTXL_AoA
+ 中的天线阵列。在使用过程中，烧录了 master 和 passive 的开发板上均可安装 BOOSTXL-AoA 
+模组用来接收蓝牙信号。由于安装过后需要使用外部天线，因此需要对传统 CC26X2R1 开发板进行修改，具体修改步骤可参照 <a href="https://dev.ti.com/tirex/explore/node?node=AHYhhuDNTaRXzkOlahOlvA__pTTHBmu__LATEST">https://dev.ti.com/tirex/explore/node?node=AHYhhuDNTaRXzkOlahOlvA__pTTHBmu__LATEST</a></p>
+<h2 id="3">3. 数据的获取和定位原理<a class="headerlink" href="#3" title="Permanent link">¶</a></h2>
+<p>在定位实验中，我们会将 Master 和 Passive 
+开发板部署在需要定位的环境中，将他们的天线组水平放置在固定位置，并测量这些天线的中心位置和朝向。受限于 AoA 
+的原理，使用一组直线排布的天线阵列时，只能完成 
+180°范围内的定位，而无法判断目标位置在天线的哪一侧；为了达到最高精度，应尽可能将天线放置在场景边缘。Master 和 Passive 
+都需要通过 USB 和同一台电脑相连，用于传回 AoA 数据等。在部署完毕后，即可定位 Slave 所在位置。Slave 
+只需要向四周发送信号，因此不需要天线阵列；其行为是 Master 通过蓝牙远程控制的，因此也不需要连接电脑，只要有充电宝等便携能源给其 usb 
+接口供电即可。 </p>
+<p>在布置好实验环境后，只要将 Master 和 Passive 接入电脑，并启动控制代码即可。在<simplelink cc13x2="" cc26x2="" sdk="">
+ → tools → ble5stack → rtls_agent → rtls_ui 文件夹下给出了带有图形界面的控制工具，双击 
+rtls_ui.exe，等待其加载完成即可在浏览器中看到TI设计的可视化页面。待该应用扫描端口，发现连入usb的SimpleLink开发板后，按
+照提示选中并连接Master和Passive设备，然后点击auto 
+play按钮即可自动完成整个定位流程，并实时地将AoA结果输出到屏幕上。设备可能会出现问题导致断开连接或无示数等情况，这时点击restart，将
+设备重新初始化，再点击auto 
+play即可。点击conimagesurations按钮可以设置一些参数，其中比较重要的是connect_interval_mSec，其默认值是
+100，这虽然能达到较高的定位实时性，但会导致连接不稳定，容易断开。将connect_interval_mSec设置为300，以定位频率降低为代
+价，使连接更稳定，能满足较长时间的定位。
+</simplelink></p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/rtls_ui.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. rtls_ui 界面示意图</div>
+<p></p></center><p></p>
+<p>使用图形界面的控制方法使用便捷，在设置里也有少量参数可供调节，也有详尽的 log 文件将一切数据和活动输出，但毕竟缺乏灵活度和可拓展性。TI 还提供了使用 python 代码，通过 rtls_util 库提供的接口进行访问的方法。在<simplelink cc13x2="" cc26x2="" sdk="">
+ → tools → ble5stack → rtls_agent → 
+examples文件夹下有三个python文件，演示了各种通过rtls_util接口进行控制的方法。这些代码都是可以直接运行的，不过代码中硬省去
+了从usb串口中发现SimpleLink设备的过程，而是直接硬编码了各设备的串口。使用时需要在windows的设备管理器中找到Master和
+Passive对应的串口名称，并改写python代码再运行。三个python文件分别叫
+rtls_example_with_rtls_util.py，rtls_aoa_multi_conn_example.py和
+rtls_aoa_iq_with_rtls_util_export_into_csv.py，顾名思义，
+rtls_example_with_rtls_util.py提供了最简单最直接的定位示例，
+rtls_aoa_multi_conn_example.py演示了对多个Slave进行连接从而实现多目标定位的例子，而
+rtls_aoa_iq_with_rtls_util_export_into_csv.py会创建一个名为
+rtls_example_with_rtls_util_log的文件夹，并在其中存储.log文件和.csv文件，在csv文件中会写入此次定位各个
+采样点的I/Q值，方便后续分析。
+</simplelink></p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/rtls_python.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. python 代码运行示意图</div>
+<p></p></center><p></p>
+<p>这里 python 代码和图形界面的控制逻辑和执行流程都完全相同。</p>
+<p>1) 通过扫描电脑的 usb 串口或硬编码的方式获得 Master 和 Passive 的串口信息，并用 rtlsUtil.set_devices() 接口保存这些信息；</p>
+<p>2) 执行 rtlsUtil.reset_devices()，初始化设备；</p>
+<p>3) 调用 rtlsUtil.scan() 通过 Master 设备扫描范围内的 Slave 设备，获取其设备信息；</p>
+<p>4) 根据上一步扫描结果，调用 rtlsUtil.ble_connect() ，与 Slave 设备建立 BLE 连接；这里需要设置 
+connect_interval_mSec，按前述所说，默认值是 100，而设置为 300 时定位频率降低但连接更稳定不易断开；</p>
+<p>5) 通过 rtlsUtil.aoa_set_params()，将一些 AoA 定位相关的参数，包括采样频率，切换天线的频率和规则等传给 
+Master 和 Passive，然后调用 rtlsUtil.aoa_start() ，启动定位流程。此后 Master 将不停地发控制信息给 
+Slave，命令 Slave 广播带有 CTE 的蓝牙包，而每个 Master 和 Passive 设备对每个蓝牙包都能算出一个 AoA 
+值，这些值将会源源不断地传回电脑，从而实现实时定位。</p>
+<p>在获取了各节点收到的实时的 AoA 数据后，即可使用三角定位的方法，根据预先测得的各节点的位置和朝向算出 Slave 
+的位置。本实验也可以支持多目标定位。Master 可以和多个 Slave 同时建立连接，而每个 Slave 广播的包都带有其 Mac 
+地址，借此可以区分不同 Slave 的信息。Master 和 Passive 可以同时聆听多个 Slave 的广播包并分别计算 
+AoA，因此可以同时对所有 Slave 进行定位。</p>
+<h2 id="4">4. 数据处理<a class="headerlink" href="#4" title="Permanent link">¶</a></h2>
+<p>在常见的由天线阵列计算 AoA 
+的场景中，多根天线都是同时接收数据的。在同一时刻两根天线之间的相位差乘以波长即得到信号源到这两者之间的距离差，再用三角函数即可算得入射角。而 
+TI 提供的 SimpleLink 开发板通过依次轮询的方式使用天线阵列。在使用天线 2 接收信号时，根据天线 1 
+搜集到的采样点，可以推算出天线 1 此时应当收到的相位。具体操作为：</p>
+<p>1) 对所有天线在其没有切换时，计算相邻两个采样点之间的相位差，并取平均</p>
+<p>2) 如果每根天线采集 16 个采样点，则可以对整个采样序列计算第(i+16)个点减第 i 个点的相位差。这样间距 16 个采样点的两个点一定在不同两根天线上，这 16 个点中间一定会有一个天线切换过程。</p>
+<p>3) 第 i 个点加上 16 倍“相邻点平均相位差”即为同一根天线第 i+16 个点应有的相位，和第 i+16 个点的真实值就形成了同一时刻不同天线的相位差对比</p>
+<p>4) 第 i+16 点减第 i 点相位得到的差值，再减去 16 倍相邻点平均相位差，即可得到两根天线在同一时刻的相位差值。</p>
+<p>5) 由于在轮询时，是对天线按照 1-2-3-1-2-3 的顺序采样的，因此这一相位差在 1-2 和 2-3 时应当比较接近，而在 3-1
+ 时应当是相反数并且幅度变为 2 倍；因此对上述(i+16)-i 的相位差，再对 3-1 的部分乘以-0.5，然后整体取平均即可。伪代码如下：</p>
+<div class="codehilite"><table class="codehilitetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>    phase_diff =  [phase[i+1]-phase[i] for i in range(length - 1) if i%16 != 0 ] 
+    avg_phase_diff = average(phase_diff)
+    antenna_diff = [phase[i+16]-phase[i]-avg_phase_diff*16 for i in range(length - 16) ]
+    antenna_diff_fixed = [ i if floor(i/16)%3 != 2 else -0.5*i for i in antenna_diff ]
+    avg_diff = average(antenna_diff_fixed)
+    avg_distance = avg_diff / 2 / pi * wavelength
+    angle = arcsin(avg_distance / antenna_distance)
+</code></pre></div></td></tr></tbody></table></div>
+
+<p>这里注意，相位的范围是-180°到 180°，相位增加到 180°时会循环变为负值，而不是每个采样点依次递增的；如下图，是某次实验某个数据包 512 个采样点的相位情况。红框标识了天线 3-1，1-2 和 2-3 的切换处，采样点增幅增加和放缓的例子。
+</p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/1_BLE_phase.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. 单蓝牙数据包相位变化情况</div>
+<p></p></center><p></p>
+<p>上图中可以看到，相位沿各采样点递增，每个变化周期中会有两次增速放缓和一次增速提升，这些就是切换天线的时刻。下面将超过 180°的点进行补偿使之不会到-180°，得到下图，可以更加直观地看到这些递增递减关系。</p>
+<p></p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/phase_change_all.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. 补偿后单蓝牙数据包相位变化情况</div>
+<p></p></center><p></p>
+<p></p><center>
+<img src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/phase_change_part.png" width="600px">
+</center>
+<center><p></p>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. 补偿后单蓝牙数据包相位变化情况(局部)</div>
+<p></p></center><p></p>
+<p>如果不进行 360°的补偿，直接计算相位差，直接减去 16 倍相位差似乎有失偏颇；不过由于天线间距不超过半个波长，天线间相位差不会超过 180°，在算出超过±180°的值时只需直接加减 360°即可。</p>
+<p>上述是 TI 提供的，内置在烧录入 Master 和 Passive 的固件中的 AoA 计算算法。TI 的实验模组不仅支持将各采样的相位值通过 usb 反馈给电脑，也可以在芯片上自动计算 AoA。</p>
+<!-- 然而这一算法过于简单，仍有改进的空间以提高定位的精确度。下面阐述我们在实验中发现的一些现象和改进点：
+
+(1) 实验中发现，天线切换时相位是连续缓慢变化，而非理想情况下的直接跳变。这是因为天线切换的时间表包含 sample slot 时间片和 switch slot 时间片，前者使用单根天线采集数据，后者留给硬件完成天线切换的过程。在 switch slot 中采集到的相位不再准确。因此，我们可以只取 16 个采样点中比较平稳的中间 8 个，舍弃边缘不准确的 8 个点，避免 sample slot 中的不准确的采样点影响相位差均值。
+
+(2) 另外，我们也把“求相邻点相位的平均值”替换为这 8 个点的直线拟合。我们观察到，在每一根天线采样的 16 个点中，中间 8 个点基本都在同一直线上，而这条直线的斜率却不十分稳定，在每个数据包的 512 个点中有轻微的偏移。这样，如果对 512 个点整体取平均相位差，再施加到每一组 8 个点上就会有失偏颇。我们把计算相邻点相位差这一步，从求 512 个点的平均值，变成了求 8 个点拟合直线的斜率，这样能在每一个局部达到最精确的拟合效果，更直观地推算出在切换天线后，当前天线应有的相位值，便于算相位差。
+
+(3) 我们观察到，第(i+16)减第 i 个点的相位差，按理想情况应当是阶梯状，在每根天线的 16 个点内应为保持不变值。然而实验发现每 16 个点内变化很大，而且在这 16 点区间内变化率为一条直线，说明有某种不断积累的误差，在每根天线的第 1 到 16 个点不断累积。并且每根天线都似乎有自己固有的直线斜率，这一累计误差和各天线相关。如图 4.7。
+
+<center>
+<img src="./images/phase_difference.png" width=600px>
+</center>
+<center>
+<div style="color:orange; border-bottom: 1px solid #d9d9d9;
+display: inline-block;
+color: #999;
+padding: 2px;">图. 相邻两根天线相对采样点差值变化情况</div>
+</center>
+
+由于蓝牙信号是稳定的正弦波，我们认为问题只能出在采样点处，采样点可能因为某种原因没有在应有的时刻采样，即采样率不稳定。我们按照信道和正弦波频率信息，可以推算出不切换天线时应有的相位和时间关系，从而计算出当前的采样率；对采样率进行平滑滤波并代入数据中，可以对误差进行适当的修正。 -->
+
+<!-- ### 5. 后续工作
+后续的进一步研究方向主要有：
+
+(1) 分析出上述 4.4 (3) 提到的的各天线的累计误差的本质和来源，从而找到合适合理的误差消除方法。这种误差具有极强的规律性，或许可以通过在固定环境下重复测量，或者对不同 AOA 角度进行精确测量，将测得的数据和 ground truth 对比，找出累计误差的分布规律。
+
+(2) 调整采样过程中的各种参数，例如，如果能降低天线切换频率，对每根天线采样 128 个采样点的话，依然可以在 512 个采样点的数据包中完成一轮切换，而这种情况下数据点更多，切换天线的时间占比更小，更容易排除切换天线带来的误差。
+
+(3) 对整套 AOA 设备的性能进行测量。在可消除的误差基本排查干净后，对 AOA 设备在各角度下的精确度进行测量，验证或推翻之前观测到的“在正对天线阵列时更加准确”的观点。可根据结论设计进一步的研究方向和应用场景。 -->
+
+
+
+
+
+                
+              </article>
+            <!-- // % 评论 -->
+            <!-- <div id="gitalk-container"></div>
+              <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+              <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+              <script>
+                var gitalk = new Gitalk({
+                    clientID: 'ab5371b4172e50e09adb',
+                    clientSecret: '792851320ee2902fe9c88bb7795e89592b108f77',
+                    repo: 'Comments',
+                    owner: 'iot-book',
+                    admin: ['iot-book', 'tongsh'],
+                    // id: 'location.pathname.substring(1,30)',
+                    id: location.pathname,      // Ensure uniqueness and length less than 50
+                    distractionFreeMode: false,  // Facebook-like distraction free mode
+                    labels: ['Gitalk'],
+                    title: 'IoTBook-Comment'
+                  })
+                  gitalk.render('gitalk-container')
+              </script> 
+            </div> -->
+            <!-- End 评论 -->
+            
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    <a href="http://tns.thss.tsinghua.edu.cn/~jiliang/" target="_blank" rel="noopener">
+      © 清华大学 - 王继良 - jiliangwang@tsinghua.edu.cn
+    </a>
+    <br>
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+  
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/bundle.51198bba.min.js"></script>
+      
+        <script src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/extra.js"></script>
+      
+        <script src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/MathJax.js"></script>
+      
+      
+      <!-- Default Statcounter code for iot-book http://iot-book.github.io -->
+      <script type="text/javascript">
+        var sc_project=12505380; 
+        var sc_invisible=1; 
+        var sc_security="d2f0597f"; 
+        </script>
+        <script type="text/javascript" src="%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%97%AE%E9%A2%98%20-%20%E7%89%A9%E8%81%94%E7%BD%91%E5%89%8D%E6%B2%BF%E5%AE%9E%E8%B7%B5%20-%20%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%20-%20%E7%8E%8B%E7%BB%A7%E8%89%AF_files/counter.js" async=""></script>
+        <noscript><div class="statcounter"><a title="Web Analytics"
+        href="https://statcounter.com/" target="_blank"><img
+        class="statcounter"
+        src="https://c.statcounter.com/12505380/0/d2f0597f/1/"
+        alt="Web Analytics"></ a></div></noscript>
+        <!-- End of Statcounter Code -->
+
+    
+  
+</body></html>

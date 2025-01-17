@@ -1,0 +1,55 @@
+(---------------------------------------------------------------------)
+(                                                                     )
+(    NC DRILL Log                                                     )
+(                                                                     )
+(    Drawing          : MCU035_BOOSTXL-AoA_PCB.brd                    )
+(    Software Version : 17.2S032                                      )
+(    Date/Time        : Fri Mar 23 08:44:19 2018                      )
+(                                                                     )
+(---------------------------------------------------------------------)
+
+
+
+ Processing NC Parameters file 'nc_param.txt' ...
+
+ NC PARAMETERS
+ -------------
+
+ FORMAT   		4.8
+ MACHINE-OFFSET		x:0.00000	y:0.00000   (mm)
+ FEEDRATE		1
+ COORDINATES		ABSOLUTE
+ OUTPUT-UNITS		METRIC
+ TOOL-ORDER		INCREASING
+ REPEAT-CODES		YES
+ SUPPRESS-LEAD-ZEROES	NO
+ SUPPRESS-TRAIL-ZEROES	NO
+ SUPPRESS-EQUAL		NO
+ TOOL-SELECT		NO
+ HEADER			none
+ LEADER			12
+ CODE			ASCII
+ SEPARATE		YES
+ SEPARATE-ROUTING	NO
+ OPTIMIZE_DRILLING	NO
+ ENHANCED_EXCELLON	NO
+ SCALE			1.000000
+
+
+
+ Drill files being output to directory 'C:/share/GIT/boostxl-aoa/design/hw/Cadence/Allegro' ...
+
+
+
+     'MCU035_BOOSTXL-AoA_PCB-1-6.drl' created for holes connecting TOP and BOTTOM ; Plating = PLATED
+     -----------------------------------------------------------------------------------------------
+
+           Num     Size      +/- Tolerance     Plating   Quantity
+
+            1.   0.2000    0.0000/  0.0000      PLATED        795
+            2.   1.0500    0.0000/  0.0000      PLATED         40
+
+     ---- Total holes:                                        835
+
+     ---- Total head travel:              25.10 feet (7.65 meters)
+
