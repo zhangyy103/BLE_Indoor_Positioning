@@ -1,0 +1,13 @@
+#
+# Copyright (c) 2018 - 2020 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+config CLOCK_CONTROL_MPSL
+	bool
+	depends on MPSL
+	depends on CLOCK_CONTROL
+	depends on !SOC_SERIES_NRF54HX
+	default y
+	select CLOCK_CONTROL_NRF_FORCE_ALT

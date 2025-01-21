@@ -1,0 +1,44 @@
+# Copyright (c) 2024 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+
+menu "SDP"
+
+menuconfig SDP
+	bool "SDP"
+
+if SDP
+
+config SDP_GPIO
+	bool "SDP GPIO application"
+
+config SDP_MSPI
+	bool "SDP MSPI application"
+
+if SDP_GPIO
+
+choice SDP_GPIO_BACKEND
+	prompt "SDP GPIO backend type"
+	default SDP_GPIO_BACKEND_ICMSG
+	help
+	  Select the backend type for SDP.
+
+config SDP_GPIO_BACKEND_MBOX
+	bool "MBOX backend"
+	help
+	  The MBOX version is more resource-efficient than the ICMSG backend,
+	  but needs to have a shared structure defined as a communication channel.
+
+config SDP_GPIO_BACKEND_ICMSG
+	bool "ICMSG backend"
+
+config SDP_GPIO_BACKEND_ICBMSG
+	bool "ICBMSG backend"
+
+endchoice
+
+endif # SDP_GPIO
+
+endif # SDP
+
+endmenu

@@ -1,0 +1,36 @@
+# The configurations resulting as a product of scenarios and platforms
+# will be skipped if quarantine is used. More details here:
+# https://docs.zephyrproject.org/latest/guides/test/twister.html#quarantine
+
+- scenarios:
+    - applications.matter_bridge.lto.br_ble.nrf54h20.wifi
+    - applications.matter_bridge.release.br_ble.nrf54h20.wifi
+    - sample.matter.template.nrf54h20.nrf7002eb
+  comment: "54H Wi-Fi PSA and Matter Legacy crypto config"
+
+- scenarios:
+    - net.lib.wifi_credentials_backend_psa
+  comment: "Fix not known at time of upmerge, temporarily excluded to be fixed after upmerge"
+
+- scenarios:
+    - applications.matter_bridge.lto.br_ble.memory_profiling
+    - sample.matter.light_switch.persistent_subscriptions
+  platforms:
+    - nrf7002dk/nrf5340/cpuapp
+  comment: https://nordicsemi.atlassian.net/browse/NCSDK-31119
+
+- scenarios:
+    - sample.nrf7002.shell.otbr
+  platforms:
+    - nrf7002dk/nrf5340/cpuapp
+  comment: https://nordicsemi.atlassian.net/browse/NCSDK-31155
+
+- platforms:
+    - native_posix
+  comment: "native_posix will be removed soon - native_sim platform is the default simulator now"
+
+- scenarios:
+    - drivers.sdp_asm.basic
+  platforms:
+    - nrf54l15dk/nrf54l15/cpuflpr
+  comment: https://nordicsemi.atlassian.net/browse/NCSDK-31409
