@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>基于低功耗蓝牙的实时定位系统 （RTLS）</title>
+<link rel="stylesheet" href="ble_rtls_data/ubuntu-regular-woff.css"><link rel="stylesheet" href="ble_rtls_data/glyphicons-halflings-regular.css"><link rel="stylesheet" href="ble_rtls_data/united2.min.css"><link rel="stylesheet" href="ble_rtls_data/bootstrap-responsive.min.css"><link rel="stylesheet" href="ble_rtls_data/strapdown.css"><link rel="shortcut icon" type="image/x-icon" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/.metadata/favicon.ico"><script type="text/javascript" async="" charset="utf-8" id="demandbase_js_lib" src="127cd254d55fd63f.min.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_292" src="init.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_272" src="elqCfg.min.js"></script><script type="text/javascript" async="" charset="utf-8" id="utag_266" src="elqCfg.min.js"></script><script type="text/javascript" async="" charset="utf-8" src="19c369a85be168c883cbae6664876759.js" id="utag_246"></script><script type="text/javascript" async="" charset="utf-8" src="js" id="utag_318"></script><script type="text/javascript" async="" charset="utf-8" src="utag.318.js" id="utag_ti.main_318"></script><script type="text/javascript" async="" charset="utf-8" src="utag.246.js" id="utag_ti.main_246"></script><script type="text/javascript" async="" charset="utf-8" src="utag.266.js" id="utag_ti.main_266"></script><script type="text/javascript" async="" charset="utf-8" src="utag.272.js" id="utag_ti.main_272"></script><script type="text/javascript" async="" charset="utf-8" src="utag.273.js" id="utag_ti.main_273"></script><script type="text/javascript" async="" charset="utf-8" src="utag.292.js" id="utag_ti.main_292"></script><script type="text/javascript" async="" charset="utf-8" src="utag.342.js" id="utag_ti.main_342"></script><link charset="utf-8" rel="preload" as="script" href="https://try.abtasty.com/shared/me.3d90e9c1b5b912644317.js"><script type="text/javascript" async="" charset="utf-8" src="ble_rtls_data/019334ebd08800194c9a4c92ae6005050006900d00a83" id="tealium_visitor_service_273main_1"></script><script type="text/javascript" async="" charset="utf-8" src="ble_rtls_data/019334ebd08800194c9a4c92ae6005050006900d00a83_002" id="tealium_visitor_service_273main_2"></script></head>
+
+<!-- START PRE -->
+
+
+
+
+
+
+<!-- END PRE -->
+
+<body style=""><div class="container"><nav class="navbar navbar-default navbar-static-top"><div class="container-fluid"> <div class="navbar-header">  <div id="headline" class="navbar-brand">基于低功耗蓝牙的实时定位系统 （RTLS） </div> </div> </div></nav><div class="container"><div class="row row-offcanvas row-offcanvas-left"><div class="col-xs-12 col-sm-9" id="content"><div class="bs-callout bs-callout-danger "><h4><span class="glyphicon glyphicon-exclamation-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">注意
+ </span></h4>
+<p>在过去的几年里，我们一直在改进我们的实时本地化系统
+（RTLS） 工具箱。今天，我们的 SimpleLink CC26x2 低功耗蓝牙无线 MCU 和
+软件堆栈 （BLE5-Stack） 解决方案元件支持蓝牙 5.2 的开发
+基于接收信号强度的合规测向解决方案
+指示 （RSSI） 和到达角 （AoA），每个都用于提供帮助
+在各个领域构建高级测向应用程序的客户，
+例如汽车和工业。 </p>
+<p>应该理解的是，实际的最终产品实现包含
+AoA 测向定位器功能 （1） 需要高级知识和
+客户进一步集成，这通常在
+使用蓝牙 LE 进行通信的产品。一些挑战
+客户可能需要在其定位器产品中使用 AoA 地址，包括：
+但不限于以下内容： </p>
+<ul>
+<li>嵌入式或系统级算法，实现所需的定位
+性能/角度精度，同时减少不需要的存在
+各种作环境中的信号（例如多路径接收） </li>
+<li>天线设计与最终产品的工业设计限制相匹配
+和/或性能预期 </li>
+</ul>
+<p>随着 SDK 中现在包含蓝牙认证的 AoA 功能，我们正在使
+我们对 AoA 的支持进行了以下修改： </p>
+<ul>
+<li>BOOSTXL-AOA 天线评估板将不再可供购买
+2021 年 9 月 30 日之后。 </li>
+<li>对于 SDK 5.20 及更高版本，根据低功耗蓝牙规范，
+RTLS 示例仅支持 “raw I/Q data” 模式。I/Q 数据可用于
+开发需要特定于您的目的的算法
+product 实现。 </li>
+<li>对于 SDK 5.20 及更高版本，已删除对到达角 （AoA） 的支持
+来自 RTLS 可视化演示。 </li>
+</ul>
+<p>SimpleLink CC13X2 / CC26X2 SDK 版本 5.10 及更早版本的内容
+将保持可访问性;但是，将提供对 AoA 的有限 E2E 支持
+这些早期的 SDK。  </p>
+<p>（1）  <strong>包含 AoA 测向目标功能的实施
+不需要如此高级的知识，可以直接利用rtls_responder
+example 如 Bluetooth  <a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html">Low Energy Angle 中所述
+目标设备的到达 （AoA） </a>
+</strong></p>
+</div>
+<h1 class="body-heading" id="introduction">介绍 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#introduction"></a></h1><p>本模块是对 Real Time Localization System （RTLS） Toolbox 的研究
+在  <a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK">SimpleLink CC13XX-CC26XX SDK </a> 中提供。
+本文假设读者具有嵌入式 C 工具链和通用 C 的基本知识
+和 Python 编程概念。 </p>
+<p>本实验基于  <code>rtls_coordinator</code> （RTLS 协调器角色）、  <code>rtls_responder</code> （RTLS 响应方角色）
+和  <code>rtls_passive</code> （RTLS 被动角色）项目，这些项目是
+ <a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK">SimpleLink CC13XX-CC26XX 软件开发工具包 </a>。 </p>
+<p>首先，本实验将概述如何开始使用 RTLS 项目。
+本实验的后续任务将指导用户如何自定义这些
+项目。 </p>
+<h1 class="body-heading" id="prerequisites">先决条件 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#prerequisites"></a></h1><h3 class="body-heading" id="hardware-required">所需硬件 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#hardware-required"></a></h3><p>此模块需要以下套件： </p>
+<ul>
+<li>2 个或 3 个  <a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1">SimpleLink™ CC26x2R LaunchPad™ </a></li>
+</ul>
+<h3 class="body-heading" id="recommended-reading">推荐阅读 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#recommended-reading"></a></h3><p>中的以下章节  <a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">TI BLE5-Stack 用户指南 </a></p>
+<ul>
+<li>TI BLE5-Stack 快速入门 </li>
+<li>CC13XX 或 CC26XX SDK 平台 </li>
+<li>应用 </li>
+<li>BLE5-Stack（尤其是专门用于定期广告和定期扫描的部分） </li>
+<li>RTLS 工具箱 </li>
+<li>网络处理器接口 （NPI） </li>
+</ul>
+<p>项目自述文件： </p>
+<ul>
+<li><code>rtls_coordinator</code> 位于  <strong>&lt;SimpleLink CC13XX / CC26XX SDK&gt; → 示例中的自述文件
+→ RTOS →板→ </strong> CC13XX / CC26XX SDK 中的 </li>
+<li>所有相关信息  <code>rtls_responder</code> 和  <code>rtls_passive</code> 包含在
+这  <code>rtls_coordinator</code> 自述文件 </li>
+<li><code>rtls_agent</code> 位于  <strong>&lt;SimpleLink CC13XX / CC26XX SDK&gt; → 工具中的自述文件
+→ </strong> CC13XX / CC26XX SDK 中的 ble5stack → rtls_agent文件夹。这将是
+在任务 2 中详细介绍了。 </li>
+</ul>
+<h3 class="body-heading" id="software-for-desktop-development">桌面开发软件 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#software-for-desktop-development"></a></h3><ul>
+<li><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK">SimpleLink CC13XX-CC26XX 软件开发工具包 </a></li>
+<li>的“依赖项”部分下列出的内容  <a href="https://dev.ti.com/tirex/explore/node?node=A__ADMjnimJ4C5BfFnmM3X-jg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">CC13XX-CC26XX SDK 发行说明 </a></li>
+</ul>
+<h1 class="body-heading" id="task-1-ndash-prepare-your-environment">任务 1 – 准备环境 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#task-1-ndash-prepare-your-environment"></a></h1><p>在此任务结束时，您将拥有： </p>
+<ul>
+<li><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"> SimpleLink CC13XX-CC26XX SDK </a> 已安装 </li>
+<li>工作 Python 环境 </li>
+</ul>
+<h2 class="body-heading" id="install-the-software">安装软件 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#install-the-software"></a></h2><ol>
+<li>运行 SimpleLink CC13XX / CC26XX SDK 安装程序。 </li>
+<li>安装 Python  <strong>3.7 </strong> 从  <a href="https://www.python.org/downloads/release/python-3710/">Python 下载页面 </a>。 </li>
+<li>按照 README.md 中所述设置 Python 环境
+ <strong>&lt;SimpleLink CC13XX / CC26XX SDK&gt; →工具→ble5stack → rtls_agent </strong>文件夹。 </li>
+<li>如果您的系统上不存在 bash 环境，请安装  <a href="https://git-scm.com/downloads">Git bash </a></li>
+</ol>
+<p>这为您提供了： </p>
+<ul>
+<li>包含 TI-RTOS 的 SDK 位于  <code>&lt;SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR&gt;</code> 哪
+默认为  <code>C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx</code>。 </li>
+<li>Python 3.7 环境，具有 RTLS 节点管理器所需的所有依赖项 </li>
+</ul>
+<h2 class="body-heading" id="load-the-software">加载软件 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#load-the-software"></a></h2><ul>
+<li>加载板 #1  <code>rtls_passive</code> 项目：  <br> <strong>&lt;SimpleLink CC13XX / CC26XX 软件开发工具包&gt;
+→ → RTOS → CC26X2R1_LAUNCHXL → ble5stack → rtls_passive </strong></li>
+<li>加载板 #2  <code>rtls_responder</code> 项目：  <br> <strong>&lt;SimpleLink CC13XX / CC26XX 软件开发工具包&gt;
+→ → CC26X2R1_LAUNCHXL → ble5stack → RTOS 的示例→
+rtls_responder </strong></li>
+<li>加载板 #3  <code>rtls_coordinator</code> 项目：  <br> <strong>&lt;SimpleLink CC13XX / CC26XX 软件开发工具包&gt;
+→ → CC26X2R1_LAUNCHXL → ble5stack → RTOS 的示例→
+rtls_coordinator </strong></li>
+</ul>
+<h1 class="body-heading" id="task-2-ndash-discover-the-rtls-toolbox">任务 2 – 探索 RTLS 工具箱 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#task-2-ndash-discover-the-rtls-toolbox"></a></h1><p>在此任务结束时，您将拥有： </p>
+<ul>
+<li>本地化技术的基本知识 </li>
+<li>使用  <code>rtls_example.py</code> 设置 RTLS 网络的脚本。 </li>
+<li>使用了 RTLS 工具箱和 RTLS UI </li>
+</ul>
+<h2 class="body-heading" id="localization-techniques">定位技术 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#localization-techniques"></a></h2><p>实时定位系统可以定义为能够
+确定目标在实际定义的物理区域内的位置
+时间。物理区域通常是通过部署
+reference/locator 节点。 </p>
+<p>有两种截然不同的位置查找方法： </p>
+<p><strong>三边测量 </strong>，其中您知道参考节点与
+目标节点。基于 RSSI 的技术是三边测量的典型示例。 </p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/trilateration.png" alt="三边测量" class="img-responsive"></div>
+</center>
+
+<p><strong>三角剖分 </strong>，您知道从参考节点到目标的方向
+节点。 <code>Angle of Arrival</code> 是一种可用于测量角度的技术
+从接收器到发射器。 </p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/triangulation.png" alt="三角测量" class="img-responsive"></div>
+</center>
+
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">什么是节点？
+ </span></h4>
+<p> 在这种情况下，节点称为具有定位功能的嵌入式设备。
+  对于 SDK 中的演示，节点是 LaunchPad </p>
+</div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">测验！
+ </span></h4>
+<p><strong> 选择基于三边测量的定位技术...  </strong></p>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q1.0" class="answer-wrong" name="quiz-1" style="display:none;"><label for="q1.0" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; No, AOA is a triangulation based technique&lt;/p&gt;
+">到达角 （AOA）  </label>
+<input type="checkbox" id="q1.1" class="answer-right" name="quiz-1" style="display:none;"><label for="q1.1" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Yes, TOF is a trilateration based technique. However, TOF is not supported&lt;/p&gt;
+">飞行时间 （TOF）  </label>
+<input type="checkbox" id="q1.2" class="answer-right" name="quiz-1" style="display:none;"><label for="q1.2" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Correct!&lt;/p&gt;
+">基于 RSSI 的技术  </label>
+</div></div>
+<p><strong> 选择基于三角剖分的定位技术...  </strong></p>
+<div class="quiz-toolbar"><div>
+<input type="radio" id="q2.3" class="answer-right" name="quiz-2"><label for="q2.3" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Correct! AOA is a triangulation based technique&lt;/p&gt;
+">到达角 （AOA）  </label>
+<input type="radio" id="q2.4" class="answer-wrong" name="quiz-2"><label for="q2.4" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; No, TOF is a trilateration based technique.&lt;/p&gt;
+">飞行时间 （TOF）  </label>
+<input type="radio" id="q2.5" class="answer-wrong" name="quiz-2"><label for="q2.5" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Wrong!&lt;/p&gt;
+">基于 RSSI 的技术  </label>
+</div></div>
+</div>
+<h2 class="body-heading" id="rtls-toolbox-introduction">RTLS Toolbox 简介 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-toolbox-introduction"></a></h2><p>在上一节中，我们讨论了多个节点如何组合角度
+用于执行三角测量的信息和/或用于执行三边测量的距离。
+重要的是要记住
+上图所示，单个节点不可能定位
+对象。单个节点只生成一个
+angle 和/或 one distance 进行匹配。从本质上讲，这是一个模棱两可的衡量标准。如果至少有两个节点
+提供 AoA 数据，然后就可以进行定位。
+RSSI 也是如此，如果至少有三个节点提供 RSSI 值，则可以进行本地化
+通过组合来自各个节点的样本并找到交集。 </p>
+<p>此外，上一节没有讨论 “链接” 的性质
+在定位器和目标之间。在本实验中，有两个选项 - 两者都
+符合蓝牙 5.1 标准 - 提供。这些被称为 “连接”
+和 “无连接”。connection-RTLS 需要蓝牙 LE 连接
+在定位器和目标之间，以及可选的一些被动节点。而
+connectionless-RTLS 允许定位器和目标保持在
+scanning/advertising 状态。基于连接的 RTLS 的主要优势
+系统是低功耗蓝牙连接，确保
+目标设备和双向通信可用。另一方面，
+无连接 RTLS 系统的复杂性较低（因为不需要
+无源器件）并且可以跟踪大量目标（几十个）
+同时。 </p>
+<p>拓扑概述如下所示。在
+下图中，黑色、蓝色和红色框代表 CC26x2R LaunchPad
+而灰色框是 PC。定位器是 RTLS 协调器和
+（仅适用于连接 RTLS）RTLS 被动。目标是
+RTLS 响应程序。 </p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/network.png" alt="RTLS 网络" class="img-responsive"></div><p></p>
+<p>有关 RTLS 工具箱及其软件组件的全面演示，
+请参阅  <a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">TI BLE5-Stack 用户指南 </a></p>
+<h2 class="body-heading" id="rtls-roles-and-topology">RTLS 角色和拓扑 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-roles-and-topology"></a></h2><p>RTLS 网络中的每个节点都使用上面列出的软件组件
+在不同的角色中执行与本地化相关的特定任务。有
+三个例子：  <code>rtls_coordinator</code>、  <code>rtls_responder</code>和  <code>rtls_passive</code>。功能
+下面将解释这些示例。 </p>
+<h3 class="body-heading" id="connection-mode">连接方式 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#connection-mode"></a></h3><div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;">RTLS 协调器
+ </span></h4>
+<p>RTLS 协调器运行完整的 BLE 堆栈，并充当蓝牙 LE Central 设备。
+它将通过蓝牙 LE 扫描并连接到 RTLS Responder。一旦连接是
+建立的 RTLS 协调器将执行以下作： </p>
+<ul>
+<li>共享连接参数（访问地址、外设休眠时钟精度、
+和 CRC init）。 </li>
+<li>使用 BLE 链接与 Responder 设备共享 RTLS 参数。 </li>
+<li>测量它接收到的蓝牙信号的 RSSI </li>
+<li>（可能）接收带有 CTE 的数据包并执行同相和正交分量 （IQ） 采样 </li>
+<li>RTLS 协调器不发送 AoA 数据包，但将 Responder 配置为发送 AoA 数据包。 </li>
+<li>向 PC 报告 RSSI 和 IQ 数据。 </li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-success "><h4><span style="vertical-align: middle;">RTLS 响应程序
+ </span></h4>
+<p>RTLS Responder 运行完整的 BLE-Stack 并充当蓝牙 LE 外围设备。  <strong>这是
+要定位的设备 </strong>（通常称为 “目标”）。响应方设备将通告并输入
+与 RTLS 协调器的连接。 </p>
+<ul>
+<li>公布要被检测的特殊字符串  <code>rtls_coordinator</code> 中详细介绍 <a href="#rtls-network-setup-procedure">（在任务 3 </a>） </li>
+<li>发送使用恒定音调扩展 （CTE） 嵌入 AoA 音调的数据包。更多
+有关 CTE 的信息，请参阅 <a href="https://www.bluetooth.com/specifications/specs/core-specification-5-2/">蓝牙核心规范 5.2 版 </a></li>
+<li>无线/电池供电，未连接到 PC </li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-warning "><h4><span style="vertical-align: middle;">RTLS 无源
+ </span></h4>
+<p>RTLS Passive 不会主动参与
+RTLS 协调器和响应器。相反，它使用 Micro BLE-Stack
+连接监控模式来跟踪连接。为此，被动式
+device 依赖 Coordinator 来分发一次连接参数
+连接形成。Passive （被动） 节点执行以下作： </p>
+<ul>
+<li>测量 RTLS 响应器和 RTLS 协调器发送的蓝牙信号的 RSSI </li>
+<li>接收带有 CTE 的数据包并执行同相和正交分量 （IQ） 采样 </li>
+<li>在连接监控模式下使用 Micro BLE-Stack 来跟踪 Coordinator 和 Responder 之间的连接 </li>
+</ul>
+<p>注意： 可以使用 RTLS Passive  <em>can</em> ，但不是必需的 <em>necessary</em>。 </p>
+</div>
+<div class="bs-callout bs-callout-danger "><h4><span style="vertical-align: middle;">PC/中央处理节点
+ </span></h4>
+<p>PC 节点负责通过发送
+命令和处理事件。在 SDK 中，这是通过组合来实现的
+实现 UNPI Central 角色的 Python 层和服务器
+，它将 UNPI 命令转换为 Socket 接口，该接口由
+在浏览器中运行的用户界面 （UI） 应用程序。在最终产品中，这些算法
+可以在嵌入式设备上实现，甚至可能在 RTLS Coordinator 节点上实现。 </p>
+<p>PC 在 RTLS GUI 中实现了以下功能： </p>
+<ul>
+<li>与 RTLS_Util 通信以发出命令并从设备提取接收到的 RTLS 数据 </li>
+<li>绘制和记录数据 </li>
+<li>枚举设备 </li>
+<li>将连接参数分发到被动节点 </li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">测验！
+ </span></h4>
+<p><strong> 是否可以在一个连接模式网络中有多个 RTLS Passive 器件？  </strong></p>
+<div class="quiz-toolbar"><div>
+<input type="radio" id="q3.6" class="answer-right" name="quiz-3"><label for="q3.6" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Since it is a Passive role and not a participant, thus any number of devices can listen to a connection so long as they have parameters.&lt;/p&gt;
+">是的，PC 程序会将连接信息分发到任何具有 Passive RTLS 功能的设备。  </label>
+<input type="radio" id="q3.7" class="answer-wrong" name="quiz-3"><label for="q3.7" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; This is incorrect, any device with connection parameters (access address, crc init, etc) can follow the connection.&lt;/p&gt;
+">不可以，由于计时要求，只有一个设备可以跟踪 Coordinator 和 Responder 之间的连接。  </label>
+</div></div>
+<p><strong> 为什么在连接 AoA 网络中需要多个无源设备？（选择所有适用项）  </strong></p>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q4.8" class="answer-right" name="quiz-4" style="display:none;"><label for="q4.8" class="quiz-label ">RTLS 被动节点可以从连接中采样 AoA 和 RSSI 的 IQ 数据 </label>
+<input type="checkbox" id="q4.9" class="answer-wrong" name="quiz-4" style="display:none;"><label for="q4.9" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; From the question above, it is possible to scale to many Passive devices.&lt;/p&gt;
+">不能有多个 Passives  </label>
+<input type="checkbox" id="q4.10" class="answer-right" name="quiz-4" style="display:none;"><label for="q4.10" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Spreading out the nodes to increase the chance that the direct path will be observed.&lt;/p&gt;
+">无源节点可以提供空间分集，从而提供对反射的免疫力  </label>
+</div></div>
+</div>
+<h3 class="body-heading" id="connection-less-mode">无连接模式 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#connection-less-mode"></a></h3><div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;">RTLS 协调器
+ </span></h4>
+<p>RTLS 协调器运行完整的 BLE 堆栈，并充当蓝牙 LE 观察器设备。
+它将扫描并同步到 RTLS 响应程序定期通告。同步后，
+RTLS 协调器将测量 RSSI 并使用 CTE 接收数据包，以执行同相和正交
+分量 （IQ） 采样 </p>
+</div>
+<div class="bs-callout bs-callout-success "><h4><span style="vertical-align: middle;">RTLS 响应器（CTE 发射器）
+ </span></h4>
+<p>RTLS Responder 运行完整的 BLE 堆栈，并充当蓝牙 LE 广播器设备。  <strong>这是
+要定位的设备 </strong>（也称为 “目标”）。响应方设备将公布
+附加了 Constant Tone Extension （CTE） 的定期广告。
+有关 CTE 的更多信息，请参阅 <a href="https://www.bluetooth.com/specifications/specs/core-specification-5-2/">蓝牙核心规范版本 5.2 </a></p>
+</div>
+<div class="bs-callout bs-callout-danger "><h4><span style="vertical-align: middle;">PC/中央处理节点
+ </span></h4>
+<p>PC 节点负责通过发送
+命令和处理事件。在 SDK 中，这是通过组合来实现的
+实现 UNPI Central 角色的 Python 层和服务器
+，它将 UNPI 命令转换为 Socket 接口，该接口由
+在浏览器中运行的用户界面 （UI） 应用程序。在最终产品中，这些算法
+可以在嵌入式设备上实现，甚至可能在 RTLS Coordinator 节点上实现。 </p>
+<p>PC 在 RTLS GUI 中实现了以下功能： </p>
+<ul>
+<li>通过 REST API 与 RTLS_Util 通信，以发出命令并从设备中提取接收到的 RTLS 数据 </li>
+<li>绘制和记录数据 </li>
+<li>枚举设备 </li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">测验！
+ </span></h4>
+<p><strong> 在无连接 AoA 网络中应该使用多少个 RTLS 无源器件？  </strong></p>
+<div class="quiz-toolbar"><div>
+<input type="radio" id="q5.11" class="answer-right" name="quiz-5"><label for="q5.11" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Correct, the RTLS Passive does not have the capability to synchronize with the periodic advertisements, thus not able to measure RSSI and/or sample the CTEs for connectionless-AoA.&lt;/p&gt;
+">0，则 RTLS 无源器件在无连接 RTLS 的情况下对定位没有贡献  </label>
+<input type="radio" id="q5.12" class="answer-wrong" name="quiz-5"><label for="q5.12" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; This is incorrect, not any RTLS Passive device is supported in the case of connectionless RTLS.&lt;/p&gt;
+">1，因为系统不能支持多个具有 connectionless-AoA 的 RTLS Passive  </label>
+<input type="radio" id="q5.13" class="answer-wrong" name="quiz-5"><label for="q5.13" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; This is incorrect (see previous answer). In the case of connectionless RTLS, spatial diversity and immunity to reflections can be improved by adding some RTLS Coordinators&lt;/p&gt;
+">不止一个，以提高空间多样性和抗反射能力  </label>
+</div></div>
+</div>
+<h2 class="body-heading" id="running-the-rtls-visual-demo">运行 RTLS 可视化演示 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#running-the-rtls-visual-demo"></a></h2><p>在本子部分中，我们将使用 UI（用户界面）。此工具在计算机上运行。
+您可以在  <strong>ble5stack → rtls_agent → rtls_ui文件夹中→ &lt;SimpleLink CC13XX / CC26XX SDK&gt; →工具 </strong>中找到RTLS_UI。 </p>
+<ol>
+<li><p>如前所述构建项目并刷写 LaunchPad <a href="#load-the-software">before</a>。 </p>
+</li>
+<li><p>通过 USB 将 Coordinator 和 Passive 设备连接到计算机。响应方设备必须已通电
+但不需要连接到计算机。 </p>
+</li>
+<li><p>执行程序  <code>rtls_ui.exe</code></p>
+</li>
+<li><p>这将打开您的默认 Web 浏览器并将您连接到本地服务器。如果您的默认浏览器不受支持（通常如果您的
+默认 Web 浏览器为 IE），则必须在支持的 Web 浏览器中复制粘贴服务器地址。 </p>
+<p>查看 RTLS UI 的欢迎页面，然后单击“开始使用”！ </p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_ui_landpage.png" alt="RTLS UI 欢迎页面" class="img-responsive"></div><p></p>
+</li>
+<li><p>选择要启用的模式（Connection 或 Connectionless）。只应选择一个要素。
+完成后，点击“继续” </p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_ui_feature_selection.png" alt="RTLS UI 欢迎页面" class="img-responsive"></div><p></p>
+</li>
+<li><p>然后，UI 将显示检测到的设备。UI 仅检测 RTLS 接收器（即连接模式的 Coordinator 和 Passive 设备，
+和 Coordinator 设备用于无连接模式）。
+UI 不会显示最终连接到计算机的 Responder 设备。 </p>
+</li>
+<li><p>选择要使用的 Launchpad。只需选择 Coordinator 和/或 Passive 设备。
+在 connectionless 的情况下，只应选择一个 Coordinator。
+完成后，点击“继续” </p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_ui_launchpad_selection.png" alt="选择要使用的 Launchpad" class="img-responsive"></div><p></p>
+</li>
+<li><p>系统已准备就绪！点击 “Auto Play” 开始演示： </p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_ui_autoplay.png" alt="点击 Auto Play" class="img-responsive"></div><p></p>
+</li>
+<li><p>对于连接模式，这将自动： </p>
+<ul>
+<li>启动扫描以检测 Responder 设备 </li>
+<li>连接 Responder 设备 </li>
+<li>启用持续连接信息监控（即 RSSI 采样） </li>
+</ul>
+<p><br>对于无连接模式，这将自动： </p>
+<ul>
+<li>启动扫描以查找 RTLS 响应程序发送的定期通告 </li>
+<li>与定期通告同步 </li>
+<li>启用 RSSI 和 TX 功率监控 </li>
+</ul>
+<p><br>这是为 connection-AoA 获取的屏幕： </p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_ui_autoplay_result.png" alt="显示 CCI 和 AOA" class="img-responsive"></div><p></p>
+<p><br>这是为 connectionless-AoA 获取的屏幕： </p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_ui_autoplay_result_CL_AoA.png" alt="显示 CCI 和 AOA" class="img-responsive"></div><p></p>
+<p>日志由 RTLS UI 存储在文件夹中  <code>rtls_ui\logs</code>。这些日志
+跟踪 RTLS UI 和节点发送的 UART 消息。 </p>
+</li>
+</ol>
+<div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;">角度和 IQ 数据显示
+ </span></h4>
+<p>开箱即用的 RTLS Visual Demo 不支持 IQ 数据采样。
+下面介绍的 RTLS 非可视化演示允许 IQ 数据采样和
+存储在 CSV 文件中。 </p>
+</div>
+<h2 class="body-heading" id="running-the-rtls-non-visual-demo">运行 RTLS 非可视化演示 <a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#running-the-rtls-non-visual-demo"></a></h2><p>在本子部分中，我们将使用 Python 脚本直接与节点交互。
+这为开发人员提供了定义
+自定义 RTLS 网络的行为，并直接控制器件。
+具体来说，这将包括设置所需的 Python 依赖项和
+运行 SDK 中提供的 python 脚本。
+对于连接模式，我们建议首先使用脚本  <code>rtls_connected.py</code>。
+对于无连接模式，请使用脚本  <code>rtls_connectionless.py</code>。 </p>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-hand-right gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">假设和表示法
+ </span></h4>
+<p>在开始此任务之前，假定以下内容 </p>
+<ul>
+<li>支持 bash 或 Git bash 的命令提示符已打开并正在运行。 </li>
+<li>将在整个过程中使用 Unix 样式的斜杠。如果需要运行这些
+Windows 命令提示符 （ <code>cmd.exe</code>），然后  <code>/</code> 应该被替换
+跟  <code>\</code>。 </li>
+<li>各种命令提示符将搜索您的 [系统路径变量][1]
+查找 Python。如果您的路径中已有 Python 版本，则此
+可能会选择新安装的版本。为了防止两者混用
+UP，我们将使用虚拟环境。 </li>
+<li>我们假设 Mac 用户没有安装另一个 Python 3 实例。
+如果不是这种情况，则根据  <code>PATH</code> variable 为旧版本
+的 Python 中，可以通过调用  <code>python3</code> 命令。请务必
+调用正确的 Python 版本。 </li>
+<li>在这里，我们重新哈希 rtls_agent/readme.html 中的一些指令。
+如果您已经遵循了此步骤，并且拥有
+Python 环境设置。 </li>
+<li>请查看存储在 tools\ble5stack\rtls_agent\ 中的 README 文件rtls_util </li>
+</ul>
+</div>
+<ol>
+<li>中的步骤安装 Python  <a href="#install-the-software">按照入门 </a></li>
+<li>打开命令提示符（ <a href="https://git-scm.com/downloads">建议使用 Git Bash </a>） </li>
+<li><p>创建 Python 虚拟环境 </p>
+<ul>
+<li>导航到 SDK 文件夹（例如  <code>C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent</code>） </li>
+<li>Execute <code>py -3.7 -m venv .venv</code> (windows) or <code>python3 -m venv .venv</code> (mac).
+This will create a folder called <code>.venv</code>
+in the current directory that includes a copy of the python interpreter and a
+sandbox for installing packages.</li>
+<li><em>Note: When using Python through Anaconda, the following extra command should
+be executed:</em> <code>c:\Anaconda3\Scripts\activate base</code></li>
+<li>Activate virtual environment using <code>source .venv/Scripts/activate</code> (bash) or
+<code>.venv\Scripts\activate.bat</code> (Windows cmd)</li>
+<li>Observe that when a venv is activated <code>(.venv)</code> will appear before each cmd
+prompt</li>
+<li>Notice that once the virtual environment is activated, the <code>python</code> command
+will use the local Python interpreter in the venv.
+See <a href="https://virtualenv.pypa.io/en/latest/">Virtual Environments</a> for more info.</li>
+</ul>
+</li>
+<li><p>Install RTLS packages and required external Python dependencies</p>
+<p><strong>Make sure to review the content of the README file.</strong></p>
+<p>This step will use package.bat (for Windows) or package.sh (for Linux / Mac) to
+install the RTLS packages.</p>
+<ul>
+<li><p>In Windows, run <code>winpty ./package.bat -c -b -u -i</code> (<em>winpty</em> must be omitted if you are using PowerShell or CMD terminal). In Linux / Mac run
+<code>package.sh -c -b -u -i</code></p>
+</li>
+<li><p>Execute <code>python -m pip --proxy www.proxy.com install -r requirements.txt</code></p>
+</li>
+<li>Note that above <code>--proxy www.proxy.com</code> is only required if behind a proxy.</li>
+<li><code>www.proxy.com</code> is an example of a proxy. It should be replaced with
+the web address of your specific proxy if applicable.</li>
+<li>This will install the required external Python packages that are needed by the RTLS
+Python suite (these are listed in <code>requirements.txt</code>).</li>
+</ul>
+</li>
+<li><p>Open the python script (<code>examples/rtls_connected.py</code> or 
+<code>examples/rtls_connectionless.py</code>, find and update the following lines.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_1')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_1" class="lang-python hljs">coordinator_comport=<span class="hljs-string">"COM27"</span>,  <span class="hljs-comment"># "/dev/cu.usbmodemL1100KKT1",</span>
+passive_comports=[],  <span class="hljs-comment"># ['COM19']</span>
+</code></pre></div></div>
+<p>Make sure to list all the Coordinator and Passive LaunchPads used and to update properly the COM ports used.
+It is not required to add the Responder device to this list.</p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Notes
+</span></h4>
+<p>For connectionless-AoA, only one RTLS coordinator should be used.</p>
+</div>
+</li>
+<li><p>Make sure all the functionalities you need are enabled</p>
+<p>Verify both RSSI and IQ data collection is enabled.</p>
+<ul>
+<li><p>For connection mode:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_2')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_2" class="lang-python hljs">   continues_connection_info=<span class="hljs-keyword">True</span>,
+   angle_of_arrival=<span class="hljs-keyword">True</span>,
+</code></pre></div></div>
+</li>
+<li><p>For connectionless mode:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_3')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_3" class="lang-python hljs">   periodic_advertise_report=<span class="hljs-keyword">True</span>,
+   angle_of_arrival=<span class="hljs-keyword">True</span>,
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li><p>Save the file and run. </p>
+<ul>
+<li><p>For connection mode, run the command <code>python -u examples/rtls_connected.py</code></p>
+<ul>
+<li>The script will scan for RTLS devices, connect, and then print continuous connection
+information (RSSI, channel) for 15 seconds.</li>
+<li>See below for sample output snippet (note that the addresses and COM ports will be
+different).</li>
+<li>The out-of-box demo only reports continuous connection information (CCI). The following
+sections will help you to leverage all the capabilities of the provided scripts.</li>
+</ul>
+<div class="panel-group">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="#expandable_-example-input-parameters-"><p> Example Input Parameters</p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-example-input-parameters-" class="panel-collapse collapse">
+      <div class="panel-body"><div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_4')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_4" class="lang-diff hljs">   ----------------------------------------------------------------------
+   Coordinator comport                     : COM27
+   Passive comports                        : []
+   Responder BD Address                    : []
+   Scan time                               : 10 Sec
+   Connection Interval                     : 100 mSec
+   Enable Continues Connection Interval    : No
+   Enable Angle Of Arrival (AoA)           : Yes
+       AoA Enable Filter                   : Yes
+       AoA Slot Duration                   : 2
+       AoA Sample Rate                     : 1
+       AoA Sample Size                     : 1
+       AoA CTE Length                      : 20
+       AoA CTE Interval                    : 2
+   Data Collection Duration                : 30
+   Data Collection iteration               : 1
+   Provide Post Analyze Function           : Yes
+   Example Log Dir                         :     C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connected_log
+   Example Log File Name                   : 10_27_2022_10_02_37_rtls_connected.log
+   ----------------------------------------------------------------------
+
+   Devices Reset
+   Start scan for 10 sec
+   Scan Results:
+           {'addr': '80:6F:B0:1E:35:E1', 'addrType': 0, 'rssi': -36, 'advSID': 255, 'periodicAdvInt': 0}
+
+   Trying connect to 80:6F:B0:1E:35:E1
+   Connected to 80:6F:B0:1E:35:E1 with connection handle 0
+
+    <span class="hljs-header">========== Starting Loop 1 ==========</span>
+   AOA Params Set
+   AOA Started
+
+   Example will now wait for result for 30 sec
+
+   [10:27:2022 10:02:53:866904] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 10:02:54:179892] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 10:02:54:421870] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   ...
+   [10:27:2022 10:03:22:699925] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 10:03:23:322936] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 10:03:23:591923] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   Rename "rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv" into     "10_27_2022_10_03_23_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv"
+
+   Executing post analyze script on C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_conn    ected_log\10_27_2022_10_03_23_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   Analyzing file : C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connected_log\08_03_    2021_10_03_23_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   Return here output of your post-analyze algorithm
+
+   AOA Stopped
+   Coordinator disconnected from responder with conn handle 0
+</code></pre><span class="code-title"><p>Log obtained for connection mode</p>
+</span></div></div>
+</div>
+    </div>
+  </div>
+</div><p>The python script also creates the folder <code>rtls_connected_log</code>
+(in the <code>examples</code> folder). The logs stored in this folder keep track of
+the UART messages exchange by the python script with the nodes. </p>
+</li>
+<li><p>For connectionless-AoA, run the command <code>python -u examples/rtls_connectionless.py</code></p>
+<ul>
+<li>The script will scan for the periodic advertisements of an RTLS device and synchronize with them.</li>
+<li>After this it enables connectionless-CTE reception and prints RTLS information for 15 seconds.</li>
+<li>See below for sample output snippet (note that the addresses and COM ports will be
+different).</li>
+</ul>
+<div class="panel-group">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="#expandable_-log-obtained-for-connectionless-aoa-"><p> Log obtained for connectionless-AoA</p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-log-obtained-for-connectionless-aoa-" class="panel-collapse collapse">
+      <div class="panel-body"><div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_5')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_5" class="lang-diff hljs">   Example Input Parameters
+   ----------------------------------------------------------------------
+   Coordinator comport                     : COM27
+   Responder BD Address                    : []
+   Scan time                               : 10 Sec
+   Sync Params                             :
+       Sync Skip                           : 0
+   Use Advertiser List                     : Yes
+   Start Periodic Advertise Report on Sync : No
+   Enable Periodic Advertise Report        : No
+   Enable Angle Of Arrival (AoA)           : Yes
+       AoA Enable Filter                   : Yes
+       AoA Slot Duration                   : 2
+       AoA Sample Rate                     : 1
+       AoA Sample Size                     : 1
+   Data Collection Duration                : 30
+   Data Collection iteration               : 1
+   Provide Post Analyze Function           : Yes
+   Example Log Dir                         :       C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log
+   Example Log File Name                   : 10_27_2022_09_56_52_rtls_connectionless.log
+   ----------------------------------------------------------------------
+
+   Devices Reset
+   Start scan for 10 sec
+   Scan results:
+                   {'addr': '80:6F:B0:1E:35:E1', 'addrType': 0, 'rssi': -34, 'advSID': 1, 'periodicAdvInt': 240}
+   Example will try sync with:
+                   {'addr': '80:6F:B0:1E:35:E1', 'addrType': 0, 'rssi': -34, 'advSID': 1, 'periodicAdvInt': 240}
+   Using advertisers list to create sync
+                   Responder 80:6F:B0:1E:35:E1 has been added to advertisers list
+   Starting attempt #1 to make sure that all required responder successfully connected
+   All required responders successfully connected !
+
+    <span class="hljs-header">========== Starting Loop 1 ==========</span>
+   Connectionless AOA started for 80:6F:B0:1E:35:E1
+
+   Example will now wait for result for 30 sec
+
+   [10:27:2022 09:57:16:721232] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:17:029199] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:17:289245] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:17:524198] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:17:825218] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:18:080235] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:18:468200] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:18:773198] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:19:125200] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   ...
+   [10:27:2022 09:57:44:552275] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:44:839260] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:45:083247] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:45:636250] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:45:890282] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   [10:27:2022 09:57:46:229251] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   Rename rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv into 10_27_2022_09_57_46_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+
+   Executing post analyze script on C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\10_27_2022_09_57_46_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   Analyzing file : C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\08_03_2021_09_57_46_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+   Return here output of your post-analyze algorithm
+
+   Connectionless AOA stoped for 80:6F:B0:1E:35:E1
+   Coordinator terminated sync from responder with sync handle 0
+</code></pre><span class="code-title"><p>Log obtained for connectionless mode</p>
+</span></div></div>
+</div>
+    </div>
+  </div>
+</div><p>The python script also creates the folder <code>rtls_connectionless_log</code>
+(in the <code>examples</code> folder). The logs stored in this folder keep track of
+the UART messages exchange by the python script with the nodes. This
+folder also contains the raw IQ samples received from the <code>rtls_coordinator</code>.</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Why is it recommended to create a virtual Python environment (select all that apply)?
+</span></h4>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q6.14" class="answer-right" name="quiz-6" style="display:none;"><label for="q6.14" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Different projects may have conflicting requirements, using venv keeps them sandboxed.&lt;/p&gt;
+">Install required packages locally</label>
+<input type="checkbox" id="q6.15" class="answer-wrong" name="quiz-6" style="display:none;"><label for="q6.15" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; It is possible to run RTLS from the global Python env.&lt;/p&gt;
+">RTLS scripts require it </label>
+<input type="checkbox" id="q6.16" class="answer-right" name="quiz-6" style="display:none;"><label for="q6.16" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; If there are multiple Python interpreters installed on your system. This will copy the correct interpreter into the venv&lt;/p&gt;
+">Get copy of interpreter </label>
+</div></div>
+</div>
+<h1 class="body-heading" id="task-3-ndash-deep-dive-in-the-rtls-python-scripts">Task 3 – Deep dive in the RTLS Python scripts<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#task-3-ndash-deep-dive-in-the-rtls-python-scripts"></a></h1><p>With the environment setup, it is time for us to use Python directly to control
+the RTLS nodes. The goal of this task is to explain the RTLS PC software and
+to walk through setting up a RTLS network.</p>
+<div class="alert alert-info "><p> You might want to revision or make a copy of the default rtls_connected.py so it is
+preserved. Save it with another name like <code>rtls_example_old.py</code> as a backup.</p>
+</div>
+<h2 class="body-heading" id="rtls-node-manager-python-overview">RTLS Node Manager Python Overview<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-node-manager-python-overview"></a></h2><p>First, we will briefly discuss the important layers of the Python solution and
+their role.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_6')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_6" class="lang-diff hljs">/rtls_agent
+    /examples/
+      rtls_connected.py - Example to exercise rtls_util functionality
+      rtls_aoa_iq_with_rtls_util_export_into_csv.py - Example to store the IQ data (or AOA) to a file on your computer
+      rtls_aoa_multi_conn_example.py - Example to exercice the multi-connections capability of the RTLS devices
+    /rtls_util/
+         Main interface for examples. Class that abstracts RTLSManager and RTLSNode
+         functionality. Handles waiting for RTLS responses in order to provide synchronous
+         API's.  Raises any unexpected functionality as an exception.
+         Please review the README file for details.
+
+    /rtls/
+        /rtls/
+            rtlsmanager.py - Class to manage multiple nodes in an RTLS network.
+                             Subscribes to incoming data from the nodes, routes
+                             outgoing data to each of the nodes. Distributes
+                             connection parameters from Coordinator node to any
+                             connected Passive nodes when an connection is
+                             established. Handles messages from rtls_agent_cli server
+                             if one is provided.
+
+            rtlsnode.py -    Class that implements the basic functionality of a node
+                             in an RTLS network. This class will query the embedded
+                             device connected to it and determine its capabilities.
+                             Essentially this assigns a role in an RTLS context to
+                             a COM port.
+
+            ss_rtls.py       Defines the commands in the RTLS UNPI subsystem.
+                             This file will define builder classes for the various
+                             UNPI commands that the RTLS subsystem supports.
+
+      /unpi/
+          serialnode.py - Thread that manages serial communication from COM ports.
+                          to higher layers.
+                          Queues up messages and sends them to parser.
+          unpiparser.py - Parser for Unified Network Processor Interface messages.
+                          Implements UNPI frame format packing/unpacking.
+</code></pre></div></div>
+<p>It is recommended to build RTLS based Python applications on top of the
+<code>RtlsUtil</code> class within rtls_util.py. This class forms the RTLS API set. A call
+to an <code>RtlsUtil</code> method translates to a sequence of one or more RTLS UNPI commands
+/ responses from ss_rtls.py. In this way, <code>RtlsUtil</code> is an abstraction of both the
+RTLS UNPI communication as well as the <code>RTLSManager</code> which manages the various
+<code>RTLSNode</code>'s.</p>
+<h2 class="body-heading" id="rtls-python-program-template">RTLS Python Program Template<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-python-program-template"></a></h2><p><code>rtls_connected.py</code> and <code>rtls_connectionless.py</code> 
+from the previous task show how to perform basic initialization of <code>RtlsUtil</code> as well
+as how to set up the networking and collecting localization data.</p>
+<p>The beginning of <code>main()</code> has several configuration variables:</p>
+<p>Here are for connection AoA:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_7')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_7" class="lang-python hljs">example = RtlsConnectedExample(
+    coordinator_comport=<span class="hljs-string">"COM27"</span>,  <span class="hljs-comment"># "/dev/cu.usbmodemL1100KKT1",</span>
+    passive_comports=[],  <span class="hljs-comment"># ['COM19']</span>
+    responder_bd_addrs=[],  <span class="hljs-comment"># ['80:6F:B0:1E:39:02', '80:6F:B0:1E:38:C3']</span>
+    scan_time=<span class="hljs-number">10</span>,
+    connection_interval=<span class="hljs-number">100</span>,
+    angle_of_arrival=<span class="hljs-keyword">True</span>,
+    angle_of_arrival_params={
+        <span class="hljs-string">'enable_filter'</span>: <span class="hljs-keyword">True</span>,
+        <span class="hljs-string">'slot_duration'</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-string">'sample_rate'</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">'sample_size'</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">'cte_length'</span>: <span class="hljs-number">20</span>,
+        <span class="hljs-string">'cte_interval'</span>: <span class="hljs-number">2</span>
+    },
+    data_collection_duration=<span class="hljs-number">30</span>,
+    data_collection_iteration=<span class="hljs-number">1</span>,
+    post_analyze_func=post_analyze_of_IQ_data
+)
+</code></pre></div></div>
+<p>Here are for connectionless AoA:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_8')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_8" class="lang-python hljs">example = RtlsConnectionlessExample(
+    coordinator_comport=<span class="hljs-string">"COM27"</span>,
+    responder_bd_addrs=[],  <span class="hljs-comment"># ['80:6F:B0:1E:39:02', '80:6F:B0:1E:38:C3']</span>
+    scan_time=<span class="hljs-number">10</span>,
+    sync_params={
+        <span class="hljs-string">'sync_skip'</span>: <span class="hljs-number">0</span>
+    },
+    use_advertiser_list=<span class="hljs-keyword">True</span>,
+    start_periodic_advertise_report_on_sync=<span class="hljs-keyword">False</span>,
+    periodic_advertise_report=<span class="hljs-keyword">False</span>,
+    angle_of_arrival=<span class="hljs-keyword">True</span>,
+    angle_of_arrival_params={
+        <span class="hljs-string">'enable_filter'</span>: <span class="hljs-keyword">True</span>,
+        <span class="hljs-string">'slot_duration'</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-string">'sample_rate'</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">'sample_size'</span>: <span class="hljs-number">1</span>,
+    },
+    data_collection_duration=<span class="hljs-number">30</span>,
+    data_collection_iteration=<span class="hljs-number">1</span>,
+    post_analyze_func=post_analyze_of_IQ_data
+)
+</code></pre></div></div>
+<p>These allow the user to select:</p>
+<ul>
+<li>the COM port used to communicate with the <code>rtls_coordinator</code></li>
+<li>the COM port used to communicate with the <code>rtls_passive</code> (not
+used for connectionless AoA as this mode does not define the passive
+role)</li>
+<li>the addresses of the devices to connect/synchronize with. If
+left blank, all the devices found will be connected/synchronized.</li>
+<li>the duration of the scanning phases (for connection/synchronization
+of the devices)</li>
+<li>the connection interval (connection AoA only / not used for
+connectionless AoA as no connection is formed)</li>
+<li>if IQ data collection for AoA is enabled (cf. boolean <code>angle_of_arrival</code>)</li>
+<li>the parameters used for AoA data collection<ul>
+<li>enable_filter, if set to true only the samples collected during
+sampling slots are reported. Otherwise, all the samples (including
+the ones sampled during switching slots are reported)</li>
+<li>slot_duration, length of the sampling slots (1 or 2 us)</li>
+<li>sample_rate, sampling rate (1, 2, 3 or 4 MHz)</li>
+<li>sample_size, 1 or 2 bytes</li>
+<li>cte_length, length in 16us units of the CTEs requested by the central locator
+(connection AOA only)</li>
+<li>cte_interval, interval (in number of connection events) between two CTE requests
+(connection AOA only)</li>
+</ul>
+</li>
+<li>the duration of the IQ data collection before analysis</li>
+<li>the number of data collections iterations to run</li>
+<li>the function to trigger once the data collection is done</li>
+</ul>
+<h2 class="body-heading" id="rtlsutils-initialization">RtlsUtils initialization<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtlsutils-initialization"></a></h2><p>Parts of the initialization function are common to all modes.
+First, construct an instance of the RTLSUtil class to serve as the RTLS Node Manager interface.
+The first parameter is the file to log debug information to and the second
+parameter is the logging level.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_9')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_9" class="lang-python hljs">rtlsUtil = RtlsUtil(logging_file, RtlsUtilLoggingLevel.INFO)
+</code></pre><span class="code-title"><p>Alternatively, a more verbose logging level ("DEBUG") can be selected.</p>
+</span></div></div>
+<p>Next, create a dictionary of devices and pass this to <code>RTLS.set_devices()</code> which
+will create <code>RTLSNode</code>'s for each device and an <code>RTLSManager</code> class using these
+nodes.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_10')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_10" class="lang-python hljs">devices = [
+  {<span class="hljs-string">"com_port"</span>: coordinator_comport, <span class="hljs-string">"baud_rate"</span>: <span class="hljs-number">460800</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"Coordinator"</span>},
+  {<span class="hljs-string">"com_port"</span>: passive_comport, <span class="hljs-string">"baud_rate"</span>: <span class="hljs-number">460800</span>, <span class="hljs-string">"name"</span>: f<span class="hljs-string">"Passive {index}"</span>},
+]
+</code></pre></div></div>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Note
+</span></h4>
+<p>The "name" field above does not affect the functionality. It is simply used for
+logging purposes and therefore it is not required to modify this if not
+desired.</p>
+</div>
+<p><code>RTLS.set_devices()</code> will send RTLS_CMD_IDENTIFY to each node to identify it's capabilities
+and set the relevant Coordinator / Passive(s).</p>
+<p>Next, reset both nodes:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_11')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_11" class="lang-python hljs">rtlsUtil.reset_devices()
+</code></pre></div></div>
+<p>The procedures above will appear, from a UNPI perspective, as the following:</p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_identify.png" alt="RTLS Identify" class="img-responsive"></div>
+</center>
+
+<h2 class="body-heading" id="rtls-network-setup-procedure">RTLS Network Setup Procedure<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-network-setup-procedure"></a></h2><p>At this point you should have a basic understanding of RTLS classes. Next we will
+cover the minimum commands required to setup an RTLS network.
+This procedure is slightly different for connection-AoA and connection-less AoA.</p>
+<h4 class="body-heading" id="rtls-network-setup-procedure-for-connection-aoa">RTLS Network Setup Procedure for connection-AoA<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-network-setup-procedure-for-connection-aoa"></a></h4><p>For connection-AoA a BLE connection is a prerequisite for performing localization.
+The sequence diagram below shows the UNPI commands required to establish a connection between <code>rtls_coordinator</code> and <code>rtls_responder</code>.</p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_connect_diag.png" alt="RTLS Setup Sequence Diagram" class="img-responsive"></div><p></p>
+<p>As covered in the BLE connections lab, before connecting, a scan must be
+performed to see if the desired device is nearby. This is initiated by <code>RtlsUtil.scan()</code>.
+The scanning device will inspect the advertisement and optionally the scan response
+data to determine if it wishes to connect to a given advertiser. Usually the
+scanner is looking for a given token or string in the broadcast data of the advertiser.
+The RTLS Coordinator will look for the string <code>{'R','T','L','S','R','e','s','p','o','n','d','e','r',}</code> starting
+at the 3rd byte of the Responder's advertisement data. If the advertising device
+matches the filter, then it will be reported to the PC/Node Manager as
+<code>RTLS_CMD_SCAN</code> responses which are returned from RtlsUtil.scan() as a list of
+devices.  If the advertising device does not match the filter, it will be discarded.</p>
+<p><code>RtlsUtil.ble_connect()</code> can be used to form a connection to one of the devices in the
+scan results. This will inform <code>rtls_coordinator</code> to form a connection by issuing an
+<code>RTLS_CMD_CONNECT</code> along with the peer device's address and address type.
+The address information can be extracted from the <code>RTLS_CMD_SCAN</code> responses
+coming from the Coordinator node.</p>
+<p>If the connection is successful, the <code>RTLS_CMD_CONNECT</code> response will be
+received with status of <code>RTLS_SUCCESS</code> and <code>RtlsUtil.ble_connect()</code> will return.
+The RTLS examples do not consider a connection to be established between Coordinator
+and Responder until the devices have paired and formed an L2CAP Connection Oriented
+Channel (CoC). The L2CAP CoC is used to send RTLS sync related information
+between Coordinator and Responder. This can include AoA parameters
+or a command to enable AoA.</p>
+<p>Immediately after the BLE connection is established
+(i.e. <code>GAP_LINK_ESTABLISHED_EVENT</code> received from the stack), the <code>rtls_coordinator</code>
+will share the connection parameters with the PC/Node Manager via
+<code>RTLS_CMD_CONN_PARAMS</code>. This information is needed by the connection monitor
+inside <code>rtls_passive</code> in order to follow the connection between RTLS Coordinator
+and Responder.</p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Distributing Connection Parameters
+</span></h4>
+<p>  The <code>RTLSManager</code> Python class will immediately relay any connection
+  parameters received (<code>RTLS_CMD_CONN_PARAMS</code>) to all of the Passive nodes
+  connected. This does not need to be done manually.</p>
+</div>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">RTLS Passive Connection Lost
+</span></h4>
+<p>  As its name suggests, the Passive device does not have an active role in the BLE
+  connection. The Passive has only the capability to listen the link but is not able
+  to require a retransmission if a packet is not properly received.
+  As a result, and especially in noisy environments, the Passive can lose track of the
+  connection. In that case, the Passive device needs to re-receive the (up to date)
+  connection info to be able to listen the BLE link. This mechanism is not implemented
+  in the out-of-the-box examples and you will be required to restart the demo if it
+  happens.</p>
+</div>
+<h4 class="body-heading" id="rtls-network-setup-procedure-for-connectionless-mode">RTLS Network Setup Procedure for connectionless mode<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#rtls-network-setup-procedure-for-connectionless-mode"></a></h4><p>For connectionless, the rtls_coordinator has to synchronize with the
+periodic advertisements of the rtls_responder.
+The sequence diagram below shows the UNPI commands required to synchronize the <code>rtls_coordinator</code> and <code>rtls_responder</code>.</p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/rtls_CL_AoA_sync_diag.png" alt="RTLS Setup Sequence Diagram" class="img-responsive"></div><p></p>
+<p>The way rtls_coordinator synchronizes with a periodic advertiser (rtls_responder)
+is detailed in the Generic Access Profile (GAP) section of 
+the <a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">TI BLE5-Stack User's Guide</a>.
+A scan must first be performed in order to identify the devices sending
+periodic advertisements nearby.
+After this, the advertiser(s) to synchronize with is(are) selected. The periodic
+advertisers found can be filtered based on the type of CTE sent.
+Once synchronized with the periodic advertiser, the receiver can start sampling
+the CTE appended to the periodic advertisement packets and extract AoA information.</p>
+<h2 class="body-heading" id="setting-up-rtls-network">Setting up RTLS Network<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#setting-up-rtls-network"></a></h2><p>Now that we understand the basics behind the RTLS networks and how to set them up,
+let's review how the <code>rtls_connected.py</code> and 
+<code>rtls_connectionless.py</code> sample apps set up the RTLS networks.</p>
+<p>Note that the scripts will do some additional processing after the
+network is setup. This is will be covered later in this lab.</p>
+<h3 class="body-heading" id="setting-up-rtls-network-in-python-for-connection-aoa">Setting up RTLS Network in Python for connection-AoA<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#setting-up-rtls-network-in-python-for-connection-aoa"></a></h3><p>The commands required to setup a network belong to the RTLS UNPI subsystem and
+can be found in the <code>ss_rtls.py</code> file. The sending and receiving of these commands
+is abstracted through the <code>RtlsUtil</code> class.</p>
+<h4 class="body-heading" id="scanning-for-devices">Scanning for Devices<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#scanning-for-devices"></a></h4><p>We will use the <code>rtls_connected.py</code> as a starting point. From the sections
+above, we know that after the nodes are identified, we want to tell the Coordinator
+to scan. This is initiated as such:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_12')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_12" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec)
+</code></pre></div></div>
+<p>Alternatively, it is possible to only scan for a specific device address by passing a
+second "address" parameter as such:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_13')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_13" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec, responder_bd_addr)
+</code></pre></div></div>
+<p>After the scan completes (runs for <code>scan_time_sec</code>), the results are returned in
+<code>scan_results</code> as a list of the following dictionaries:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_14')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_14" class="lang-diff hljs">{
+    "addr" : 6 byte address as string,
+    "addrType" : address type as int,
+    "rssi": int,
+    "advSID": int,
+    "periodicAdvInt": int (0 means this advertisement is not a periodic advertisement)
+}
+</code></pre></div></div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-hand-right gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Asynchronous vs Synchronous commands in UNPI
+</span></h4>
+<p>  The following provides more information about the RTLS UNPI commands. As mentioned
+  above, all of this is abstracted through <code>RtlsUtil</code> so can be skipped if desired.</p>
+<p>  You might have noticed that <code>RTLS_CMD_SCAN</code> is used to tell the node to start
+  scanning, receive status, and receive scan results.
+  This is possible within UNPI because each message can be one of the following
+  types</p>
+<ul>
+<li>Synchronous request</li>
+<li>Synchronous response</li>
+<li>Asynchronous request</li>
+</ul>
+<p>In the case of <code>RTLS_CMD_SCAN</code> the message that initiates the scan on the
+<code>rtls_coordinator</code> is a synchronous request. The message that returns the status
+of the scan start call is a synchronous response, and the message that
+returns scan results is an asynchronous request. See the NPI chapter
+in the <a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">TI BLE5-Stack User's Guide</a> for more information.</p>
+</div>
+<h4 class="body-heading" id="connecting-to-a-device">Connecting to a Device<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#connecting-to-a-device"></a></h4><p>Now, we have collected a list of scan results and are ready to connect.  It is
+required to specify an address to connect to. The address can be hard-coded:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_15')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_15" class="lang-python hljs">  responder_bd_addr = <span class="hljs-string">"80:6F:B0:1E:38:C3"</span>
+  rtlsUtil.ble_connect(responder_bd_addr, connect_interval_mSec)
+</code></pre></div></div>
+<p>If you don't know the address, you can read it from the UART
+display of the Responder device. Open a Serial terminal (like putty or Tera Term)
+on the user/UART port of the <code>rtls_responder</code> LaunchPad. Use 115200 baud, 8N1.
+It should show the following text:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_16')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_16" class="lang-diff hljs">Initialized
+Dev Addr: 0x806FB01E3A8B
+Advertising
+</code></pre></div></div>
+<p>Alternatively, the address can be extracted from the scan results as such:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_17')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_17" class="lang-python hljs">  rtlsUtil.ble_connect(scan_results[<span class="hljs-number">0</span>], connect_interval_mSec)
+</code></pre></div></div>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Connection Interval
+</span></h4>
+<p>  It is also necessary to pass a connection interval into <code>RtlsUtil.ble_connect()</code>.
+  The ramifications of this parameter will be discussed in the various RTLS mode
+  documentation sections where relevant. The out-of-box example uses 100
+  milliseconds by default.</p>
+</div>
+<p>Remember, the <code>rtls_coordinator</code> will automatically send the connection parameters
+once a BLE connection is formed with the <code>rtls_responder</code>. The <code>RTLSManager</code> python
+class will intercept this and distribute it to all <code>rtls_passive</code> nodes so we
+don't have to do this in our program. Upon receiving the connection parameters,
+the <code>rtls_passive</code> connection monitor will begin following the connection between
+Coordinator and Responder. Note that it may take some time to establish a connection as this
+does include LE Secure Connections pairing as well as opening an L2CAP
+Connection Oriented Channel.</p>
+<h3 class="body-heading" id="setting-up-rtls-network-in-python-for-connectionless-mode">Setting up RTLS Network in Python for connectionless mode<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#setting-up-rtls-network-in-python-for-connectionless-mode"></a></h3><p>As for connection mode, the commands required to setup a network belong to
+the RTLS UNPI subsystem and can be found in the <code>ss_rtls.py</code> file. 
+The sending and receiving of these commands is abstracted through the <code>RtlsUtil</code> class.</p>
+<h4 class="body-heading" id="scanning-for-devices-connectionless-mode-">Scanning for Devices (connectionless mode)<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#scanning-for-devices-connectionless-mode-"></a></h4><div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;">Synchronize with the devices in the Periodic Advertiser List
+</span></h4>
+<p>  When one wants to synchronize with the devices in the Periodic Advertiser
+  List, there is no need to perform this initial scan and/or
+  filter the advertiser list. In other words, you could directly refer to the
+  section <a href="#create-the-synchronization-with-a-periodic-advertiser">Create the synchronization with a periodic advertiser</a>.
+  However, we recommend you to go through all the steps in order to better
+  understanding our offering.</p>
+</div>
+<p>We will use the <code>rtls_connectionless.py</code> as a 
+starting point. From the sections above, we know that after the nodes are
+identified, we want to tell the <code>rtls_coordinator</code> to scan. 
+This is initiated as such:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_18')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_18" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec)
+</code></pre></div></div>
+<p>Alternatively, it is possible to only scan for a specific device address and
+advertising set ID (SID).</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_19')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_19" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec, advertiser_addr, advertiser_advSID)
+</code></pre></div></div>
+<p>After the scan completes (runs for <code>scan_time_sec</code>), the results are returned in
+<code>scan_results</code> as a list of the following dictionaries:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_20')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_20" class="lang-diff hljs">{
+    "addr" : 6 byte address as string,
+    "addrType" : address type as int,
+    "rssi": int,
+    "advSID": int,
+    "periodicAdvInt": int (0 means this advertisement is not a periodic advertisement)
+}
+</code></pre></div></div>
+<p>If you look at the content of <code>scan_results</code>, you will see that the <code>rtls_responder</code>
+device is reported twice. The device is reported once as a periodic advertiser 
+(<code>periodicAdvInt</code> value is not 0), and once as a legacy advertiser (<code>periodicAdvInt</code>
+value is 0). This is because the out-of-the-box <code>rtls_responder</code> project is
+configured to send out several advertisement sets. The legacy advertisement
+is used to establish the connection when using connection-AoA.
+For connectionless-AoA the legacy should be filter out.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_21')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_21" class="lang-diff hljs">Scan results found: [{'addr': '80:6F:B0:1E:55:F7', 'addrType': 0, 'rssi': -58, 'advSID': 255, 'periodicAdvInt': 0}, {'addr': '80:6F:B0:1E:55:F7', 'addrType': 0, 'rssi': -63, 'advSID': 1, 'periodicAdvInt': 80}]
+</code></pre><span class="code-title"><p>Extract of the log displayed by
+ the python script. Two advertisements different are detected for device
+ 80:6F:B0:1E:55:F7. The first one is a legacy advertisement, and the 
+second one is a periodic advertisement which we can synchronize with.</p>
+</span></div></div>
+<h4 class="body-heading" id="select-a-periodic-advertiser-to-synchronize-with">Select a periodic advertiser to synchronize with<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#select-a-periodic-advertiser-to-synchronize-with"></a></h4><p>Now, we have collected a list of scan results.
+We are only interested in periodic advertisements. The other ones can be
+filtered out.</p>
+<p>As said before, the field <code>periodicAdvInt</code> of a periodic advertisement is
+always superior to 0.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_22')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_22" class="lang-python hljs">   scan_results_for_cl_rtls = [scan_result <span class="hljs-keyword">for</span> scan_result <span class="hljs-keyword">in</span> scan_results <span class="hljs-keyword">if</span> scan_result[<span class="hljs-string">'periodicAdvInt'</span>] &gt; <span class="hljs-number">0</span>]
+</code></pre><span class="code-title"><p>Non-periodic advertisements are filtered out based on the value of the field <code>periodicAdvInt</code></p>
+</span></div></div>
+<div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;">Add the advertiser to the Periodic Advertiser List
+</span></h4>
+<a name="add-the-advertiser-to-the-periodic-adv-list"></a>
+
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_23')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_23" class="lang-python hljs">    advertiser = advertiser_list[<span class="hljs-number">0</span>]
+    rtlsUtil.padv_add_device_to_periodic_adv_list(advertiser)
+</code></pre></div></div>
+<p>  The advertiser passed to the  function <code>padv_add_device_to_periodic_adv_list</code>
+  should be a periodic advertiser.</p>
+<p>  Other python procedures that may be useful:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_24')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_24" class="lang-python hljs">    periodicAdvLisSize = rtlsUtil.padv_read_periodic_adv_list_size()
+</code></pre><span class="code-title"><p>Get the number of devices inside the Periodic Advertiser List of the device</p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_25')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_25" class="lang-python hljs">    advertiser = advertiser_list[<span class="hljs-number">0</span>]
+    rtlsUtil.padv_remove_device_from_periodic_adv_list(advertiser)
+</code></pre><span class="code-title"><p>Remove one specific advertiser from the Periodic Advertiser List of the device</p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_26')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_26" class="lang-python hljs">    rtlsUtil.padv_clear_periodic_adv_list()
+</code></pre><span class="code-title"><p>Remove all the advertisers from the Periodic Advertiser List of the device</p>
+</span></div></div>
+<p>  The python procedure allows to read the content of the Periodic Advertiser
+  List is not implemented. We recommend keeping a list within the python script
+  of the devices added to the Periodic Advertiser List. In the out-of-the-box
+  script, all the periodic advertisers found are added to the Periodic
+  Advertiser List so no specific list is kept.</p>
+</div>
+<h4 class="body-heading" id="create-the-synchronization-with-a-periodic-advertiser">Create the synchronization with a periodic advertiser<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#create-the-synchronization-with-a-periodic-advertiser"></a></h4><p>The function <code>rtlsUtil.padv_create_sync()</code> is used to create the synchronization.
+This functions requires five parameters that are described here:</p>
+<ul>
+<li><p><code>advertiser</code> (called <code>Responder</code>). This parameter contains the description of the
+advertiser to synchronize with.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_27')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_27" class="lang-python hljs">  advertiser = advertiser_list[<span class="hljs-number">0</span>]
+</code></pre></div></div>
+<p>Note: When synchronizing with the advertiser(s) of the Periodic Advertiser List
+this parameter is not used (see next bullet). In that case we recommend using
+a "dummy advertiser" instead:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_28')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_28" class="lang-python hljs">  <span class="hljs-comment"># Dummy responder to send when using periodic advertise list for sync</span>
+  dummy_responder = {<span class="hljs-string">'addr'</span>: <span class="hljs-string">'FF:FF:FF:FF:FF:FF'</span>,
+                     <span class="hljs-string">'addrType'</span>: <span class="hljs-number">0</span>,
+                     <span class="hljs-string">'rssi'</span>: <span class="hljs-number">0</span>,
+                     <span class="hljs-string">'advSID'</span>: <span class="hljs-number">0</span>,
+                     <span class="hljs-string">'periodicAdvInt'</span>: <span class="hljs-number">0</span>
+                     }
+</code></pre></div></div>
+</li>
+<li><p><code>options</code>. There are two option to create the synchronization, one is using
+the Periodic Advertiser List and the other one is using the specified advertiser.
+In additon, one can choose if the periodic avertisements reports
+should be initially enabled or disabled.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_29')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_29" class="lang-python hljs">  <span class="hljs-comment"># Options constants:</span>
+  <span class="hljs-comment">#   Clear Bit 0 - Use the advSID, advAddrType, and advAddress parameters to determine which advertiser to listen to.</span>
+  <span class="hljs-comment">#   Set Bit 0   - Use the Periodic Advertiser List to determine which advertiser to listen to.</span>
+  <span class="hljs-comment">#   Clear Bit 1 - Reporting initially enabled.</span>
+  <span class="hljs-comment">#   Set Bit 1   - Reporting initially disabled.</span>
+
+  USE_GIVEN_ADDRESS_AND_REPORT_ENABLE = <span class="hljs-number">0</span>
+  USE_LIST_AND_REPORT_ENABLE = <span class="hljs-number">1</span>
+  USE_GIVEN_ADDRESS_AND_REPORT_DISABLE = <span class="hljs-number">2</span>
+  USE_LIST_AND_REPORT_DISABLE = <span class="hljs-number">3</span>
+</code></pre></div></div>
+<div class="panel-group">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="#expandable_-how-to-enable-reports-if-they-are-not-initially-enabled-"><p> How to enable reports if they are not initially enabled?</p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-how-to-enable-reports-if-they-are-not-initially-enabled-" class="panel-collapse collapse">
+      <div class="panel-body"><p>  The reports may not be enabled at the beginning to save some
+  computation to the MCU. In that case the MCU keeps receiving
+  the periodic advertisings but does not execute a callback at
+  each reception.</p>
+<p>  If the reports are not enabled at synchronization creation,
+  they can only be enabled after the synchronization is established:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_30')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_30" class="lang-python hljs">    rtlsUtil.padv_create_sync(advertiser,
+                              USE_GIVEN_ADDRESS_AND_REPORT_DISABLE,
+                              sync_skip,
+                              sync_timeout,
+                              sync_cte_type)
+
+    <span class="hljs-comment"># Scan again for sync established event. scan again if not sync established event occurred</span>
+    sync_est_status = scan_for_sync_est(scan_time_sec, rtlsUtil, advertiser, num_of_scan_retry)
+
+    <span class="hljs-comment"># Enable periodic advertise reports</span>
+    rtlsUtil.padv_periodic_receive_enable(rtlsUtil.padv_get_sync_handle_by_responder(advertiser))
+</code></pre></div></div>
+</div>
+    </div>
+  </div>
+</div></li>
+<li><p><code>skip</code>. This is the maximum number of periodic advertising events that can
+be skipped after a successful receive. This is mainly used for energy savings
+and can be kept to 0 for a first evaluation.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_31')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_31" class="lang-python hljs">  sync_skip = <span class="hljs-number">0</span>         <span class="hljs-comment"># The maximum number of periodic advertising events that can be skipped after</span>
+                        <span class="hljs-comment"># a successful receive (Range: 0x0000 to 0x01F3)</span>
+</code></pre></div></div>
+</li>
+<li><p><code>syncTimeout</code>. Maximum time allowed between the successfull reception of two
+periodic advertisements. Synchronization is considered as lost if this time
+expires. This is mainly used for energy savings and can be kept to 10 times
+the periodic advertisement interval for a first evaluation.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_32')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_32" class="lang-python hljs">  <span class="hljs-comment"># Synchronization timeout for the periodic advertising train Range: 0x000A to 0x4000 Time = N*10 ms Time Range</span>
+  <span class="hljs-comment"># For this example, the timeout value set to be 10 times bigger then the periodic advertise interval.</span>
+  sync_timeout = int((advertiser[<span class="hljs-string">'periodicAdvInt'</span>] * <span class="hljs-number">1.25</span>) * <span class="hljs-number">10</span>)
+</code></pre></div></div>
+</li>
+<li><p><code>syncCteType</code>. This parameter allows to synchronize only with periodic advertisings
+containing a CTE. Here we want to synchronize with periodic advertising appended with
+an AoA CTEs only.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_33')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_33" class="lang-python hljs">  sync_cte_type = <span class="hljs-number">0</span>     <span class="hljs-comment"># Clear All Bits(0) - Sync All</span>
+                        <span class="hljs-comment"># Set Bit 0(1) - Do not sync to packets with an AoA CTE</span>
+                        <span class="hljs-comment"># Set Bit 1(2) - Do not sync to packets with an AoD CTE with 1 us slots</span>
+                        <span class="hljs-comment"># Set Bit 2(4) - Do not sync to packets with an AoD CTE with 2 us slots</span>
+                        <span class="hljs-comment"># Set Bit 4(16) - Do not sync to packets without a CTE</span>
+</code></pre></div></div>
+</li>
+</ul>
+<p>Here is the way to call the function <code>rtlsUtil.padv_create_sync()</code>:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_34')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_34" class="lang-python hljs">  rtlsUtil.padv_create_sync(advertiser,
+                            USE_GIVEN_ADDRESS_AND_REPORT_DISABLE,
+                            sync_skip,
+                            sync_timeout,
+                            sync_cte_type)
+</code></pre></div></div>
+<p>The synchronization is now created and ready to be established!</p>
+<h5 class="body-heading" id="establish-the-synchronization-with-a-periodic-advertiser">Establish the synchronization with a periodic advertiser<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#establish-the-synchronization-with-a-periodic-advertiser"></a></h5><p>This is done by launching a new scan.</p>
+<ul>
+<li><p>In the cases where you want to synchronize with the device specified
+(not with the devices in the Periodic Advertiser List), the function
+<code>scan_for_sync_est</code> defined in <code>rtls_connectionless.py</code>
+can be leveraged.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_35')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_35" class="lang-python hljs">  sync_advertiser_list = []
+  scan_time_sec = <span class="hljs-number">10</span>     <span class="hljs-comment"># Scanning time duration in seconds</span>
+  um_of_scan_retry = <span class="hljs-number">5</span>   <span class="hljs-comment"># Number of scan retry in case sync established event didn't occurred</span>
+
+  sync_est_status = scan_for_sync_est(scan_time_sec, rtlsUtil, advertiser, num_of_scan_retry)
+  <span class="hljs-keyword">if</span> sync_est_status:
+      print(f<span class="hljs-string">"Sync established with: {advertiser}"</span>)
+      sync_advertiser_list.append(advertiser)
+  <span class="hljs-keyword">else</span>:
+      print(f<span class="hljs-string">"Failed to establish sync with: {advertiser}"</span>)
+</code></pre></div></div>
+</li>
+<li><p>In the cases where you want to synchronize with the devices in the
+Periodic Advertiser List, use directly <code>rtlsUtil.scan()</code>, and then verify
+if all the expected synchronizations have been established using the
+function <code>rtlsUtil.padv_get_sync_handle_by_responder()</code>.
+In our example, we added all the periodic advertisers we found during
+scanning to the Periodic Advertiser List (so we directly use the
+<code>advertiser_list</code> to verify if all the synchronizations have been
+established):</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_36')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_36" class="lang-python hljs"><span class="hljs-comment"># Scan again for sync established event</span>
+rtlsUtil.scan(scan_time_sec)
+time.sleep(<span class="hljs-number">3</span>)
+
+<span class="hljs-comment"># verify if the sync handle is different from 0</span>
+synced_advertiser = <span class="hljs-keyword">None</span>
+<span class="hljs-keyword">for</span> advertiser <span class="hljs-keyword">in</span> advertiser_list:
+    <span class="hljs-keyword">if</span> rtlsUtil.padv_get_sync_handle_by_responder(advertiser) == <span class="hljs-number">0</span>:
+        synced_advertiser = advertiser
+        print(f<span class="hljs-string">"Sync created with first advertiser on advertisers list: {synced_advertiser}. "</span>
+              f<span class="hljs-string">"Periodic advertise report enabled automatically"</span>)
+</code></pre></div></div>
+</li>
+</ul>
+<h4 class="body-heading" id="in-summary-">In summary...<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#in-summary-"></a></h4><p>Connectionless mode requires synchronizing between the <code>rtls_coordinator</code> device and
+periodic advertisers. Periodic advertisers can be detected through a scanning
+procedure. The <a href="#scanning-for-devices-connectionless-aoa-">scanning</a>
+procedure detects both periodic advertisers and legacy advertisers.
+There are two ways to synchronize with periodic advertiser(s).</p>
+<ul>
+<li>Synchronization with one advertiser. Based on the result of the scanning
+procedure, one periodic advertiser is <a href="#select-a-periodic-advertiser-to-synchronize-with">selected</a>.
+Synchronization is first <a href="#create-the-synchronization-with-a-periodic-advertiser">created</a>.
+Then synchronization is <a href="#establish-the-synchronization-with-a-periodic-advertiser">established</a>.</li>
+<li>Synchronization with all the periodic advertiser(s) in the Periodic
+Advertiser List of the <code>rtls_coordinator</code> device. To do so some periodic
+advertisers detected during the scanning procedure are
+<a href="#select-a-periodic-advertiser-to-synchronize-with">selected</a> then
+<a href="#add-the-advertiser-to-the-periodic-adv-list">added</a> to the Periodic
+Advertiser List. Once the Periodic Advertiser List is ready, the
+synchronization must be <a href="#create-the-synchronization-with-a-periodic-advertiser">created</a>
+then <a href="#establish-the-synchronization-with-a-periodic-advertiser">established</a>.</li>
+</ul>
+<h2 class="body-heading" id="enabling-data-collection">Enabling data collection<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#enabling-data-collection"></a></h2><h3 class="body-heading" id="enabling-data-collection-with-connection-mode">Enabling data collection with connection mode<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#enabling-data-collection-with-connection-mode"></a></h3><p>This section uses the <code>rtls_connected.py</code> python script.</p>
+<h4 class="body-heading" id="enabling-connection-aoa">Enabling connection-AoA<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#enabling-connection-aoa"></a></h4><p>Now that the connection has been formed and the connection parameter information has been
+distributed, it is time to enable AoA.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_37')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_37" class="lang-python hljs">aoa_params = {
+    <span class="hljs-string">"aoa_run_mode"</span>: <span class="hljs-string">"AOA_MODE_RAW"</span>,
+    <span class="hljs-string">"aoa_cc26x2"</span>: {
+        <span class="hljs-string">"aoa_slot_durations"</span>: self.angle_of_arrival_params.get(<span class="hljs-string">'slot_duration'</span>, <span class="hljs-number">2</span>),
+        <span class="hljs-string">"aoa_sample_rate"</span>: self.angle_of_arrival_params.get(<span class="hljs-string">'sample_rate'</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-string">"aoa_sample_size"</span>: self.angle_of_arrival_params.get(<span class="hljs-string">'sample_size'</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-string">"aoa_sampling_control"</span>: int(
+            <span class="hljs-string">'0x10'</span> <span class="hljs-keyword">if</span> self.angle_of_arrival_params.get(<span class="hljs-string">'enable_filter'</span>, <span class="hljs-keyword">True</span>) <span class="hljs-keyword">else</span> <span class="hljs-string">'0x11'</span>, <span class="hljs-number">16</span>),
+        <span class="hljs-string">"aoa_sampling_enable"</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">"aoa_pattern_len"</span>: <span class="hljs-number">36</span>,
+        <span class="hljs-string">"aoa_ant_pattern"</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>,
+                            <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>]
+    }
+}
+self.rtls_util.aoa_set_params(aoa_params)
+print(<span class="hljs-string">"AOA Params Set"</span>)
+
+self.rtls_util.aoa_start(cte_length=self.angle_of_arrival_params.get(<span class="hljs-string">'cte_length'</span>, <span class="hljs-number">20</span>),
+                         cte_interval=self.angle_of_arrival_params.get(<span class="hljs-string">'cte_interval'</span>, <span class="hljs-number">2</span>))
+print(<span class="hljs-string">"AOA Started\n"</span>)
+</code></pre></div></div>
+<h4 class="body-heading" id="continuous-connection-information-to-be-used-with-connection-aoa-">Continuous Connection Information (to be used with connection-AoA)<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#continuous-connection-information-to-be-used-with-connection-aoa-"></a></h4><p>CCI is the default functionality of the out-of-box <code>rtls_connected.py</code>. It is the
+most simplistic method and only provides a received signal strength indicator (RSSI) and
+frequency channel index for each BLE connection event.</p>
+<p>CCI can be enabled on both the Coordinator and the Passive(s) by sending a <code>RTLS_CMD_CONN_INFO</code> UNPI
+request. This is abstracted and initiated from <code>RtlsUtil</code> as such:</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_38')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_38" class="lang-python hljs">  rtlsUtil.cci_start()
+</code></pre></div></div>
+<p>After being enabled, the respective node will send a <code>RTLS_EVT_CONN_INFO</code> UNPI Asynchronous Response
+after each Coordinator-Responder connection event. This response contains the RSSI and the channel of the
+connection event. The Coordinator will send this after participating in the connection
+event with the Responder and the Passive will send this after it observes the connection event.</p>
+<p><code>RtlsUtil</code> will receive each response and append it to the <code>RtlsUtil.conn_info_queue</code>.  This queue
+can then be processed as desired. The out-of-box example periodically reads and prints
+from this queue in <code>results_parsing()</code> in a separate thread.</p>
+<p>This procedure is shown here:</p>
+<center>
+  <div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/cci.png" alt="Continuous Connection Information" class="img-responsive"></div>
+</center>
+
+<h4 class="body-heading" id="stopping-the-example">Stopping the Example<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#stopping-the-example"></a></h4><p>After enabling the localization mode(s), <code>rtls_connected.py</code> will
+collect data for a <span class="hinted" data-placement="auto top" data-toggle="tooltip" data-html="true" data-original-title="&lt;p&gt;this time is given by the value of &lt;code&gt;data_collection_duration&lt;/code&gt;
+discussed set in the python script's &lt;code&gt;main()&lt;/code&gt;&lt;/p&gt;
+">given time</span>, then
+gracefully stop all ongoing over-the-air procedures and any spawned result-processing threads.
+The parameter <code>data_collection_duration</code> can be changed according to the data collection
+time required.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_39')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_39" class="lang-python hljs">self.rtls_util.cci_stop()
+print(<span class="hljs-string">"\nContinues Connection Information Stopped"</span>)
+</code></pre><span class="code-title"><p>Stopping data collection for CCI</p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_40')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_40" class="lang-python hljs">self.rtls_util.aoa_stop()
+print(<span class="hljs-string">"\nAOA Stopped"</span>)
+</code></pre><span class="code-title"><p>Stopping data collection for AoA</p>
+</span></div></div>
+<h3 class="body-heading" id="enabling-data-collection-with-connectionless-mode">Enabling data collection with connectionless mode<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#enabling-data-collection-with-connectionless-mode"></a></h3><p>This section uses the <code>rtls_connectionless.py</code> python script.</p>
+<h4 class="body-heading" id="enabling-connectionless-aoa">Enabling connectionless-AoA<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#enabling-connectionless-aoa"></a></h4><p>Now that the device is synchronized with a periodic advertiser and
+that periodic advertising reports are enabled, we can enable 
+connection-less AoA.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_41')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_41" class="lang-python hljs">self.rtls_util.cl_aoa_start(aoa_params, responder)
+print(f<span class="hljs-string">"Connectionless AOA started for {responder['addr']}\n"</span>)
+</code></pre></div></div>
+<p>Connetionless-AoA has to be started for each advertiser we
+are synchronized with.</p>
+<h4 class="body-heading" id="stopping-the-example">Stopping the Example<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#stopping-the-example"></a></h4><p>After enabling data connection, <code>rtls_connectionless.py</code> 
+will collect data for a given time, then gracefully stop.
+The parameter <code>data_collection_duration</code> can be changed
+according to the data collection time required.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_42')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_42" class="lang-python hljs">self.rtls_util.padv_periodic_receive_disable(sync_handle)
+print(f<span class="hljs-string">"Periodic report disabled for {responder['addr']}"</span>)
+</code></pre><span class="code-title"><p>Stopping data collection for RSSI</p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_43')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_43" class="lang-python hljs">self.rtls_util.cl_aoa_stop(aoa_params, responder)
+print(f<span class="hljs-string">"\nConnectionless AOA stoped for {responder['addr']}"</span>)
+</code></pre><span class="code-title"><p>Stopping data collection for AoA</p>
+</span></div></div>
+<p>This does not finish the synchronization(s) with the periodic advertisers.
+If you desire to finish the synchronization with the periodic advertisers, you
+need to use the funtion <code>rtlsUtil.padv_terminate_sync()</code>.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText('codeBlock_44')">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_44" class="lang-python hljs"><span class="hljs-keyword">for</span> responder <span class="hljs-keyword">in</span> self.all_sync_responders:
+    sync_handle = self.rtls_util.padv_get_sync_handle_by_responder(responder)
+    self.rtls_util.padv_terminate_sync(sync_handle)
+    print(f<span class="hljs-string">"Coordinator terminated sync from responder with sync handle {sync_handle}"</span>)
+</code></pre></div></div>
+<h1 class="body-heading" id="task-4-ndash-introduction-to-aoa-theory">Task 4 – Introduction to AoA theory<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#task-4-ndash-introduction-to-aoa-theory"></a></h1><p>Bluetooth Core Specification Version 5.1 introduces AoA/AoD which are
+covered under <code>Direction Finding Using Bluetooth Low Energy Device</code> section.</p>
+<p>AoA is for receivers that have RF switches, multiple antennas, can switch
+antennas and capture I/Q samples when receiving direction finding packets.</p>
+<p>AoD is for transmitters that have RF switches, multiple antennas and can switch
+antennas when transmitting direction finding packets. And receivers only have one
+antenna but can capture I/Q samples when receiving direction finding packets.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Direction Finding Method</th>
+<th>Transmitter</th>
+<th>Receiver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> AoA</td>
+<td>Single antenna, transmit CTE</td>
+<td>Multiple antennas, RF switches, can switches antennas while capture I/Q data of the CTE</td>
+</tr>
+<tr>
+<td> AoD</td>
+<td>Multiple antennas, RF switches, transmit CTE while switching antennas</td>
+<td>Single antenna, can capture I/Q data of the CTE</td>
+</tr>
+</tbody>
+</table>
+<p>On top of that, the Bluetooth Core Specification version 5.1 specifies the following
+states can support sending direction finding packets:</p>
+<ol>
+<li>Periodic advertising; also called <code>Connectionless CTE</code></li>
+<li>Connection; also called <code>Connection CTE</code></li>
+</ol>
+<p>The theory behind AoA/AoD and Connectionless/Connection CTE is the same,
+therefore in this SimpleLink Academy training, we will only focus on Connection CTE AoA.</p>
+<p>We will explain the AoA theory first and the walk through our
+SimpleLink CC13XX / CC26XX SDK offering.</p>
+<p>AoA measurement is typically a 3-step process:</p>
+<ol>
+<li>Collect phase information by sampling the I/Q</li>
+<li>Calculate the phase difference among the antennas</li>
+<li>Convert the phase difference into Angle of Arrival</li>
+</ol>
+<h2 class="body-heading" id="1-collect-phase-information-by-sampling-the-i-q">1. Collect phase information by sampling the I/Q<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#1-collect-phase-information-by-sampling-the-i-q"></a></h2><p>When two (or more) antennas are placed at a given distance apart from each other, their
+received RF signals will have a phase difference that is proportional to the
+difference between their respective distances from the transmitter.</p>
+<p>Typically, the signal from one antenna will be a delayed version of the signal
+from the other antenna. If they are sufficiently close (less than λ(wavelength)/2
+between phase centers), you can always determine which is closest to the transmitter.</p>
+<p>These path length differences will depend on the direction of the incoming RF
+waves relative to the antennas in the array. In order to measure the phase
+difference accurately, the radio wave packet must contain a section of constant
+tone with <span class="hinted" data-placement="auto top" data-toggle="tooltip" data-html="true" data-original-title="&lt;p&gt;Data whitening is a process that avoids sending long
+sequences of 1s or 0s which can cause DC bias thus altering RF performance -
+Here we want a sequence of 1s, so datawhitening must be disabled.&lt;/p&gt;
+">whitening</span> disabled where
+there are no phase shifts caused by modulation.</p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Constant Tone Extension (CTE)
+</span></h4>
+<p>The constant tone extension is a section of consecutive 1's without whitening, which is effectively
+a +250kHz wave on top of the carrier wave.
+In the Bluetooth Core Specification Version 5.1, both periodic advertising packets and connection
+packets can contain a constant tone extension (CTE) after the CRC. The CTE can only be sent
+using uncoded PHY.</p>
+</div>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/AoA_conversion_to_phase_shift.png" alt="AoA Conversion to Phase Shift" class="img-responsive"></div><p></p>
+<h2 class="body-heading" id="2-calculate-the-phase-difference-among-the-antennas">2. Calculate the phase difference among the antennas<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#2-calculate-the-phase-difference-among-the-antennas"></a></h2><p>Phase Difference (Φ) is measured by connecting at least two antennas to the same
+receiver sequentially (more antennas can be added).</p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/AoA_measure_phase.png" alt="AoA Measure the phase shift" class="img-responsive"></div>
+</center>
+The picture shown below is a constellation diagram which illustrates
+signal vectors from 2 antennas. If all the antennas
+are positioned in line and with a fixed distance d, the phase difference Φ between
+adjacent antennas will be constant.
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/AoA_constellation.png" alt="AoA Constellation diagram" class="img-responsive"></div>
+</center>
+
+<p>In order to get a good estimate of Φ (phase), all other intentional phase shifts
+in the signal should be removed. Connection CTE AoA solution achieves this
+by adding CTE at the end of packets.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th style="text-align:center"><div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/AoA_packetformat.png" alt="BLE Packets" class="img-responsive"></div></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Connection CTE Packet Format</td>
+</tr>
+</tbody>
+</table>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Data Physical Packet format
+</span></h4>
+<p>The grey colored part of the packet shown above means
+it's optional. The Constant Tone Extension is only enabled when the <code>CP</code> bit
+in the Data Physical PDU header is set. The detail of the Constant Tone
+Extension is then specified by the <code>CTEInfo</code> field in the in the Data
+Physical PDU.</p>
+</div>
+<p>This gives the receiver time to synchronize the demodulator first, and then
+store the I/Q samples from the CTE into radio RAM. The I/Q data
+is then extracted by the application layer.</p>
+<p>I/Q samples are used to estimate phase difference among antennas. When the receiver gets AoA packets,
+the RF core will trigger an event that will lead to start of the antenna switching.
+The RF core will start sampling the I/Q data after the guard period of the CTE and the
+sampled data will be stored in the radio RAM.</p>
+<p>By comparing the I/Q data collected from different antennas, users can get the relative phase difference
+among antennas.</p>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">What technique does AoA use to identify the direction of incident wave?
+</span></h4>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q7.17" class="answer-wrong" name="quiz-7" style="display:none;"><label for="q7.17" class="quiz-label ">The difference of wave frequencies incident on to antenna array</label>
+<input type="checkbox" id="q7.18" class="answer-right" name="quiz-7" style="display:none;"><label for="q7.18" class="quiz-label ">The difference of phase incident on to antenna array</label>
+</div></div>
+</div>
+<h2 class="body-heading" id="3-convert-the-phase-difference-into-angle-of-arrival">3. Convert the phase difference into Angle of Arrival<a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="#3-convert-the-phase-difference-into-angle-of-arrival"></a></h2><p>Last step is converting the phase shift (Φ) back to AoA (Θ).
+If Φ is negative, this means that antenna 2 is ahead of antenna 1.
+In this case Θ is negative too but this does not cause any
+mathematical problem as <code>sin()</code> and <code>arcsin()</code> functions are defined
+both for positive and negative numbers. To avoid any unnecessary complications,
+we will consider here Φ to be positive.</p>
+<p>The angle between the incident wave and antenna array is Θ. Base on the
+picture below we know that the sin(Θ) = r/d, and d is the distance
+between antenna 1 and antenna 2 which is known. Then all we need to find out
+is r.</p>
+<p>r is the distance to antenna 2 that the incident wave needs to travel after
+arriving at antenna 1. We have found that the phase difference between antenna 1
+and antenna 2 is Φ, so the extra distance  r is equal to wavelength of the
+incoming signal * Φ/(2Π).</p>
+<p>r= Λ* Φ/(2Π)</p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/AoA_converting_phase.png" alt="AoA convert the phase shift back to angle" class="img-responsive"></div>
+</center>
+Therfore Θ can be represented as below:
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="ble_rtls_data/AoA_converted_angle.png" alt="AoA Angle" class="img-responsive"></div>
+</center>
+
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Note
+</span></h4>
+<p>The <code>rtls_coordinator</code> and <code>rtls_passive</code> can be used to sample
+Bluetooth 5.1 compliant IQ data.
+Angle calculation implementation depends on the characteristics of
+the antenna board chosen.</p>
+</div>
+<div class="bs-callout bs-callout-success "><h4><span class="glyphicon glyphicon-ok-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">That's all folks!
+</span></h4>
+<p>You earned a coffee ☕. <br>
+Now make sure to review the labs showing how to develop an <a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html">AoA-target</a>
+and an <a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_locator.html">AoA-locator</a>.</p>
+</div>
+<!-- Actual references -->
+<div align="center" style="margin-top: 4em; font-size: smaller;">
+<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="ble_rtls_data/cc_license_icon.png"></a><br>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.</div>
+
+</div><div class="col-xs-4 col-sm-2 sidebar-offcanvas bs-docs-sidebar hidden-print" id="sidebar-overview"><ul class="nav nav-stacked fixed" id="sidebar"><li class=""><a href="#introduction">介绍 </a></li><li class=""><a href="#prerequisites">先决条件 </a><ul class="nav nav-stacked"><ul class="nav nav-stacked"><li class=""><a href="#hardware-required">Hardware required</a></li><li class=""><a href="#recommended-reading">Recommended reading</a></li><li class=""><a href="#software-for-desktop-development">Software for desktop development</a></li></ul></ul></li><li class=""><a href="#task-1-ndash-prepare-your-environment">任务 1 – 准备环境 </a><ul class="nav nav-stacked"><li class=""><a href="#install-the-software">安装软件 </a></li><li class=""><a href="#load-the-software">加载软件 </a></li></ul></li><li class=""><a href="#task-2-ndash-discover-the-rtls-toolbox">任务 2 – 探索 RTLS 工具箱 </a><ul class="nav nav-stacked"><li class=""><a href="#localization-techniques">定位技术 </a></li><li class=""><a href="#rtls-toolbox-introduction">RTLS Toolbox 简介 </a></li><li class=""><a href="#rtls-roles-and-topology">RTLS 角色和拓扑 </a><ul class="nav nav-stacked"><li class=""><a href="#connection-mode">连接方式 </a></li><li class=""><a href="#connection-less-mode">无连接模式 </a></li></ul></li><li class=""><a href="#running-the-rtls-visual-demo">运行 RTLS 可视化演示 </a></li><li><a href="#running-the-rtls-non-visual-demo">运行 RTLS 非可视化演示 </a></li></ul></li><li><a href="#task-3-ndash-deep-dive-in-the-rtls-python-scripts">任务 3 – 深入探讨 RTLS Python 脚本 </a><ul class="nav nav-stacked"><li><a href="#rtls-node-manager-python-overview">RTLS Node Manager Python Overview</a></li><li><a href="#rtls-python-program-template">RTLS Python Program Template</a></li><li><a href="#rtlsutils-initialization">RtlsUtils initialization</a></li><li><a href="#rtls-network-setup-procedure">RTLS Network Setup Procedure</a><ul class="nav nav-stacked"><ul class="nav nav-stacked"><li><a href="#rtls-network-setup-procedure-for-connection-aoa">RTLS Network Setup Procedure for connection-AoA</a></li><li><a href="#rtls-network-setup-procedure-for-connectionless-mode">RTLS Network Setup Procedure for connectionless mode</a></li></ul></ul></li><li><a href="#setting-up-rtls-network">Setting up RTLS Network</a><ul class="nav nav-stacked"><li><a href="#setting-up-rtls-network-in-python-for-connection-aoa">Setting up RTLS Network in Python for connection-AoA</a><ul class="nav nav-stacked"><li><a href="#scanning-for-devices">Scanning for Devices</a></li><li><a href="#connecting-to-a-device">Connecting to a Device</a></li></ul></li><li><a href="#setting-up-rtls-network-in-python-for-connectionless-mode">Setting up RTLS Network in Python for connectionless mode</a><ul class="nav nav-stacked"><li><a href="#scanning-for-devices-connectionless-mode-">Scanning for Devices (connectionless mode)</a></li><li><a href="#select-a-periodic-advertiser-to-synchronize-with">Select a periodic advertiser to synchronize with</a></li><li><a href="#create-the-synchronization-with-a-periodic-advertiser">Create the synchronization with a periodic advertiser</a><ul class="nav nav-stacked"><li><a href="#establish-the-synchronization-with-a-periodic-advertiser">Establish the synchronization with a periodic advertiser</a></li></ul></li><li><a href="#in-summary-">In summary...</a></li></ul></li></ul></li><li><a href="#enabling-data-collection">Enabling data collection</a><ul class="nav nav-stacked"><li><a href="#enabling-data-collection-with-connection-mode">Enabling data collection with connection mode</a><ul class="nav nav-stacked"><li><a href="#enabling-connection-aoa">Enabling connection-AoA</a></li><li><a href="#continuous-connection-information-to-be-used-with-connection-aoa-">Continuous Connection Information (to be used with connection-AoA)</a></li><li><a href="#stopping-the-example">Stopping the Example</a></li></ul></li><li><a href="#enabling-data-collection-with-connectionless-mode">Enabling data collection with connectionless mode</a><ul class="nav nav-stacked"><li><a href="#enabling-connectionless-aoa">Enabling connectionless-AoA</a></li><li><a href="#stopping-the-example">Stopping the Example</a></li></ul></li></ul></li></ul></li><li><a href="#task-4-ndash-introduction-to-aoa-theory">任务 4 – AoA 理论简介 </a><ul class="nav nav-stacked"><li><a href="#1-collect-phase-information-by-sampling-the-i-q">1. Collect phase information by sampling the I/Q</a></li><li><a href="#2-calculate-the-phase-difference-among-the-antennas">2. Calculate the phase difference among the antennas</a></li><li><a href="#3-convert-the-phase-difference-into-angle-of-arrival">3. Convert the phase difference into Angle of Arrival</a></li></ul></li></ul></div></div></div></div>
+
+<link rel="stylesheet" href="ble_rtls_data/zenburn.css">
+<script src="utag.js" type="text/javascript" async=""></script><script type="text/javascript" async="" src="metrics-min.js"></script><script src="ble_rtls_data/jquery-1.11.2.min.js"></script>
+<script src="ble_rtls_data/bootstrap.min.js"></script>
+<script src="ble_rtls_data/highlight.pack.js"></script>
+<script type="text/javascript">document.isPreRendered = true;</script><script src="ble_rtls_data/strapdown.js"></script>      <div class="modal" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">        <div class="vertical-alignment-helper">          <div class="modal-dialog vertical-align-center">             <div class="modal-dialog">               <div class="modal-content" style="margin-left: auto;margin-right: auto;">                 <div class="modal-body">                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>                   <img src="ble_rtls.htm" class="imagepreview img-responsive">                 </div>              </div>            </div>          </div>        </div>      </div>
+
+
+<script src="analytics.js" charset="utf-8"></script><div style="position: fixed; top: 0px; left: 0px;"><img src="pxPixel.gif"></div><iframe style="display: none; border: 0px;" alt="" aria-hidden="true" width="0" height="0" sandbox="" id="db-sync" src="ble_rtls_data/sync.htm"></iframe><img style="display: none;" alt="" aria-hidden="true" width="0" height="0" id="db_lr_pixel_ad" src="464526.gif"></body></html>

@@ -1,0 +1,36 @@
+Silicon Labs   PBA: PCB4191T  PCB: PCB4191T Rev. A00  
+
+Board/PCB Manufacturing Files:
+
+PCB4191T_A00_pcb_spec.PDF          PCB Specification                 (Acrobat)
+PCB4191T_A00.DRR        Drill Report                 (Text)
+PCB4191T_A00.DRL		Drill Data                   (Excellon)
+PCB4191T_A00.TX1		Drill Data                   (Excellon)
+PCB4191T_A00.GM1        Board Outline                (X-Gerber)
+PCB4191T_A00.GTL        PCB Layer 1  Top             (X-Gerber)
+PCB4191T_A00.G1         PCB Layer 2  Inner           (X-Gerber)
+PCB4191T_A00.G2         PCB Layer 3  Inner           (X-Gerber)
+PCB4191T_A00.G3         PCB Layer 4  Inner           (X-Gerber)
+PCB4191T_A00.G4         PCB Layer 5  Inner           (X-Gerber)
+PCB4191T_A00.GBL        PCB Layer 6  Bot             (X-Gerber)
+PCB4191T_A00.GTS        Solder Mask  Top             (X-Gerber)
+PCB4191T_A00.GBS        Solder Mask  Bot             (X-Gerber)
+PCB4191T_A00.GTO        Silk/Mark    Top             (X-Gerber)
+PCB4191T_A00.GBO        Silk/Mark    Bot             (X-Gerber)
+
+
+######################################################################################
+# ECAD information:
+#
+# =============================================================================
+# Silicon Labs - HW Tools Team
+# =============================================================================
+#
+# Silicon Laboratories Hungary ltd.
+# Graphisoft Park, Building SP-B
+# 1033 Budapest, Angel Sanz Briz ut 13.
+# Hungary
+# Telephone                       +36-1-453-4250
+# Telefax                         +36-1-240-1056
+#
+######################################################################################

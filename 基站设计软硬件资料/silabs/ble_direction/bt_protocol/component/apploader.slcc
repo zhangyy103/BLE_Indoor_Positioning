@@ -1,0 +1,123 @@
+id: "apploader"
+label: "AppLoader Support for Applications"
+package: "Bluetooth"
+description: >
+  Bluetooth AppLoader application for OTA DFU.
+
+  On series 1 devices, this component adds AppLoader binary to the application.
+
+  On series 2 and above devices, it moves the application start address to give space for an AppLoader OTA DFU
+  Bootloader. It also requires a Gecko Bootloader with an AppLoader OTA DFU plugin to be present on the device.
+
+  AppLoader is a minimal version of the Bluetooth stack designed to enable device firmware updates over BLE connections
+  It allows to update application using in-place update where the old application is directly overwritten with the new one.
+category: Bluetooth|Apploader
+quality: "production"
+root_path: "protocol/bluetooth"
+include: []
+source: []
+requires:
+  - name: device_supports_bluetooth
+library:
+#EFR32XG1
+  - path: "lib/EFR32XG1/GCC/binapploader.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_sdid_80"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG1/GCC/binapploader_nvm3.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_sdid_80"
+      - "nvm3"
+  - path: "lib/EFR32XG1/IAR/binapploader.o"
+    condition:
+      - "toolchain_iar"
+      - "device_sdid_80"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG1/IAR/binapploader_nvm3.o"
+    condition:
+      - "toolchain_iar"
+      - "device_sdid_80"
+      - "nvm3"
+#EFR32XG12
+  - path: "lib/EFR32XG12/GCC/binapploader.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg12"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG12/GCC/binapploader_nvm3.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg12"
+      - "nvm3"
+  - path: "lib/EFR32XG12/IAR/binapploader.o"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg12"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG12/IAR/binapploader_nvm3.o"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg12"
+      - "nvm3"
+#EFR32XG13
+  - path: "lib/EFR32XG13/GCC/binapploader.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg13"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG13/GCC/binapploader_nvm3.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg13"
+      - "nvm3"
+  - path: "lib/EFR32XG13/IAR/binapploader.o"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg13"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG13/IAR/binapploader_nvm3.o"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg13"
+      - "nvm3"
+#EFR32XG14
+  - path: "lib/EFR32XG14/GCC/binapploader.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg14"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG14/GCC/binapploader_nvm3.o"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg14"
+      - "nvm3"
+  - path: "lib/EFR32XG14/IAR/binapploader.o"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg14"
+    unless:
+      - "nvm3"
+  - path: "lib/EFR32XG14/IAR/binapploader_nvm3.o"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg14"
+      - "nvm3"
+provides:
+  - name: "apploader"
+template_contribution:
+  - name: "apploader_enable"
+    value: 1
+    condition: [device_series_1]
+  - name: "apploader_size"
+    value: 4096
+    condition: [device_series_1]
+

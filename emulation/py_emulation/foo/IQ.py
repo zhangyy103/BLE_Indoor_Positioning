@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-file_path = "C:\\Users\\32285\\OneDrive\\Desktop\\IQ_Sample.txt"
+file_path = "C:\\Users\\32285\\OneDrive\\Desktop\\single_iq_sample.txt"
 
 # 修正数据解析函数，处理文件中的IQ数据
 def extract_iq_samples(file_path):
@@ -70,6 +70,24 @@ plt.plot(time, phases, label="Phase", alpha=0.8)
 plt.title("Amplitude and Phase over Time")
 plt.xlabel("Sample Index")
 plt.ylabel("Value")
+plt.legend()
+plt.grid(alpha=0.5)
+plt.show()
+
+# 假设采样频率 fs
+fs = 1e6  # 1 MHz 采样率，你需要根据实际情况调整
+Ts = 1 / fs  # 采样周期
+time = np.arange(len(iq_samples)) * Ts  # 生成时间轴
+
+# 还原原始正弦波
+reconstructed_signal = iq_samples[:, 0] * np.cos(2 * np.pi * fs * time) + iq_samples[:, 1] * np.sin(2 * np.pi * fs * time)
+
+# 绘制波形
+plt.figure(figsize=(12, 6))
+plt.plot(time[:500], reconstructed_signal[:500], label="Reconstructed Signal", alpha=0.8)
+plt.title("Reconstructed Time-Domain Signal from IQ Data")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
 plt.legend()
 plt.grid(alpha=0.5)
 plt.show()

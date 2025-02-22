@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/prj/!svn/ver/23127/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/function_test
+END
+input.lua
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/prj/!svn/ver/23127/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/function_test/input.lua
+END
+button_test.lua
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/prj/!svn/ver/23127/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/function_test/button_test.lua
+END
+draw_test.lua
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/prj/!svn/ver/23127/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/function_test/draw_test.lua
+END

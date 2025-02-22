@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<!-- saved from url=(0135)https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Real Time Localization System (RTLS) based on Bluetooth Low Energy</title>
+<link rel="stylesheet" href="./ubuntu-regular-woff.css"><link rel="stylesheet" href="./glyphicons-halflings-regular.css"><link rel="stylesheet" href="./united2.min.css"><link rel="stylesheet" href="./bootstrap-responsive.min.css"><link rel="stylesheet" href="./strapdown.css"><link rel="shortcut icon" type="image/x-icon" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/.metadata/favicon.ico"><script type="text/javascript" async="" charset="utf-8" id="demandbase_js_lib" src="./127cd254d55fd63f.min.js.下载"></script><script type="text/javascript" async="" charset="utf-8" id="utag_292" src="./init.js.下载"></script><script type="text/javascript" async="" charset="utf-8" id="utag_272" src="./elqCfg.min.js.下载"></script><script type="text/javascript" async="" charset="utf-8" id="utag_266" src="./elqCfg.min.js.下载"></script><script type="text/javascript" async="" charset="utf-8" src="./19c369a85be168c883cbae6664876759.js.下载" id="utag_246"></script><script type="text/javascript" async="" charset="utf-8" src="./js" id="utag_318"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.318.js.下载" id="utag_ti.main_318"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.246.js.下载" id="utag_ti.main_246"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.266.js.下载" id="utag_ti.main_266"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.272.js.下载" id="utag_ti.main_272"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.273.js.下载" id="utag_ti.main_273"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.292.js.下载" id="utag_ti.main_292"></script><script type="text/javascript" async="" charset="utf-8" src="./utag.342.js.下载" id="utag_ti.main_342"></script><link charset="utf-8" rel="preload" as="script" href="https://try.abtasty.com/shared/me.3d90e9c1b5b912644317.js"><script type="text/javascript" async="" charset="utf-8" src="./01930ffc175c001201a2b9042f0b0006f008206700a83(1)" id="tealium_visitor_service_273main_1"></script></head>
+
+<!-- START PRE -->
+
+
+
+
+
+
+<!-- END PRE -->
+
+<body style=""><div class="container"><nav class="navbar navbar-default navbar-static-top"><div class="container-fluid"> <div class="navbar-header">  <div id="headline" class="navbar-brand"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">基于低功耗蓝牙的实时定位系统 (RTLS)</font></font></div> </div> </div></nav><div class="container"><div class="row row-offcanvas row-offcanvas-left"><div class="col-xs-12 col-sm-9" id="content"><div class="bs-callout bs-callout-danger "><h4><span class="glyphicon glyphicon-exclamation-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">笔记
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">过去几年来，我们一直在改进我们的实时定位系统 (RTLS) 工具箱。如今，我们的 SimpleLink CC26x2 Bluetooth LE 无线 MCU 和软件堆栈 (BLE5-Stack) 解决方案元素支持开发基于接收信号强度指示 (RSSI) 和到达角 (AoA) 的符合蓝牙 5.2 标准的测向解决方案，每种解决方案都可用于帮助客户在汽车和工业等各个领域构建先进的测向应用。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">应该理解的是，实际的最终产品实施结合了 AoA 测向定位器功能 (1)，需要客户具备高级知识和进一步集成，而这在使用蓝牙 LE 进行通信的产品中通常不需要。客户可能需要在其定位器产品中解决 AoA 的一些挑战包括但不限于以下几点：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">嵌入式或系统级算法，用于实现所需的定位性能/角度精度，同时减轻各种操作环境中的干扰信号（例如多径接收）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">天线设计符合最终产品的工业设计约束和/或性能预期</font></font></li>
+</ul>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">由于 SDK 中现已包含符合蓝牙标准的 AoA 功能，我们对 AoA 的支持做出了以下修改：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2021 年 9 月 30 日之后，BOOSTXL-AOA 天线评估板将不再可供购买。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于 SDK 5.20 及更高版本，根据低功耗蓝牙规范，RTLS 示例仅支持“原始 I/Q 数据”模式。I/Q 数据可用于开发需要特定于最终产品实现的算法。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于 SDK 5.20 及更高版本，已从 RTLS 视觉演示中删除对到达角 (AoA) 的支持。</font></font></li>
+</ul>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SimpleLink CC13X2 / CC26X2 SDK 版本 5.10 及更早版本的内容将保持可访问；但是，这些早期版本的 SDK 将提供对 AoA 的有限 E2E 支持。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（1）</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">结合 AoA 测向目标功能的实现不需要如此高级的知识，可以直接利用 SDK 中提供的 rtls_responder 示例，如</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">目标设备的蓝牙低功耗到达角 (AoA)中所述</font></font></a>
+</strong></p>
+</div>
+<h1 class="body-heading" id="introduction"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">介绍</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#introduction"></a></h1><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本模块研究</font></font><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SimpleLink CC13XX-CC26XX SDK</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中提供的实时定位系统 (RTLS) 工具箱。假设读者具有嵌入式 C 工具链和一般 C 和 Python 编程概念的基本知识。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该实验室基于</font><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"><font style="vertical-align: inherit;">SimpleLink CC13XX-CC26XX SDK</font></a><font style="vertical-align: inherit;">的一部分</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（RTLS 协调器角色）、</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（RTLS 响应器角色）和（RTLS 被动角色）项目</font><font style="vertical-align: inherit;">。</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"></font><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首先，本实验将概述如何开始使用 RTLS 项目。本实验的后续任务将指导用户如何自定义这些项目。</font></font></p>
+<h1 class="body-heading" id="prerequisites"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">先决条件</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#prerequisites"></a></h1><h3 class="body-heading" id="hardware-required"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所需硬件</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#hardware-required"></a></h3><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此模块需要以下套件：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2x 或 3x </font></font><a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SimpleLink™ CC26x2R LaunchPad™</font></font></a></li>
+</ul>
+<h3 class="body-heading" id="recommended-reading"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">推荐阅读</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#recommended-reading"></a></h3><p><font style="vertical-align: inherit;"><a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;">TI BLE5-Stack 用户指南</font></a><font style="vertical-align: inherit;">中的这些章节</font></font><a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;"></font></a></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TI BLE5-Stack 快速入门</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CC13XX 或 CC26XX SDK 平台</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">应用</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">BLE5-Stack（特别是专门用于定期广告和定期扫描的部分）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 工具箱</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">网络处理器接口 (NPI)</font></font></li>
+</ul>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">项目自述文件：</font></font></p>
+<ul>
+<li><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">自述文件位于</font><font style="vertical-align: inherit;">CC13XX / CC26XX SDK 内的</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&lt;SimpleLink CC13XX / CC26XX SDK&gt; → examples → rtos → Board → ble5stack → rtls_coordinator文件夹中。</font></font></strong><font style="vertical-align: inherit;"></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所有相关信息</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">均</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">包含在</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">自述文件中</font></font></li>
+<li><code>rtls_agent</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">自述文件位于 CC13XX / CC26XX SDK 中的</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&lt;SimpleLink CC13XX / CC26XX SDK&gt; → tools → ble5stack → rtls_agent</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件夹中。任务 2 将详细介绍此内容。</font></font></li>
+</ul>
+<h3 class="body-heading" id="software-for-desktop-development"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">桌面开发软件</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#software-for-desktop-development"></a></h3><ul>
+<li><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SimpleLink CC13XX-CC26XX SDK</font></font></a></li>
+<li><font style="vertical-align: inherit;"><a href="https://dev.ti.com/tirex/explore/node?node=A__ADMjnimJ4C5BfFnmM3X-jg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;">CC13XX-CC26XX SDK 发行说明</font></a><font style="vertical-align: inherit;">的依赖项部分下列出的内容</font></font><a href="https://dev.ti.com/tirex/explore/node?node=A__ADMjnimJ4C5BfFnmM3X-jg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;"></font></a></li>
+</ul>
+<h1 class="body-heading" id="task-1-ndash-prepare-your-environment"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 1 – 准备环境</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-1-ndash-prepare-your-environment"></a></h1><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">完成此任务后你将获得：</font></font></p>
+<ul>
+<li><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">已安装</font><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK"><font style="vertical-align: inherit;">SimpleLink CC13XX-CC26XX SDK</font></a></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">工作 Python 环境</font></font></li>
+</ul>
+<h2 class="body-heading" id="install-the-software"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装软件</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#install-the-software"></a></h2><ol>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行 SimpleLink CC13XX / CC26XX SDK 安装程序。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从</font><a href="https://www.python.org/downloads/release/python-3710/"><font style="vertical-align: inherit;">Python 下载页面</font></a><font style="vertical-align: inherit;">安装 Python </font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3.7</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font><a href="https://www.python.org/downloads/release/python-3710/"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"></font></li>
+<li><font style="vertical-align: inherit;"></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">按照&lt;SimpleLink CC13XX / CC26XX SDK&gt; → tools → ble5stack → rtls_agent</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件夹中 README.md 中的说明设置 Python 环境
+</font><font style="vertical-align: inherit;">。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果你的系统上不存在 bash 环境，请安装</font></font><a href="https://git-scm.com/downloads"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Git bash</font></font></a></li>
+</ol>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这将为您提供：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">包含 TI-RTOS 的 SDK 默认</font></font><code>&lt;SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR&gt;</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为</font></font><code>C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Python 3.7 环境，包含 RTLS 节点管理器所需的所有依赖项</font></font></li>
+</ul>
+<h2 class="body-heading" id="load-the-software"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">加载软件</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#load-the-software"></a></h2><ul>
+<li><font style="vertical-align: inherit;"></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将项目</font><font style="vertical-align: inherit;">加载到 Board #1 中： </font></font><br> <strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&lt;SimpleLink CC13XX / CC26XX SDK&gt; → examples → rtos → CC26X2R1_LAUNCHXL → ble5stack → rtls_passive</font></font></strong></li>
+<li><font style="vertical-align: inherit;"></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将项目</font><font style="vertical-align: inherit;">加载到 Board #2 中： </font></font><br> <strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&lt;SimpleLink CC13XX / CC26XX SDK&gt; → examples → rtos → CC26X2R1_LAUNCHXL → ble5stack → rtls_responder</font></font></strong></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用以下项目加载主板 #3 </font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：</font></font><br> <strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&lt;SimpleLink CC13XX / CC26XX SDK&gt; → examples → rtos → CC26X2R1_LAUNCHXL → ble5stack → rtls_coordinator</font></font></strong></li>
+</ul>
+<h1 class="body-heading" id="task-2-ndash-discover-the-rtls-toolbox"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 2 – 探索 RTLS 工具箱</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-2-ndash-discover-the-rtls-toolbox"></a></h1><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">完成此任务后你将获得：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本地化技术的基本知识</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用</font></font><code>rtls_example.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">脚本设置 RTLS 网络。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 RTLS 工具箱和 RTLS UI</font></font></li>
+</ul>
+<h2 class="body-heading" id="localization-techniques"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">定位技术</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#localization-techniques"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">实时定位系统可以定义为能够实时确定指定物理区域内目标位置的系统。物理区域通常通过部署参考/定位器节点来定义。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有两种根本不同的定位方法：</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">三边测量法</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，其中您可以知道参考节点和目标节点之间的距离。基于 RSSI 的技术是三边测量法的典型示例。</font></font></p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./trilateration.png" alt="三边测量" class="img-responsive"></div>
+</center>
+
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">三角测量</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，您可以知道从参考节点到目标节点的方向。</font></font><code>Angle of Arrival</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是一种可用于测量从接收器到发射器的角度的技术。</font></font></p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./triangulation.png" alt="三角测量" class="img-responsive"></div>
+</center>
+
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">什么是节点？
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  在这种情况下，节点被称为具有本地化能力的嵌入式设备。对于 SDK 中的演示，节点是 LaunchPad</font></font></p>
+</div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测验！
+</font></font></span></h4>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择基于三边测量的定位技术……</font></font></strong></p>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q1.0" class="answer-wrong" name="quiz-1" style="display:none;"><label for="q1.0" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; No, AOA is a triangulation based technique&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">到达角（AOA）</font></font></label>
+<input type="checkbox" id="q1.1" class="answer-right" name="quiz-1" style="display:none;"><label for="q1.1" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Yes, TOF is a trilateration based technique. However, TOF is not supported&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">飞行时间 (TOF)</font></font></label>
+<input type="checkbox" id="q1.2" class="answer-right" name="quiz-1" style="display:none;"><label for="q1.2" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Correct!&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">基于RSSI的技术</font></font></label>
+</div></div>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择基于三角测量的定位技术……</font></font></strong></p>
+<div class="quiz-toolbar"><div>
+<input type="radio" id="q2.3" class="answer-right" name="quiz-2"><label for="q2.3" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Correct! AOA is a triangulation based technique&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">到达角（AOA）</font></font></label>
+<input type="radio" id="q2.4" class="answer-wrong" name="quiz-2"><label for="q2.4" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; No, TOF is a trilateration based technique.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">飞行时间 (TOF)</font></font></label>
+<input type="radio" id="q2.5" class="answer-wrong" name="quiz-2"><label for="q2.5" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Wrong!&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">基于RSSI的技术</font></font></label>
+</div></div>
+</div>
+<h2 class="body-heading" id="rtls-toolbox-introduction"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 工具箱介绍</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-toolbox-introduction"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在上一节中，我们讨论了多个节点如何结合角度信息进行三角测量和/或结合距离进行三边测量。重要的是要记住，在上面的图片中，单个节点不可能使用 TI 示例应用程序定位一个对象。单个节点只产生一个角度和/或一个距离。本质上，这是一种模糊的测量。如果至少有两个节点提供 AoA 数据，则可以进行定位。RSSI 也是如此，如果至少有三个节点提供 RSSI 值，则可以通过组合来自各个节点的样本并找到交集来进行定位。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此外，上一节没有讨论定位器和目标之间的“链接”的性质。在本实验中，介绍了两种选项 - 均符合蓝牙 5.1 标准。这些被称为“连接”和“无连接”。连接 RTLS 需要定位器和目标之间的蓝牙 LE 连接以及可选的一些被动节点。而无连接 RTLS 允许定位器和目标保持扫描/广告状态。基于连接的 RTLS 系统的主要优点是低功耗蓝牙连接可确保目标设备的身份并可进行双向通信。另一方面，无连接 RTLS 系统的复杂性降低（因为不需要被动设备），并且可以同时跟踪大量目标（几十个）。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">拓扑概览如下。下图中，黑色、蓝色和红色框代表 CC26x2R LaunchPad，灰色框代表 PC。定位器是 RTLS 协调器，（仅用于连接 RTLS）是 RTLS 被动器。目标是 RTLS 响应器。</font></font></p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="./network.png" alt="RTLS 网络" class="img-responsive"></div><p></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有关 RTLS 工具箱及其软件组件的全面介绍，请参阅</font></font><a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TI BLE5-Stack 用户指南</font></font></a></p>
+<h2 class="body-heading" id="rtls-roles-and-topology"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 角色和拓扑</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-roles-and-topology"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 网络中的每个节点都以不同的角色利用上面列出的软件组件来执行与定位相关的特定任务。有三个示例：</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">、</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">和</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。这些示例的功能如下所述。</font></font></p>
+<h3 class="body-heading" id="connection-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接方式</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#connection-mode"></a></h3><div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 协调员
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 协调器运行完整的 BLE 堆栈并充当蓝牙 LE 中央设备。它将通过蓝牙 LE 扫描并连接到 RTLS 响应器。建立连接后，RTLS 协调器将执行以下操作：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与PC共享连接参数（访问地址、外设睡眠时钟精度和CRC初始化）。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 BLE 链接与 Responder 设备共享 RTLS 参数。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测量接收的蓝牙信号的 RSSI</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（可能）接收带有 CTE 的数据包并执行同相和正交分量 (IQ) 采样</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 协调器不会发送 AoA 数据包，但会配置响应器来发送 AoA 数据包。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将 RSSI 和 IQ 数据报告给 PC。</font></font></li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-success "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 应答器
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 响应器运行完整的 BLE 堆栈并充当蓝牙 LE 外围设备。</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这是要定位的设备</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（通常称为“目标”）。响应器设备将通告并与 RTLS 协调器建立连接。</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">公布要检测的特殊字符串（在</font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure"><font style="vertical-align: inherit;">任务 3</font></a></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中详细介绍</font><font style="vertical-align: inherit;">）</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用恒定音调扩展 (CTE) 发送嵌入了 AoA 音调的数据包。有关 CTE 的更多信息，请参阅</font></font><a href="https://www.bluetooth.com/specifications/specs/core-specification-5-2/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">蓝牙核心规范版本 5.2</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无线/电池供电，无需连接电脑</font></font></li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-warning "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 被动
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 被动节点不会主动参与 RTLS 协调器和响应器之间的 BLE 连接。相反，它使用连接监控模式下的 Micro BLE-Stack 来跟踪连接。为此，被动设备依靠协调器在建立连接后分发连接参数。被动节点执行以下操作：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测量 RTLS 响应器和 RTLS 协调器发送的蓝牙信号的 RSSI</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">接收带有 CTE 的数据包并执行同相和正交分量 (IQ) 采样</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用连接监控模式下的 Micro BLE-Stack 来跟踪协调器和响应器之间的连接</font></font></li>
+</ul>
+<p><font style="vertical-align: inherit;"></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：可以</font></font></em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用RTLS Passive </font><font style="vertical-align: inherit;">，但不是</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">必需的</font></font></em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+</div>
+<div class="bs-callout bs-callout-danger "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PC/中央处理节点
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PC 节点负责通过发送命令和处理事件来控制嵌入式 RTLS 节点。在 SDK 中，这通过实现 UNPI Central 角色的 Python 层和将 UNPI 命令转换为套接字接口的服务器的组合来实现，该接口由浏览器中运行的用户界面 (UI) 应用程序使用。在最终产品中，这些算法可以在嵌入式设备上实现，甚至可能是 RTLS 协调器节点。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PC 在 RTLS GUI 中实现以下功能：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与 RTLS_Util 通信以发出命令并从设备中提取接收到的 RTLS 数据</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">绘制和记录数据</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">枚举设备</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将连接参数分发给被动节点</font></font></li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测验！
+</font></font></span></h4>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在连接模式网络中是否可以拥有多个 RTLS 无源设备？</font></font></strong></p>
+<div class="quiz-toolbar"><div>
+<input type="radio" id="q3.6" class="answer-right" name="quiz-3"><label for="q3.6" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Since it is a Passive role and not a participant, thus any number of devices can listen to a connection so long as they have parameters.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是的，PC 程序会将连接信息分发给任何具有被动 RTLS 功能的设备。</font></font></label>
+<input type="radio" id="q3.7" class="answer-wrong" name="quiz-3"><label for="q3.7" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; This is incorrect, any device with connection parameters (access address, crc init, etc) can follow the connection.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不可以，由于时间要求，只有一个设备可以跟踪协调器和响应器之间的连接。</font></font></label>
+</div></div>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为什么在连接 AoA 网络中需要多个无源设备？（选择所有适用项）</font></font></strong></p>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q4.8" class="answer-right" name="quiz-4" style="display:none;"><label for="q4.8" class="quiz-label "><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 被动节点可以从连接中采样 AoA 的 IQ 数据以及 RSSI</font></font></label>
+<input type="checkbox" id="q4.9" class="answer-wrong" name="quiz-4" style="display:none;"><label for="q4.9" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; From the question above, it is possible to scale to many Passive devices.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不可能有多个被动</font></font></label>
+<input type="checkbox" id="q4.10" class="answer-right" name="quiz-4" style="display:none;"><label for="q4.10" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Spreading out the nodes to increase the chance that the direct path will be observed.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无源节点可以提供空间分集，从而避免反射</font></font></label>
+</div></div>
+</div>
+<h3 class="body-heading" id="connection-less-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接模式</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#connection-less-mode"></a></h3><div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 协调员
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 协调器运行完整的 BLE 堆栈并充当蓝牙 LE 观察器设备。它将扫描并同步到 RTLS 响应器定期广告。同步后，RTLS 协调器将测量 RSSI 并接收带有 CTE 的数据包以执行同相和正交分量 (IQ) 采样</font></font></p>
+</div>
+<div class="bs-callout bs-callout-success "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 应答器（CTE 发射器）
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 响应器运行完整的 BLE 堆栈并充当蓝牙 LE 广播设备。</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这是要定位的设备</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（也称为“目标”）。响应器设备将定期发布广告，并附加恒定音调扩展 (CTE)。有关 CTE 的更多信息，请参阅</font></font><a href="https://www.bluetooth.com/specifications/specs/core-specification-5-2/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">蓝牙核心规范版本 5.2</font></font></a></p>
+</div>
+<div class="bs-callout bs-callout-danger "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PC/中央处理节点
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PC 节点负责通过发送命令和处理事件来控制嵌入式 RTLS 节点。在 SDK 中，这通过实现 UNPI Central 角色的 Python 层和将 UNPI 命令转换为套接字接口的服务器的组合来实现，该接口由浏览器中运行的用户界面 (UI) 应用程序使用。在最终产品中，这些算法可以在嵌入式设备上实现，甚至可能是 RTLS 协调器节点。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PC 在 RTLS GUI 中实现以下功能：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过 REST API 与 RTLS_Util 进行通信，以发出命令并从设备中提取接收到的 RTLS 数据</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">绘制和记录数据</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">枚举设备</font></font></li>
+</ul>
+</div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测验！
+</font></font></span></h4>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接 AoA 网络中应该使用多少个 RTLS 无源设备？</font></font></strong></p>
+<div class="quiz-toolbar"><div>
+<input type="radio" id="q5.11" class="answer-right" name="quiz-5"><label for="q5.11" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Correct, the RTLS Passive does not have the capability to synchronize with the periodic advertisements, thus not able to measure RSSI and/or sample the CTEs for connectionless-AoA.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">0，在无连接RTLS的情况下，RTLS被动设备对定位没有贡献</font></font></label>
+<input type="radio" id="q5.12" class="answer-wrong" name="quiz-5"><label for="q5.12" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; This is incorrect, not any RTLS Passive device is supported in the case of connectionless RTLS.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1，因为系统无法支持多个具有无连接AoA的RTLS被动设备</font></font></label>
+<input type="radio" id="q5.13" class="answer-wrong" name="quiz-5"><label for="q5.13" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; This is incorrect (see previous answer). In the case of connectionless RTLS, spatial diversity and immunity to reflections can be improved by adding some RTLS Coordinators&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不止一个，以提高空间多样性和抗反射能力</font></font></label>
+</div></div>
+</div>
+<h2 class="body-heading" id="running-the-rtls-visual-demo"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行 RTLS 可视化演示</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#running-the-rtls-visual-demo"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在本小节中，我们将使用 UI（用户界面）。此工具在计算机上运行。您将在</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&lt;SimpleLink CC13XX / CC26XX SDK&gt; → tools → ble5stack → rtls_agent → rtls_ui</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件夹中找到 RTLS_UI。</font></font></p>
+<ol>
+<li><p><font style="vertical-align: inherit;"></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#load-the-software"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">按照前面的</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">说明构建项目并刷新 LaunchPad </font><font style="vertical-align: inherit;">。</font></font></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过 USB 将 Coordinator 和 Passive 设备连接到计算机。Responder 设备必须通电，但不需要连接到计算机。</font></font></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">执行程序</font></font><code>rtls_ui.exe</code></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这将打开您的默认 Web 浏览器并将您连接到本地服务器。如果您的默认浏览器不受支持（通常是您的默认 Web 浏览器是 IE），则您必须将服务器的地址复制粘贴到受支持的 Web 浏览器中。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">查看 RTLS UI 的欢迎页面，然后单击“开始！”</font></font></p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_ui_landpage.png" alt="RTLS UI 欢迎页面" class="img-responsive"></div><p></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择要启用的模式（连接或无连接）。只能选择一个功能。完成后，点击“继续”</font></font></p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_ui_feature_selection.png" alt="RTLS UI 欢迎页面" class="img-responsive"></div><p></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">然后，UI 将显示检测到的设备。UI 仅检测 RTLS 接收器（即连接模式下的协调器和被动设备，以及无连接模式下的协调器设备）。UI 不会显示最终连接到计算机的响应器设备。</font></font></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择要使用的启动板。只需选择协调器和/或被动设备。在无连接的情况下，只需选择一个协调器。完成后，单击“继续”</font></font></p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_ui_launchpad_selection.png" alt="选择要使用的启动板" class="img-responsive"></div><p></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">系统已准备就绪！点击“自动播放”开始演示：</font></font></p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_ui_autoplay.png" alt="点击自动播放" class="img-responsive"></div><p></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于连接模式，这将自动：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启动扫描来检测 Responder 设备</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接 Responder 设备</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用持续连接信息监控（即RSSI采样）</font></font></li>
+</ul>
+<p><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于无连接模式，这将自动：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启动扫描以查找 RTLS 响应器发送的定期广告</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与定期广告同步</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用 RSSI 和 TX Power 监控</font></font></li>
+</ul>
+<p><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以下是连接 AoA 获得的屏幕：</font></font></p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_ui_autoplay_result.png" alt="显示 CCI 和 AOA" class="img-responsive"></div><p></p>
+<p><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以下是无连接 AoA 获得的屏幕：</font></font></p>
+<p> </p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_ui_autoplay_result_CL_AoA.png" alt="显示 CCI 和 AOA" class="img-responsive"></div><p></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">日志由 RTLS UI 存储在文件夹中</font></font><code>rtls_ui\logs</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。这些日志跟踪 RTLS UI 和节点发送的 UART 消息。</font></font></p>
+</li>
+</ol>
+<div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">角度和 IQ 数据显示
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">开箱即用的 RTLS Visual Demo 不支持 IQ 数据采样。下面介绍的 RTLS Non-Visual Demo 允许 IQ 数据采样并存储在 csv 文件中。</font></font></p>
+</div>
+<h2 class="body-heading" id="running-the-rtls-non-visual-demo"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行 RTLS 非视觉演示</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#running-the-rtls-non-visual-demo"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在本小节中，我们将使用 Python 脚本直接与节点交互。这使开发人员能够定义 RTLS 网络的自定义行为并直接控制设备。具体来说，这将涵盖设置所需的 Python 依赖项和运行 SDK 中提供的 Python 脚本。对于连接模式，我们建议首先使用脚本</font></font><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。对于无连接模式，请使用脚本</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-hand-right gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">假设和符号
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在开始此任务之前，假设以下内容</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支持 bash 或 Git bash 的命令提示符已打开并正在运行。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将始终使用 Unix 样式的斜杠。如果需要在 Windows 命令提示符 ( </font></font><code>cmd.exe</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">) 中运行这些步骤，则应</font></font><code>/</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将其替换为</font></font><code>\</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">各种命令提示符将搜索您的 [系统路径变量][1] 以查找 Python。如果您的路径中有一个预先存在的 Python 版本，则可以选择该版本而不是新安装的版本。为了防止混淆两者，我们将使用虚拟环境。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们假设 Mac 用户没有安装其他 Python 3 实例。如果不是这种情况，则根据变量，</font></font><code>PATH</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可能会在调用命令时选择较旧版本的 Python </font></font><code>python3</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。请确保调用正确版本的 Python。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这里我们重新整理了 rtls_agent/readme.html 中的一些说明。如果您已经按照此步骤操作并设置了 python 环境，则某些步骤可能是多余的。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请查看 tools\ble5stack\rtls_agent\rtls_util 中的 README 文件</font></font></li>
+</ul>
+</div>
+<ol>
+<li><font style="vertical-align: inherit;"><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#install-the-software"><font style="vertical-align: inherit;">按照入门</font></a><font style="vertical-align: inherit;">中的步骤安装 Python</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#install-the-software"><font style="vertical-align: inherit;"></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">打开命令提示符（</font><font style="vertical-align: inherit;">建议使用</font></font><a href="https://git-scm.com/downloads"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Git Bash ）</font></font></a><font style="vertical-align: inherit;"></font></li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建 Python 虚拟环境</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">导航到 SDK 文件夹（例如</font></font><code>C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">执行</font></font><code>py -3.7 -m venv .venv</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（Windows）或</font></font><code>python3 -m venv .venv</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（Mac）。这将</font></font><code>.venv</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+在当前目录中创建一个名为的文件夹，其中包含 Python 解释器的副本和用于安装包的沙箱。</font></font></li>
+<li><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：通过 Anaconda 使用 Python 时，应执行以下额外命令：</font></font></em> <code>c:\Anaconda3\Scripts\activate base</code></li>
+<li><font style="vertical-align: inherit;"></font><code>source .venv/Scripts/activate</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用(bash) 或
+</font></font><code>.venv\Scripts\activate.bat</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">(Windows cmd)</font><font style="vertical-align: inherit;">激活虚拟环境</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">观察当 venv 被激活时，</font></font><code>(.venv)</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">每个 cmd 提示符前都会出现</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请注意，一旦激活虚拟环境，该</font></font><code>python</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">命令将使用 venv 中的本地 Python 解释器。</font><font style="vertical-align: inherit;">有关更多信息，请参阅</font></font><a href="https://virtualenv.pypa.io/en/latest/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">虚拟环境。</font></font></a><font style="vertical-align: inherit;"></font></li>
+</ul>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装 RTLS 包和所需的外部 Python 依赖项</font></font></p>
+<p><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确保检查 README 文件的内容。</font></font></strong></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此步骤将使用 package.bat（适用于 Windows）或 package.sh（适用于 Linux / Mac）来安装 RTLS 包。</font></font></p>
+<ul>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在 Windows 中，运行</font></font><code>winpty ./package.bat -c -b -u -i</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（</font><font style="vertical-align: inherit;">如果使用 PowerShell 或 CMD 终端，则必须省略
+</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">winpty ）。在 Linux / Mac 中，运行</font></font></em><font style="vertical-align: inherit;"></font><code>package.sh -c -b -u -i</code></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">执行</font></font><code>python -m pip --proxy www.proxy.com install -r requirements.txt</code></p>
+</li>
+<li><font style="vertical-align: inherit;"></font><code>--proxy www.proxy.com</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请注意，仅在代理之后才需要</font><font style="vertical-align: inherit;">上述操作。</font></font></li>
+<li><code>www.proxy.com</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是代理的一个示例。如适用，应将其替换为您特定代理的网址。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这将安装 RTLS Python 套件所需的外部 Python 包（这些包在 中列出</font></font><code>requirements.txt</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）。</font></font></li>
+</ul>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">打开 python 脚本（</font></font><code>examples/rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或 
+</font></font><code>examples/rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，找到并更新以下行。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_1&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_1" class="lang-python hljs">coordinator_comport=<span class="hljs-string">"COM27"</span>,  <span class="hljs-comment"># "/dev/cu.usbmodemL1100KKT1",</span>
+passive_comports=[],  <span class="hljs-comment"># ['COM19']</span>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确保列出所有使用的 Coordinator 和 Passive LaunchPad，并正确更新使用的 COM 端口。无需将 Responder 设备添加到此列表中。</font></font></p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">笔记
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于无连接 AoA，只应使用一个 RTLS 协调器。</font></font></p>
+</div>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确保你需要的所有功能都已启用</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">验证 RSSI 和 IQ 数据收集均已启用。</font></font></p>
+<ul>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于连接模式：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_2&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_2" class="lang-python hljs">   continues_connection_info=<span class="hljs-keyword">True</span>,<font></font>
+   angle_of_arrival=<span class="hljs-keyword">True</span>,
+</code></pre></div></div>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于无连接模式：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_3&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_3" class="lang-python hljs">   periodic_advertise_report=<span class="hljs-keyword">True</span>,<font></font>
+   angle_of_arrival=<span class="hljs-keyword">True</span>,
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保存文件并运行。</font></font></p>
+<ul>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于连接模式，运行命令</font></font><code>python -u examples/rtls_connected.py</code></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该脚本将扫描 RTLS 设备、连接，然后打印 15 秒的连续连接信息（RSSI、通道）。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请参阅下面的示例输出片段（请注意，地址和 COM 端口会有所不同）。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">开箱即用的演示仅报告持续连接信息 (CCI)。以下部分将帮助您利用所提供脚本的所有功能。</font></font></li>
+</ul>
+<div class="panel-group">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#expandable_-example-input-parameters-"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">输入参数示例</font></font></p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-example-input-parameters-" class="panel-collapse collapse">
+      <div class="panel-body"><div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_4&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_4" class="lang-diff hljs">   ----------------------------------------------------------------------<font></font>
+   Coordinator comport                     : COM27<font></font>
+   Passive comports                        : []<font></font>
+   Responder BD Address                    : []<font></font>
+   Scan time                               : 10 Sec<font></font>
+   Connection Interval                     : 100 mSec<font></font>
+   Enable Continues Connection Interval    : No<font></font>
+   Enable Angle Of Arrival (AoA)           : Yes<font></font>
+       AoA Enable Filter                   : Yes<font></font>
+       AoA Slot Duration                   : 2<font></font>
+       AoA Sample Rate                     : 1<font></font>
+       AoA Sample Size                     : 1<font></font>
+       AoA CTE Length                      : 20<font></font>
+       AoA CTE Interval                    : 2<font></font>
+   Data Collection Duration                : 30<font></font>
+   Data Collection iteration               : 1<font></font>
+   Provide Post Analyze Function           : Yes<font></font>
+   Example Log Dir                         :     C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connected_log<font></font>
+   Example Log File Name                   : 10_27_2022_10_02_37_rtls_connected.log<font></font>
+   ----------------------------------------------------------------------<font></font>
+<font></font>
+   Devices Reset<font></font>
+   Start scan for 10 sec<font></font>
+   Scan Results:<font></font>
+           {'addr': '80:6F:B0:1E:35:E1', 'addrType': 0, 'rssi': -36, 'advSID': 255, 'periodicAdvInt': 0}<font></font>
+<font></font>
+   Trying connect to 80:6F:B0:1E:35:E1<font></font>
+   Connected to 80:6F:B0:1E:35:E1 with connection handle 0<font></font>
+<font></font>
+    <span class="hljs-header">========== Starting Loop 1 ==========</span><font></font>
+   AOA Params Set<font></font>
+   AOA Started<font></font>
+<font></font>
+   Example will now wait for result for 30 sec<font></font>
+<font></font>
+   [10:27:2022 10:02:53:866904] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 10:02:54:179892] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 10:02:54:421870] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   ...<font></font>
+   [10:27:2022 10:03:22:699925] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 10:03:23:322936] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 10:03:23:591923] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_a    gent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   Rename "rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv" into     "10_27_2022_10_03_23_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv"<font></font>
+<font></font>
+   Executing post analyze script on C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_conn    ected_log\10_27_2022_10_03_23_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   Analyzing file : C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connected_log\08_03_    2021_10_03_23_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   Return here output of your post-analyze algorithm<font></font>
+<font></font>
+   AOA Stopped<font></font>
+   Coordinator disconnected from responder with conn handle 0<font></font>
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获取连接模式的日志</font></font></p>
+</span></div></div>
+</div>
+    </div>
+  </div>
+</div><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Python 脚本还会</font></font><code>rtls_connected_log</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+在</font></font><code>examples</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件夹中创建文件夹。存储在此文件夹中的日志会跟踪 Python 脚本与节点交换的 UART 消息。</font></font></p>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于无连接 AoA，运行命令</font></font><code>python -u examples/rtls_connectionless.py</code></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该脚本将扫描 RTLS 设备的定期广告并与它们同步。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此后，它启用无连接 CTE 接收并打印 15 秒的 RTLS 信息。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请参阅下面的示例输出片段（请注意，地址和 COM 端口会有所不同）。</font></font></li>
+</ul>
+<div class="panel-group">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#expandable_-log-obtained-for-connectionless-aoa-"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获取无连接 AoA 的日志</font></font></p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-log-obtained-for-connectionless-aoa-" class="panel-collapse collapse">
+      <div class="panel-body"><div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_5&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_5" class="lang-diff hljs">   Example Input Parameters<font></font>
+   ----------------------------------------------------------------------<font></font>
+   Coordinator comport                     : COM27<font></font>
+   Responder BD Address                    : []<font></font>
+   Scan time                               : 10 Sec<font></font>
+   Sync Params                             :<font></font>
+       Sync Skip                           : 0<font></font>
+   Use Advertiser List                     : Yes<font></font>
+   Start Periodic Advertise Report on Sync : No<font></font>
+   Enable Periodic Advertise Report        : No<font></font>
+   Enable Angle Of Arrival (AoA)           : Yes<font></font>
+       AoA Enable Filter                   : Yes<font></font>
+       AoA Slot Duration                   : 2<font></font>
+       AoA Sample Rate                     : 1<font></font>
+       AoA Sample Size                     : 1<font></font>
+   Data Collection Duration                : 30<font></font>
+   Data Collection iteration               : 1<font></font>
+   Provide Post Analyze Function           : Yes<font></font>
+   Example Log Dir                         :       C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log<font></font>
+   Example Log File Name                   : 10_27_2022_09_56_52_rtls_connectionless.log<font></font>
+   ----------------------------------------------------------------------<font></font>
+<font></font>
+   Devices Reset<font></font>
+   Start scan for 10 sec<font></font>
+   Scan results:<font></font>
+                   {'addr': '80:6F:B0:1E:35:E1', 'addrType': 0, 'rssi': -34, 'advSID': 1, 'periodicAdvInt': 240}<font></font>
+   Example will try sync with:<font></font>
+                   {'addr': '80:6F:B0:1E:35:E1', 'addrType': 0, 'rssi': -34, 'advSID': 1, 'periodicAdvInt': 240}<font></font>
+   Using advertisers list to create sync<font></font>
+                   Responder 80:6F:B0:1E:35:E1 has been added to advertisers list<font></font>
+   Starting attempt #1 to make sure that all required responder successfully connected<font></font>
+   All required responders successfully connected !<font></font>
+<font></font>
+    <span class="hljs-header">========== Starting Loop 1 ==========</span><font></font>
+   Connectionless AOA started for 80:6F:B0:1E:35:E1<font></font>
+<font></font>
+   Example will now wait for result for 30 sec<font></font>
+<font></font>
+   [10:27:2022 09:57:16:721232] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:17:029199] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:17:289245] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:17:524198] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:17:825218] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:18:080235] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:18:468200] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:18:773198] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:19:125200] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   ...<font></font>
+   [10:27:2022 09:57:44:552275] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:44:839260] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:45:083247] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:45:636250] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:45:890282] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   [10:27:2022 09:57:46:229251] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   Rename rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv into 10_27_2022_09_57_46_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+<font></font>
+   Executing post analyze script on C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\10_27_2022_09_57_46_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   Analyzing file : C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\08_03_2021_09_57_46_rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv<font></font>
+   Return here output of your post-analyze algorithm<font></font>
+<font></font>
+   Connectionless AOA stoped for 80:6F:B0:1E:35:E1<font></font>
+   Coordinator terminated sync from responder with sync handle 0<font></font>
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接模式获取的日志</font></font></p>
+</span></div></div>
+</div>
+    </div>
+  </div>
+</div><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Python 脚本还会创建文件夹</font></font><code>rtls_connectionless_log</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+（在</font></font><code>examples</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件夹中）。存储在此文件夹中的日志会跟踪 Python 脚本与节点交换的 UART 消息。此文件夹还包含从 接收到的原始 IQ 样本</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为什么建议创建虚拟 Python 环境（选择所有适用的选项）？
+</font></font></span></h4>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q6.14" class="answer-right" name="quiz-6" style="display:none;"><label for="q6.14" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; Different projects may have conflicting requirements, using venv keeps them sandboxed.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本地安装所需的包</font></font></label>
+<input type="checkbox" id="q6.15" class="answer-wrong" name="quiz-6" style="display:none;"><label for="q6.15" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; It is possible to run RTLS from the global Python env.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 脚本需要它</font></font></label>
+<input type="checkbox" id="q6.16" class="answer-right" name="quiz-6" style="display:none;"><label for="q6.16" class="quiz-label " data-toggle="tooltip" data-html="true" data-container="body" data-placement="auto top" data-trigger="click" title="" data-original-title="&lt;p&gt; If there are multiple Python interpreters installed on your system. This will copy the correct interpreter into the venv&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获取翻译副本</font></font></label>
+</div></div>
+</div>
+<h1 class="body-heading" id="task-3-ndash-deep-dive-in-the-rtls-python-scripts"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 3 – 深入研究 RTLS Python 脚本</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-3-ndash-deep-dive-in-the-rtls-python-scripts"></a></h1><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">环境设置完成后，我们就可以直接使用 Python 来控制 RTLS 节点了。此任务的目的是解释 RTLS PC 软件并逐步设置 RTLS 网络。</font></font></p>
+<div class="alert alert-info "><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可能需要修改或复制默认的 rtls_connected.py 以保留它。将其保存为另一个名称，例如</font></font><code>rtls_example_old.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">作为备份。</font></font></p>
+</div>
+<h2 class="body-heading" id="rtls-node-manager-python-overview"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 节点管理器 Python 概述</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-node-manager-python-overview"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首先，我们将简要讨论 Python 解决方案的重要层及其作用。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_6&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_6" class="lang-diff hljs">/rtls_agent<font></font>
+    /examples/<font></font>
+      rtls_connected.py - Example to exercise rtls_util functionality<font></font>
+      rtls_aoa_iq_with_rtls_util_export_into_csv.py - Example to store the IQ data (or AOA) to a file on your computer<font></font>
+      rtls_aoa_multi_conn_example.py - Example to exercice the multi-connections capability of the RTLS devices<font></font>
+    /rtls_util/<font></font>
+         Main interface for examples. Class that abstracts RTLSManager and RTLSNode<font></font>
+         functionality. Handles waiting for RTLS responses in order to provide synchronous<font></font>
+         API's.  Raises any unexpected functionality as an exception.<font></font>
+         Please review the README file for details.<font></font>
+<font></font>
+    /rtls/<font></font>
+        /rtls/<font></font>
+            rtlsmanager.py - Class to manage multiple nodes in an RTLS network.<font></font>
+                             Subscribes to incoming data from the nodes, routes<font></font>
+                             outgoing data to each of the nodes. Distributes<font></font>
+                             connection parameters from Coordinator node to any<font></font>
+                             connected Passive nodes when an connection is<font></font>
+                             established. Handles messages from rtls_agent_cli server<font></font>
+                             if one is provided.<font></font>
+<font></font>
+            rtlsnode.py -    Class that implements the basic functionality of a node<font></font>
+                             in an RTLS network. This class will query the embedded<font></font>
+                             device connected to it and determine its capabilities.<font></font>
+                             Essentially this assigns a role in an RTLS context to<font></font>
+                             a COM port.<font></font>
+<font></font>
+            ss_rtls.py       Defines the commands in the RTLS UNPI subsystem.<font></font>
+                             This file will define builder classes for the various<font></font>
+                             UNPI commands that the RTLS subsystem supports.<font></font>
+<font></font>
+      /unpi/<font></font>
+          serialnode.py - Thread that manages serial communication from COM ports.<font></font>
+                          to higher layers.<font></font>
+                          Queues up messages and sends them to parser.<font></font>
+          unpiparser.py - Parser for Unified Network Processor Interface messages.<font></font>
+                          Implements UNPI frame format packing/unpacking.<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建议
+</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在 rtls_util.py 中的类之上构建基于 RTLS 的 Python 应用程序。此类构成了 RTLS API 集。对</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">方法的调用将转换为来自 ss_rtls.py 的一个或多个 RTLS UNPI 命令/响应序列。这样，</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">就是 RTLS UNPI 通信以及</font></font><code>RTLSManager</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">管理各种的
+的抽象</font></font><code>RTLSNode</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<h2 class="body-heading" id="rtls-python-program-template"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS Python 程序模板</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-python-program-template"></a></h2><p><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">并</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 
+从上一个任务中展示如何执行基本初始化</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以及如何设置网络和收集本地化数据。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">的开头</font></font><code>main()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有几个配置变量：</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接 AoA 如下：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_7&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_7" class="lang-python hljs">example = RtlsConnectedExample(<font></font>
+    coordinator_comport=<span class="hljs-string">"COM27"</span>,  <span class="hljs-comment"># "/dev/cu.usbmodemL1100KKT1",</span>
+    passive_comports=[],  <span class="hljs-comment"># ['COM19']</span>
+    responder_bd_addrs=[],  <span class="hljs-comment"># ['80:6F:B0:1E:39:02', '80:6F:B0:1E:38:C3']</span>
+    scan_time=<span class="hljs-number">10</span>,<font></font>
+    connection_interval=<span class="hljs-number">100</span>,<font></font>
+    angle_of_arrival=<span class="hljs-keyword">True</span>,<font></font>
+    angle_of_arrival_params={<font></font>
+        <span class="hljs-string">'enable_filter'</span>: <span class="hljs-keyword">True</span>,
+        <span class="hljs-string">'slot_duration'</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-string">'sample_rate'</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">'sample_size'</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">'cte_length'</span>: <span class="hljs-number">20</span>,
+        <span class="hljs-string">'cte_interval'</span>: <span class="hljs-number">2</span><font></font>
+    },<font></font>
+    data_collection_duration=<span class="hljs-number">30</span>,<font></font>
+    data_collection_iteration=<span class="hljs-number">1</span>,<font></font>
+    post_analyze_func=post_analyze_of_IQ_data<font></font>
+)<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以下为无连接 AoA：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_8&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_8" class="lang-python hljs">example = RtlsConnectionlessExample(<font></font>
+    coordinator_comport=<span class="hljs-string">"COM27"</span>,<font></font>
+    responder_bd_addrs=[],  <span class="hljs-comment"># ['80:6F:B0:1E:39:02', '80:6F:B0:1E:38:C3']</span>
+    scan_time=<span class="hljs-number">10</span>,<font></font>
+    sync_params={<font></font>
+        <span class="hljs-string">'sync_skip'</span>: <span class="hljs-number">0</span><font></font>
+    },<font></font>
+    use_advertiser_list=<span class="hljs-keyword">True</span>,<font></font>
+    start_periodic_advertise_report_on_sync=<span class="hljs-keyword">False</span>,<font></font>
+    periodic_advertise_report=<span class="hljs-keyword">False</span>,<font></font>
+    angle_of_arrival=<span class="hljs-keyword">True</span>,<font></font>
+    angle_of_arrival_params={<font></font>
+        <span class="hljs-string">'enable_filter'</span>: <span class="hljs-keyword">True</span>,
+        <span class="hljs-string">'slot_duration'</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-string">'sample_rate'</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">'sample_size'</span>: <span class="hljs-number">1</span>,<font></font>
+    },<font></font>
+    data_collection_duration=<span class="hljs-number">30</span>,<font></font>
+    data_collection_iteration=<span class="hljs-number">1</span>,<font></font>
+    post_analyze_func=post_analyze_of_IQ_data<font></font>
+)<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这些允许用户选择：</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于与</font></font><code>rtls_coordinator</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于通信的 COM 端口</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（不用于无连接 AoA，因为此模式未定义被动角色）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要连接/同步的设备的地址。如果留空，则将连接/同步所有找到的设备。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描阶段的持续时间（用于设备的连接/同步）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接间隔（仅限连接 AoA/不用于无连接 AoA，因为没有形成连接）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是否启用了 AoA 的 IQ 数据收集（参见布尔值</font></font><code>angle_of_arrival</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于 AoA 数据收集的参数</font></font><ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">enable_filter，如果设置为 true，则只报告采样时段内采集的样本。否则，报告所有样本（包括切换时段期间采集的样本）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">slot_duration，采样时隙的长度（1 或 2 us）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">sample_rate，采样率（1、2、3 或 4 MHz）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">sample_size，1 或 2 个字节</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cte_length，中央定位器请求的 CTE 的长度（以 16us 为单位）（仅连接 AOA）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cte_interval，两个 CTE 请求之间的间隔（以连接事件的数量表示）（仅限连接 AOA）</font></font></li>
+</ul>
+</li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">分析前的 IQ 数据收集持续时间</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要运行的数据收集迭代次数</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据收集完成后触发的函数</font></font></li>
+</ul>
+<h2 class="body-heading" id="rtlsutils-initialization"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RtlsUtils 初始化</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtlsutils-initialization"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">初始化函数的部分内容对于所有模式都是通用的。首先，构造一个 RTLSUtil 类的实例，用作 RTLS 节点管理器接口。第一个参数是要记录调试信息的文件，第二个参数是日志记录级别。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_9&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_9" class="lang-python hljs">rtlsUtil = RtlsUtil(logging_file, RtlsUtilLoggingLevel.INFO)
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或者，可以选择更详细的日志记录级别（“DEBUG”）。</font></font></p>
+</span></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">接下来，创建一个设备字典并将其传递给将为每个设备</font></font><code>RTLS.set_devices()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建的</font></font><code>RTLSNode</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">字典以及</font></font><code>RTLSManager</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用这些节点的类。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_10&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_10" class="lang-python hljs">devices = [<font></font>
+  {<span class="hljs-string">"com_port"</span>: coordinator_comport, <span class="hljs-string">"baud_rate"</span>: <span class="hljs-number">460800</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"Coordinator"</span>},<font></font>
+  {<span class="hljs-string">"com_port"</span>: passive_comport, <span class="hljs-string">"baud_rate"</span>: <span class="hljs-number">460800</span>, <span class="hljs-string">"name"</span>: f<span class="hljs-string">"Passive {index}"</span>},<font></font>
+]<font></font>
+</code></pre></div></div>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">笔记
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上面的“名称”字段不影响功能。它仅用于记录目的，因此如果不需要，则无需修改。</font></font></p>
+</div>
+<p><code>RTLS.set_devices()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将向每个节点发送 RTLS_CMD_IDENTIFY 来识别其功能并设置相关的协调器/被动器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">接下来重置两个节点：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_11&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_11" class="lang-python hljs">rtlsUtil.reset_devices()
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从 UNPI 角度来看，上述程序如下所示：</font></font></p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_identify.png" alt="RTLS 识别" class="img-responsive"></div>
+</center>
+
+<h2 class="body-heading" id="rtls-network-setup-procedure"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 网络设置程序</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此时您应该对 RTLS 类有基本的了解。接下来我们将介绍设置 RTLS 网络所需的最少命令。此过程对于连接 AoA 和无连接 AoA 略有不同。</font></font></p>
+<h4 class="body-heading" id="rtls-network-setup-procedure-for-connection-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接 AoA 的 RTLS 网络设置程序</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure-for-connection-aoa"></a></h4><p><font style="vertical-align: inherit;"></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于连接-AoA，BLE 连接是执行定位的先决条件。下面的序列图显示了在和</font><font style="vertical-align: inherit;">之间建立连接所需的 UNPI 命令</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_connect_diag.png" alt="RTLS 设置序列图" class="img-responsive"></div><p></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如 BLE 连接实验室所述，在连接之前，必须执行扫描以查看所需设备是否在附近。此操作由 启动</font></font><code>RtlsUtil.scan()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。扫描设备将检查广告和可选的扫描响应数据，以确定是否希望连接到给定的广告商。通常，扫描仪会在广告商的广播数据中寻找给定的令牌或字符串。RTLS 协调器将从</font></font><code>{'R','T','L','S','R','e','s','p','o','n','d','e','r',}</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">响应者的广告数据的第 3 个字节开始查找字符串。如果广告设备与过滤器匹配，则它将作为响应报告给 PC/节点管理器，
+</font></font><code>RTLS_CMD_SCAN</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这些响应从 RtlsUtil.scan() 返回为设备列表。如果广告设备与过滤器不匹配，它将被丢弃。</font></font></p>
+<p><code>RtlsUtil.ble_connect()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可用于与扫描结果中的某个设备建立连接。这将</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过发出与对等设备地址和地址类型一起发出通知来建立连接
+。地址信息可以</font><font style="vertical-align: inherit;">从来自协调器节点的响应</font></font><code>RTLS_CMD_CONNECT</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中提取。</font></font><code>RTLS_CMD_SCAN</code><font style="vertical-align: inherit;"></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果连接成功，</font></font><code>RTLS_CMD_CONNECT</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将收到状态为的响应</font></font><code>RTLS_SUCCESS</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">并</font></font><code>RtlsUtil.ble_connect()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">返回。RTLS 示例不考虑在协调器和响应器之间建立连接，直到设备配对并形成 L2CAP 连接导向通道 (CoC)。L2CAP CoC 用于在协调器和响应器之间发送 RTLS 同步相关信息。这可以包括 AoA 参数或启用 AoA 的命令。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建立 BLE 连接后（即</font></font><code>GAP_LINK_ESTABLISHED_EVENT</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从堆栈接收），</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+将通过 与 PC/节点管理器共享连接参数
+</font></font><code>RTLS_CMD_CONN_PARAMS</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。内部的连接监视器需要此信息</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">才能跟踪 RTLS 协调器和响应器之间的连接。</font></font></p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">分发连接参数
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  Python类</font></font><code>RTLSManager</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将立即将收到的任何连接参数 ( </font></font><code>RTLS_CMD_CONN_PARAMS</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">) 转发给所有连接的被动节点。此操作无需手动完成。</font></font></p>
+</div>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 被动连接丢失
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  顾名思义，被动设备在 BLE 连接中不扮演主动角色。被动设备仅具有监听链接的能力，但如果数据包未正确接收，则无法要求重新传输。因此，尤其是在嘈杂的环境中，被动设备可能会失去对连接的跟踪。在这种情况下，被动设备需要重新接收（最新的）连接信息才能监听 BLE 链接。此机制未在开箱即用的示例中实现，如果发生这种情况，您将需要重新启动演示。</font></font></p>
+</div>
+<h4 class="body-heading" id="rtls-network-setup-procedure-for-connectionless-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接模式的 RTLS 网络设置程序</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure-for-connectionless-mode"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于无连接，rtls_coordinator 必须与 rtls_responder 的定期通告同步。下面的序列图显示了同步</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">和所需的 UNPI 命令</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="./rtls_CL_AoA_sync_diag.png" alt="RTLS 设置序列图" class="img-responsive"></div><p></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">rtls_coordinator 与定期广告商 (rtls_responder) 同步的方式在</font></font><a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TI BLE5-Stack 用户指南</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">的通用访问配置文件 (GAP) 部分中有详细说明。必须先执行扫描，以识别附近发送定期广告的设备。此后，选择要同步的广告商。可以根据发送的 CTE 类型筛选找到的定期广告商。与定期广告商同步后，接收器可以开始对附加到定期广告包的 CTE 进行采样并提取 AoA 信息。</font></font></p>
+<h2 class="body-heading" id="setting-up-rtls-network"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设置 RTLS 网络</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#setting-up-rtls-network"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">现在我们了解了 RTLS 网络背后的基础知识以及如何设置它们，让我们回顾一下</font></font><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">和 
+</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">示例应用程序如何设置 RTLS 网络。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请注意，脚本将在网络设置后进行一些额外处理。本实验稍后将介绍这些内容。</font></font></p>
+<h3 class="body-heading" id="setting-up-rtls-network-in-python-for-connection-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 Python 设置 RTLS 网络以进行连接-AoA</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#setting-up-rtls-network-in-python-for-connection-aoa"></a></h3><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设置网络所需的命令属于 RTLS UNPI 子系统，可以在</font></font><code>ss_rtls.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件中找到。这些命令的发送和接收通过</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类抽象出来。</font></font></p>
+<h4 class="body-heading" id="scanning-for-devices"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描设备</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#scanning-for-devices"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们将使用</font></font><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">作为起点。从上面的部分，我们知道在识别节点后，我们想要告诉协调器进行扫描。这是这样启动的：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_12&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_12" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec)
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或者，也可以通过传递第二个“地址”参数来仅扫描特定的设备地址，如下所示：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_13&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_13" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec, responder_bd_addr)
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描完成（运行</font></font><code>scan_time_sec</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）后，结果将
+</font></font><code>scan_results</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">作为以下字典列表返回：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_14&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_14" class="lang-diff hljs">{<font></font>
+    "addr" : 6 byte address as string,<font></font>
+    "addrType" : address type as int,<font></font>
+    "rssi": int,<font></font>
+    "advSID": int,<font></font>
+    "periodicAdvInt": int (0 means this advertisement is not a periodic advertisement)<font></font>
+}<font></font>
+</code></pre></div></div>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-hand-right gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UNPI 中的异步命令与同步命令
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  下面提供了有关 RTLS UNPI 命令的更多信息。如上所述，所有这些都是抽象的，</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">因此如果需要，可以跳过。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  您可能已经注意到，它</font></font><code>RTLS_CMD_SCAN</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于通知节点开始扫描、接收状态和接收扫描结果。这在 UNPI 中是可能的，因为每条消息都可以是以下类型之一</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">同步请求</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">同步响应</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">异步请求</font></font></li>
+</ul>
+<p><font style="vertical-align: inherit;"></font><code>RTLS_CMD_SCAN</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在上启动扫描的消息
+是同步请求</font><font style="vertical-align: inherit;">的情况下</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。返回扫描开始调用状态的消息是同步响应，而返回扫描结果的消息是异步请求。</font><font style="vertical-align: inherit;">有关更多信息，请参阅</font></font><a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TI BLE5-Stack 用户指南中的 NPI 章节。</font></font></a><font style="vertical-align: inherit;"></font></p>
+</div>
+<h4 class="body-heading" id="connecting-to-a-device"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接到设备</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#connecting-to-a-device"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">现在，我们已经收集了扫描结果列表并准备连接。需要指定要连接的地址。该地址可以硬编码：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_15&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_15" class="lang-python hljs">  responder_bd_addr = <span class="hljs-string">"80:6F:B0:1E:38:C3"</span><font></font>
+  rtlsUtil.ble_connect(responder_bd_addr, connect_interval_mSec)<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您不知道地址，可以从 Responder 设备的 UART 显示屏上读取它。在 LaunchPad 的用户/UART 端口上打开串行终端（如 putty 或 Tera Term）</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。使用 115200 波特率、8N1。它应该显示以下文本：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_16&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_16" class="lang-diff hljs">Initialized<font></font>
+Dev Addr: 0x806FB01E3A8B<font></font>
+Advertising<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或者，也可以从扫描结果中提取地址，如下所示：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_17&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_17" class="lang-python hljs">  rtlsUtil.ble_connect(scan_results[<span class="hljs-number">0</span>], connect_interval_mSec)
+</code></pre></div></div>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接间隔
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  还需要将连接间隔传递到</font></font><code>RtlsUtil.ble_connect()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。此参数的影响将在相关的各种 RTLS 模式文档部分中讨论。开箱即用的示例默认使用 100 毫秒。</font></font></p>
+</div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请记住，</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">一旦与 建立 BLE 连接， 就会自动发送连接参数</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。python</font></font><code>RTLSManager</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类将拦截此信息并将其分发到所有</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">节点，因此我们不必在程序中执行此操作。收到连接参数后，</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接监视器将开始跟踪协调器和响应器之间的连接。请注意，建立连接可能需要一些时间，因为这确实包括 LE 安全连接配对以及打开 L2CAP 连接导向通道。</font></font></p>
+<h3 class="body-heading" id="setting-up-rtls-network-in-python-for-connectionless-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 Python 设置 RTLS 网络以实现无连接模式</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#setting-up-rtls-network-in-python-for-connectionless-mode"></a></h3><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">至于连接模式，建立网络所需的命令属于 RTLS UNPI 子系统，可以在</font></font><code>ss_rtls.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件中找到。这些命令的发送和接收是通过</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类抽象出来的。</font></font></p>
+<h4 class="body-heading" id="scanning-for-devices-connectionless-mode-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描设备（无连接模式）</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#scanning-for-devices-connectionless-mode-"></a></h4><div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与定期广告主列表中的设备同步
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  当想要与定期广告商列表中的设备同步时，无需执行此初始扫描和/或过滤广告商列表。换句话说，您可以直接参考“</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#create-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建与定期广告商的同步”</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">部分。但是，我们建议您完成所有步骤，以便更好地了解我们的产品。</font></font></p>
+</div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们将使用</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">作为起点。从上面的部分，我们知道在识别节点后，我们想要告诉</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">进行扫描。这是这样启动的：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_18&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_18" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec)
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或者，也可以只扫描特定的设备地址和广告集 ID（SID）。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_19&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_19" class="lang-python hljs">  scan_results = rtlsUtil.scan(scan_time_sec, advertiser_addr, advertiser_advSID)
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描完成（运行</font></font><code>scan_time_sec</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）后，结果将
+</font></font><code>scan_results</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">作为以下字典列表返回：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_20&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_20" class="lang-diff hljs">{<font></font>
+    "addr" : 6 byte address as string,<font></font>
+    "addrType" : address type as int,<font></font>
+    "rssi": int,<font></font>
+    "advSID": int,<font></font>
+    "periodicAdvInt": int (0 means this advertisement is not a periodic advertisement)<font></font>
+}<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您查看 的内容</font></font><code>scan_results</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，您将看到该</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+设备被报告了两次。该设备被报告一次为定期广告商（</font></font><code>periodicAdvInt</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">值不为 0），一次为传统广告商（</font></font><code>periodicAdvInt</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+值为 0）。这是因为开箱即用的</font></font><code>rtls_responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">项目配置为发送多个广告集。使用连接 AoA 时，传统广告用于建立连接。对于无连接 AoA，应该过滤掉传统广告。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_21&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_21" class="lang-diff hljs">Scan results found: [{'addr': '80:6F:B0:1E:55:F7', 'addrType': 0, 'rssi': -58, 'advSID': 255, 'periodicAdvInt': 0}, {'addr': '80:6F:B0:1E:55:F7', 'addrType': 0, 'rssi': -63, 'advSID': 1, 'periodicAdvInt': 80}]
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">摘录自 Python 脚本显示的日志。检测到设备 80:6F:B0:1E:55:F7 的两个不同的广告。第一个是旧版广告，第二个是可以同步的定期广告。</font></font></p>
+</span></div></div>
+<h4 class="body-heading" id="select-a-periodic-advertiser-to-synchronize-with"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择要同步的定期广告商</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#select-a-periodic-advertiser-to-synchronize-with"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">现在，我们已经收集了扫描结果列表。我们只对周期性广告感兴趣。其他的可以过滤掉。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">前面说过了，周期性广告的字段</font></font><code>periodicAdvInt</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">永远大于0。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_22&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_22" class="lang-python hljs">   scan_results_for_cl_rtls = [scan_result <span class="hljs-keyword">for</span> scan_result <span class="hljs-keyword">in</span> scan_results <span class="hljs-keyword">if</span> scan_result[<span class="hljs-string">'periodicAdvInt'</span>] &gt; <span class="hljs-number">0</span>]
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">根据字段值过滤掉非周期性广告</font></font><code>periodicAdvInt</code></p>
+</span></div></div>
+<div class="bs-callout bs-callout-info "><h4><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将广告商添加到定期广告商列表中
+</font></font></span></h4>
+<a name="add-the-advertiser-to-the-periodic-adv-list"></a>
+
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_23&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_23" class="lang-python hljs">    advertiser = advertiser_list[<span class="hljs-number">0</span>]<font></font>
+    rtlsUtil.padv_add_device_to_periodic_adv_list(advertiser)<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  传递给该函数的广告商</font></font><code>padv_add_device_to_periodic_adv_list</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+  应该是定期广告商。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  其他可能有用的python程序：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_24&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_24" class="lang-python hljs">    periodicAdvLisSize = rtlsUtil.padv_read_periodic_adv_list_size()
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获取设备定期广告客户列表中的设备数量</font></font></p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_25&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_25" class="lang-python hljs">    advertiser = advertiser_list[<span class="hljs-number">0</span>]<font></font>
+    rtlsUtil.padv_remove_device_from_periodic_adv_list(advertiser)<font></font>
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从设备的定期广告商列表中删除一个特定广告商</font></font></p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_26&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_26" class="lang-python hljs">    rtlsUtil.padv_clear_periodic_adv_list()
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从设备的定期广告商列表中删除所有广告商</font></font></p>
+</span></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  python 程序允许读取定期广告商列表的内容，但尚未实现。我们建议在 python 脚本中保留添加到定期广告商列表中的设备的列表。在现成的脚本中，找到的所有定期广告商都会添加到定期广告商列表中，因此不会保留特定列表。</font></font></p>
+</div>
+<h4 class="body-heading" id="create-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建与定期广告商的同步</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#create-the-synchronization-with-a-periodic-advertiser"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此函数</font></font><code>rtlsUtil.padv_create_sync()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于创建同步。此函数需要以下五个参数：</font></font></p>
+<ul>
+<li><p><code>advertiser</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（称为</font></font><code>Responder</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）。此参数包含要同步的广告商的描述。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_27&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_27" class="lang-python hljs">  advertiser = advertiser_list[<span class="hljs-number">0</span>]
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：与定期广告商列表的广告商同步时，不使用此参数（请参阅下一项）。在这种情况下，我们建议改用“虚拟广告商”：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_28&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_28" class="lang-python hljs">  <span class="hljs-comment"># Dummy responder to send when using periodic advertise list for sync</span>
+  dummy_responder = {<span class="hljs-string">'addr'</span>: <span class="hljs-string">'FF:FF:FF:FF:FF:FF'</span>,
+                     <span class="hljs-string">'addrType'</span>: <span class="hljs-number">0</span>,
+                     <span class="hljs-string">'rssi'</span>: <span class="hljs-number">0</span>,
+                     <span class="hljs-string">'advSID'</span>: <span class="hljs-number">0</span>,
+                     <span class="hljs-string">'periodicAdvInt'</span>: <span class="hljs-number">0</span><font></font>
+                     }<font></font>
+</code></pre></div></div>
+</li>
+<li><p><code>options</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。创建同步有两种方式，一种是使用定期广告商列表，另一种是使用指定广告商。此外，还可以选择是否应首先启用或禁用定期广告报告。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_29&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_29" class="lang-python hljs">  <span class="hljs-comment"># Options constants:</span>
+  <span class="hljs-comment">#   Clear Bit 0 - Use the advSID, advAddrType, and advAddress parameters to determine which advertiser to listen to.</span>
+  <span class="hljs-comment">#   Set Bit 0   - Use the Periodic Advertiser List to determine which advertiser to listen to.</span>
+  <span class="hljs-comment">#   Clear Bit 1 - Reporting initially enabled.</span>
+  <span class="hljs-comment">#   Set Bit 1   - Reporting initially disabled.</span><font></font>
+<font></font>
+  USE_GIVEN_ADDRESS_AND_REPORT_ENABLE = <span class="hljs-number">0</span>
+  USE_LIST_AND_REPORT_ENABLE = <span class="hljs-number">1</span>
+  USE_GIVEN_ADDRESS_AND_REPORT_DISABLE = <span class="hljs-number">2</span>
+  USE_LIST_AND_REPORT_DISABLE = <span class="hljs-number">3</span>
+</code></pre></div></div>
+<div class="panel-group">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#expandable_-how-to-enable-reports-if-they-are-not-initially-enabled-"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果最初未启用报告，如何启用报告？</font></font></p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-how-to-enable-reports-if-they-are-not-initially-enabled-" class="panel-collapse collapse">
+      <div class="panel-body"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  一开始可能不启用报告，以节省 MCU 的一些计算量。在这种情况下，MCU 会继续接收定期广告，但不会在每次接收时执行回调。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  如果在创建同步时未启用报告，则只能在建立同步后启用它们：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_30&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_30" class="lang-python hljs">    rtlsUtil.padv_create_sync(advertiser,<font></font>
+                              USE_GIVEN_ADDRESS_AND_REPORT_DISABLE,<font></font>
+                              sync_skip,<font></font>
+                              sync_timeout,<font></font>
+                              sync_cte_type)<font></font>
+<font></font>
+    <span class="hljs-comment"># Scan again for sync established event. scan again if not sync established event occurred</span><font></font>
+    sync_est_status = scan_for_sync_est(scan_time_sec, rtlsUtil, advertiser, num_of_scan_retry)<font></font>
+<font></font>
+    <span class="hljs-comment"># Enable periodic advertise reports</span><font></font>
+    rtlsUtil.padv_periodic_receive_enable(rtlsUtil.padv_get_sync_handle_by_responder(advertiser))<font></font>
+</code></pre></div></div>
+</div>
+    </div>
+  </div>
+</div></li>
+<li><p><code>skip</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。这是成功接收后可以跳过的最大周期性广告事件数。这主要用于节省能源，在首次评估时可以将其保持为 0。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_31&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_31" class="lang-python hljs">  sync_skip = <span class="hljs-number">0</span>         <span class="hljs-comment"># The maximum number of periodic advertising events that can be skipped after</span>
+                        <span class="hljs-comment"># a successful receive (Range: 0x0000 to 0x01F3)</span>
+</code></pre></div></div>
+</li>
+<li><p><code>syncTimeout</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. 成功接收两个周期性广告之间的最大允许时间。如果此时间到期，则认为同步丢失。这主要用于节省能源，在首次评估时可以将其保持在周期性广告间隔的 10 倍。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_32&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_32" class="lang-python hljs">  <span class="hljs-comment"># Synchronization timeout for the periodic advertising train Range: 0x000A to 0x4000 Time = N*10 ms Time Range</span>
+  <span class="hljs-comment"># For this example, the timeout value set to be 10 times bigger then the periodic advertise interval.</span>
+  sync_timeout = int((advertiser[<span class="hljs-string">'periodicAdvInt'</span>] * <span class="hljs-number">1.25</span>) * <span class="hljs-number">10</span>)
+</code></pre></div></div>
+</li>
+<li><p><code>syncCteType</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。此参数允许仅与包含 CTE 的定期广告同步。这里我们只想与附加了 AoA CTE 的定期广告同步。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_33&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_33" class="lang-python hljs">  sync_cte_type = <span class="hljs-number">0</span>     <span class="hljs-comment"># Clear All Bits(0) - Sync All</span>
+                        <span class="hljs-comment"># Set Bit 0(1) - Do not sync to packets with an AoA CTE</span>
+                        <span class="hljs-comment"># Set Bit 1(2) - Do not sync to packets with an AoD CTE with 1 us slots</span>
+                        <span class="hljs-comment"># Set Bit 2(4) - Do not sync to packets with an AoD CTE with 2 us slots</span>
+                        <span class="hljs-comment"># Set Bit 4(16) - Do not sync to packets without a CTE</span>
+</code></pre></div></div>
+</li>
+</ul>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">调用该函数的方法如下</font></font><code>rtlsUtil.padv_create_sync()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_34&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_34" class="lang-python hljs">  rtlsUtil.padv_create_sync(advertiser,<font></font>
+                            USE_GIVEN_ADDRESS_AND_REPORT_DISABLE,<font></font>
+                            sync_skip,<font></font>
+                            sync_timeout,<font></font>
+                            sync_cte_type)<font></font>
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">同步现已创建并准备建立！</font></font></p>
+<h5 class="body-heading" id="establish-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与定期广告商建立同步</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#establish-the-synchronization-with-a-periodic-advertiser"></a></h5><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这是通过启动新扫描来完成的。</font></font></p>
+<ul>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当您想要与指定的设备同步（而不是与定期广告客户列表中的设备同步）时，
+</font><font style="vertical-align: inherit;">
+可以利用</font></font><code>scan_for_sync_est</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中定义的功能。</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_35&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_35" class="lang-python hljs">  sync_advertiser_list = []<font></font>
+  scan_time_sec = <span class="hljs-number">10</span>     <span class="hljs-comment"># Scanning time duration in seconds</span>
+  um_of_scan_retry = <span class="hljs-number">5</span>   <span class="hljs-comment"># Number of scan retry in case sync established event didn't occurred</span><font></font>
+<font></font>
+  sync_est_status = scan_for_sync_est(scan_time_sec, rtlsUtil, advertiser, num_of_scan_retry)<font></font>
+  <span class="hljs-keyword">if</span> sync_est_status:<font></font>
+      print(f<span class="hljs-string">"Sync established with: {advertiser}"</span>)<font></font>
+      sync_advertiser_list.append(advertiser)<font></font>
+  <span class="hljs-keyword">else</span>:<font></font>
+      print(f<span class="hljs-string">"Failed to establish sync with: {advertiser}"</span>)
+</code></pre></div></div>
+</li>
+<li><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您想要与定期广告商列表中的设备同步，请直接使用</font></font><code>rtlsUtil.scan()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，然后使用 函数验证是否已建立所有预期的同步</font></font><code>rtlsUtil.padv_get_sync_handle_by_responder()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。在我们的示例中，我们将扫描过程中找到的所有定期广告商添加到定期广告商列表中（因此我们直接使用
+</font></font><code>advertiser_list</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">来验证是否已建立所有同步）：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_36&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_36" class="lang-python hljs"><span class="hljs-comment"># Scan again for sync established event</span><font></font>
+rtlsUtil.scan(scan_time_sec)<font></font>
+time.sleep(<span class="hljs-number">3</span>)<font></font>
+<font></font>
+<span class="hljs-comment"># verify if the sync handle is different from 0</span>
+synced_advertiser = <span class="hljs-keyword">None</span>
+<span class="hljs-keyword">for</span> advertiser <span class="hljs-keyword">in</span> advertiser_list:
+    <span class="hljs-keyword">if</span> rtlsUtil.padv_get_sync_handle_by_responder(advertiser) == <span class="hljs-number">0</span>:<font></font>
+        synced_advertiser = advertiser<font></font>
+        print(f<span class="hljs-string">"Sync created with first advertiser on advertisers list: {synced_advertiser}. "</span>
+              f<span class="hljs-string">"Periodic advertise report enabled automatically"</span>)
+</code></pre></div></div>
+</li>
+</ul>
+<h4 class="body-heading" id="in-summary-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">总之...</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#in-summary-"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接模式需要在</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设备和定期广告商之间进行同步。可以通过扫描程序检测定期广告商。</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#scanning-for-devices-connectionless-aoa-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+程序可检测定期广告商和传统广告商。有两种方法可以与定期广告商同步。</font></font></p>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与一个广告商同步。根据扫描过程的结果，</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#select-a-periodic-advertiser-to-synchronize-with"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择一个定期广告商。首先</font></font></a><font style="vertical-align: inherit;"></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#create-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">同步</font><font style="vertical-align: inherit;">。然后</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#establish-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建立</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">同步。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与设备定期广告商列表中的所有定期广告商同步</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。为此，
+</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#select-a-periodic-advertiser-to-synchronize-with"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描过程中检测到的一些定期广告商，然后
+</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#add-the-advertiser-to-the-periodic-adv-list"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将其添加到定期广告商列表中。一旦定期广告商列表准备就绪，必须</font></font></a><font style="vertical-align: inherit;"></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#create-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+然后</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#establish-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建立</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">同步</font><font style="vertical-align: inherit;">。</font></font></li>
+</ul>
+<h2 class="body-heading" id="enabling-data-collection"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用数据收集</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-data-collection"></a></h2><h3 class="body-heading" id="enabling-data-collection-with-connection-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用连接模式启用数据收集</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-data-collection-with-connection-mode"></a></h3><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本节使用</font></font><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">python脚本。</font></font></p>
+<h4 class="body-heading" id="enabling-connection-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用连接-AoA</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-connection-aoa"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">现在已经形成了连接并且分发了连接参数信息，现在是时候启用 AoA 了。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_37&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_37" class="lang-python hljs">aoa_params = {
+    <span class="hljs-string">"aoa_run_mode"</span>: <span class="hljs-string">"AOA_MODE_RAW"</span>,
+    <span class="hljs-string">"aoa_cc26x2"</span>: {
+        <span class="hljs-string">"aoa_slot_durations"</span>: self.angle_of_arrival_params.get(<span class="hljs-string">'slot_duration'</span>, <span class="hljs-number">2</span>),
+        <span class="hljs-string">"aoa_sample_rate"</span>: self.angle_of_arrival_params.get(<span class="hljs-string">'sample_rate'</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-string">"aoa_sample_size"</span>: self.angle_of_arrival_params.get(<span class="hljs-string">'sample_size'</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-string">"aoa_sampling_control"</span>: int(
+            <span class="hljs-string">'0x10'</span> <span class="hljs-keyword">if</span> self.angle_of_arrival_params.get(<span class="hljs-string">'enable_filter'</span>, <span class="hljs-keyword">True</span>) <span class="hljs-keyword">else</span> <span class="hljs-string">'0x11'</span>, <span class="hljs-number">16</span>),
+        <span class="hljs-string">"aoa_sampling_enable"</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">"aoa_pattern_len"</span>: <span class="hljs-number">36</span>,
+        <span class="hljs-string">"aoa_ant_pattern"</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>,
+                            <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>]<font></font>
+    }<font></font>
+}<font></font>
+self.rtls_util.aoa_set_params(aoa_params)<font></font>
+print(<span class="hljs-string">"AOA Params Set"</span>)<font></font>
+<font></font>
+self.rtls_util.aoa_start(cte_length=self.angle_of_arrival_params.get(<span class="hljs-string">'cte_length'</span>, <span class="hljs-number">20</span>),<font></font>
+                         cte_interval=self.angle_of_arrival_params.get(<span class="hljs-string">'cte_interval'</span>, <span class="hljs-number">2</span>))<font></font>
+print(<span class="hljs-string">"AOA Started\n"</span>)
+</code></pre></div></div>
+<h4 class="body-heading" id="continuous-connection-information-to-be-used-with-connection-aoa-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连续连接信息（与连接 AoA 一起使用）</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#continuous-connection-information-to-be-used-with-connection-aoa-"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CCI 是开箱即用的默认功能</font></font><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。它是最简单的方法，仅为每个 BLE 连接事件提供接收信号强度指示器 (RSSI) 和频道索引。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过发送 UNPI 请求，可以在协调器和被动器上启用 CCI </font></font><code>RTLS_CMD_CONN_INFO</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。这是抽象和启动的，</font></font><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如下所示：</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_38&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_38" class="lang-python hljs">  rtlsUtil.cci_start()
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用后，相应节点将</font></font><code>RTLS_EVT_CONN_INFO</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在每个协调器-响应器连接事件后发送 UNPI 异步响应。此响应包含 RSSI 和连接事件的通道。协调器将在与响应器一起参与连接事件后发送此响应，而被动节点将在观察到连接事件后发送此响应。</font></font></p>
+<p><code>RtlsUtil</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将接收每个响应并将其附加到</font></font><code>RtlsUtil.conn_info_queue</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。然后可以根据需要处理此队列。开箱即用的示例在</font></font><code>results_parsing()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">单独的线程中定期从此队列读取和打印。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该过程如下所示：</font></font></p>
+<center>
+  <div class="modal-pop" style="cursor:zoom-in;"><img src="./cci.png" alt="持续连接信息" class="img-responsive"></div>
+</center>
+
+<h4 class="body-heading" id="stopping-the-example"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止示例</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#stopping-the-example"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用定位模式后，将在给</font><span class="hinted" data-placement="auto top" data-toggle="tooltip" data-html="true" data-original-title="&lt;p&gt;this time is given by the value of &lt;code&gt;data_collection_duration&lt;/code&gt;
+discussed set in the python script&#39;s &lt;code&gt;main()&lt;/code&gt;&lt;/p&gt;
+"><font style="vertical-align: inherit;">定时间</font></span></font><code>rtls_connected.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">内收集数据</font><font style="vertical-align: inherit;">，然后正常停止所有正在进行的无线程序和任何产生的结果处理线程。</font><font style="vertical-align: inherit;">可以根据所需的数据收集时间更改参数。</font></font><span class="hinted" data-placement="auto top" data-toggle="tooltip" data-html="true" data-original-title="&lt;p&gt;this time is given by the value of &lt;code&gt;data_collection_duration&lt;/code&gt;
+discussed set in the python script&#39;s &lt;code&gt;main()&lt;/code&gt;&lt;/p&gt;
+"><font style="vertical-align: inherit;"></font></span><font style="vertical-align: inherit;"></font><code>data_collection_duration</code><font style="vertical-align: inherit;"></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_39&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_39" class="lang-python hljs">self.rtls_util.cci_stop()<font></font>
+print(<span class="hljs-string">"\nContinues Connection Information Stopped"</span>)
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止 CCI 的数据收集</font></font></p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_40&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_40" class="lang-python hljs">self.rtls_util.aoa_stop()<font></font>
+print(<span class="hljs-string">"\nAOA Stopped"</span>)
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止 AoA 数据收集</font></font></p>
+</span></div></div>
+<h3 class="body-heading" id="enabling-data-collection-with-connectionless-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用无连接模式启用数据收集</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-data-collection-with-connectionless-mode"></a></h3><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本节使用</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">python脚本。</font></font></p>
+<h4 class="body-heading" id="enabling-connectionless-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用无连接 AoA</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-connectionless-aoa"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">现在设备已与定期广告商同步，并且已启用定期广告报告，我们可以启用无连接 AoA。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_41&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_41" class="lang-python hljs">self.rtls_util.cl_aoa_start(aoa_params, responder)<font></font>
+print(f<span class="hljs-string">"Connectionless AOA started for {responder['addr']}\n"</span>)
+</code></pre></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们必须为同步的每个广告商启动无连接 AoA。</font></font></p>
+<h4 class="body-heading" id="stopping-the-example"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止示例</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#stopping-the-example"></a></h4><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用数据连接后，将在给定时间内收集数据，然后正常停止。</font><font style="vertical-align: inherit;">可以根据所需的数据收集时间更改</font></font><code>rtls_connectionless.py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 
+参数。</font></font><code>data_collection_duration</code><font style="vertical-align: inherit;"></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_42&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_42" class="lang-python hljs">self.rtls_util.padv_periodic_receive_disable(sync_handle)<font></font>
+print(f<span class="hljs-string">"Periodic report disabled for {responder['addr']}"</span>)
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止 RSSI 数据收集</font></font></p>
+</span></div></div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_43&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_43" class="lang-python hljs">self.rtls_util.cl_aoa_stop(aoa_params, responder)<font></font>
+print(f<span class="hljs-string">"\nConnectionless AOA stoped for {responder['addr']}"</span>)
+</code></pre><span class="code-title"><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止 AoA 数据收集</font></font></p>
+</span></div></div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这不会结束与定期广告商的同步。如果您希望结束与定期广告商的同步，则需要使用 功能</font></font><code>rtlsUtil.padv_terminate_sync()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_44&#39;)"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择文本</font></font></button></div><div class="pre-container"><pre><code id="codeBlock_44" class="lang-python hljs"><span class="hljs-keyword">for</span> responder <span class="hljs-keyword">in</span> self.all_sync_responders:<font></font>
+    sync_handle = self.rtls_util.padv_get_sync_handle_by_responder(responder)<font></font>
+    self.rtls_util.padv_terminate_sync(sync_handle)<font></font>
+    print(f<span class="hljs-string">"Coordinator terminated sync from responder with sync handle {sync_handle}"</span>)
+</code></pre></div></div>
+<h1 class="body-heading" id="task-4-ndash-introduction-to-aoa-theory"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 4 – AoA 理论简介</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-4-ndash-introduction-to-aoa-theory"></a></h1><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">蓝牙核心规范版本 5.1 引入了 AoA/AoD，这些内容在章节中介绍</font></font><code>Direction Finding Using Bluetooth Low Energy Device</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoA 适用于具有 RF 开关、多个天线的接收器，可以在接收测向数据包时切换天线并捕获 I/Q 样本。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoD 适用于具有 RF 开关和多根天线的发射器，它们可以在发送测向数据包时切换天线。接收器只有一个天线，但可以在接收测向数据包时捕获 I/Q 样本。</font></font></p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测向方法</font></font></th>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">发射机</font></font></th>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">接收者</font></font></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">迎角</font></font></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">单天线，发射CTE</font></font></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">多天线、射频开关，可在捕获 CTE 的 I/Q 数据的同时切换天线</font></font></td>
+</tr>
+<tr>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">点火装置</font></font></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">多根天线，射频开关，切换天线时传输 CTE</font></font></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">单天线，可以捕获 CTE 的 I/Q 数据</font></font></td>
+</tr>
+</tbody>
+</table>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">除此之外，蓝牙核心规范 5.1 版规定以下状态可以支持发送测向数据包：</font></font></p>
+<ol>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">定期广告；也称为</font></font><code>Connectionless CTE</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接；也称为</font></font><code>Connection CTE</code></li>
+</ol>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoA/AoD 和无连接/连接 CTE 背后的理论是相同的，因此在本次 SimpleLink Academy 培训中，我们将仅关注连接 CTE AoA。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们将首先解释 AoA 理论，然后介绍我们的 SimpleLink CC13XX / CC26XX SDK 产品。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoA 测量通常分为 3 个步骤：</font></font></p>
+<ol>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过采样 I/Q 来收集相位信息</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">计算天线间的相位差</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将相位差转换为到达角</font></font></li>
+</ol>
+<h2 class="body-heading" id="1-collect-phase-information-by-sampling-the-i-q"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1. 通过采样 I/Q 来收集相位信息</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#1-collect-phase-information-by-sampling-the-i-q"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当两个（或更多）天线彼此相距一定距离时，它们接收到的射频信号将具有与它们与发射器各自距离之差成比例的相位差。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通常，来自一个天线的信号将是来自另一个天线的信号的延迟版本。如果它们足够接近（相位中心之间的距离小于 λ（波长）/2），您始终可以确定哪个最接近发射器。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这些路径长度差异将取决于传入 RF 波相对于阵列中天线的方向。为了准确测量相位差，无线电波包必须包含一段恒定音调，</font><font style="vertical-align: inherit;">其中没有</font></font><span class="hinted" data-placement="auto top" data-toggle="tooltip" data-html="true" data-original-title="&lt;p&gt;Data whitening is a process that avoids sending long
+sequences of 1s or 0s which can cause DC bias thus altering RF performance -
+Here we want a sequence of 1s, so datawhitening must be disabled.&lt;/p&gt;
+"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">白化，没有调制引起的相移。</font></font></span><font style="vertical-align: inherit;"></font></p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">恒定音调扩展 (CTE)
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">恒定音调扩展是一段连续的 1，没有白化，实际上是载波顶部的 +250kHz 波。在蓝牙核心规范版本 5.1 中，周期性广告数据包和连接数据包都可以在 CRC 后包含恒定音调扩展 (CTE)。CTE 只能使用未编码的 PHY 发送。</font></font></p>
+</div>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="./AoA_conversion_to_phase_shift.png" alt="AoA 转换为相移" class="img-responsive"></div><p></p>
+<h2 class="body-heading" id="2-calculate-the-phase-difference-among-the-antennas"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2. 计算天线间的相位差</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#2-calculate-the-phase-difference-among-the-antennas"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过将至少两个天线依次连接到同一接收器来测量相位差（Φ）（可以添加更多天线）。</font></font></p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./AoA_measure_phase.png" alt="AoA 测量相移" class="img-responsive"></div>
+</center><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+下图是星座图，展示了来自 2 根天线的信号向量。如果所有天线都位于一条直线上，且距离固定为 d，则相邻天线之间的相位差 Φ 将保持恒定。
+</font></font><center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./AoA_constellation.png" alt="AoA 星座图" class="img-responsive"></div>
+</center>
+
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为了获得 Φ（相位）的良好估计，信号中所有其他有意的相移都应被移除。连接 CTE AoA 解决方案通过在数据包末尾添加 CTE 来实现这一点。</font></font></p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th style="text-align:center"><div class="modal-pop" style="cursor:zoom-in;"><img src="./AoA_packetformat.png" alt="BLE 数据包" class="img-responsive"></div></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接 CTE 数据包格式</font></font></td>
+</tr>
+</tbody>
+</table>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据物理包格式
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上面显示的数据包的灰色部分表示它是可选的。仅当设置了数据物理 PDU 标头中的位时，才会启用恒定音调扩展。然后，恒定音调扩展的详细信息由</font><font style="vertical-align: inherit;">数据物理 PDU 中的字段</font></font><code>CP</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">指定。</font></font><code>CTEInfo</code><font style="vertical-align: inherit;"></font></p>
+</div>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这样接收器就有时间先同步解调器，然后将 CTE 中的 I/Q 样本存储到无线电 RAM 中。然后应用层提取 I/Q 数据。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">I/Q 样本用于估计天线之间的相位差。当接收器收到 AoA 数据包时，RF 核心将触发一个事件，从而开始天线切换。RF 核心将在 CTE 的保护期后开始采样 I/Q 数据，采样数据将存储在无线电 RAM 中。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过比较从不同天线采集的I/Q数据，用户可以获得天线之间的相对相位差。</font></font></p>
+<div class="bs-callout bs-callout-default "><h4><span class="glyphicon glyphicon-question-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoA 使用什么技术来识别入射波的方向？
+</font></font></span></h4>
+<div class="quiz-toolbar"><div>
+<input type="checkbox" id="q7.17" class="answer-wrong" name="quiz-7" style="display:none;"><label for="q7.17" class="quiz-label "><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">入射到天线阵列的波频率差异</font></font></label>
+<input type="checkbox" id="q7.18" class="answer-right" name="quiz-7" style="display:none;"><label for="q7.18" class="quiz-label "><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">入射到天线阵列的相位差</font></font></label>
+</div></div>
+</div>
+<h2 class="body-heading" id="3-convert-the-phase-difference-into-angle-of-arrival"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3. 将相位差转换为到达角</font></font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#3-convert-the-phase-difference-into-angle-of-arrival"></a></h2><p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">最后一步是将相移 (Φ) 转换回 AoA (Θ)。如果 Φ 为负，则表示天线 2 领先于天线 1。在这种情况下 Θ 也为负，但这不会引起任何数学问题，因为</font></font><code>sin()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">函数</font></font><code>arcsin()</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">既有正数也有负数。为了避免不必要的复杂化，我们在此将 Φ 视为正数。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">入射波与天线阵列之间的角度为 Θ。根据下图，我们知道 sin(Θ) = r/d，d 是天线 1 和天线 2 之间的已知距离。那么我们需要找出的就是 r。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">r 是入射波到达天线 1 之后需要行进到天线 2 的距离。我们发现天线 1 和天线 2 之间的相位差为 Φ，所以额外的距离 r 等于入射信号的波长 * Φ/(2Π)。</font></font></p>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">r= L* F / (2P)</font></font></p>
+<center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./AoA_converting_phase.png" alt="AoA 将相移转换回角度" class="img-responsive"></div>
+</center><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+因此 Θ 可以表示如下：
+</font></font><center>
+<div class="modal-pop" style="cursor:zoom-in;"><img src="./AoA_converted_angle.png" alt="迎角" class="img-responsive"></div>
+</center>
+
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">笔记
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">和</font><font style="vertical-align: inherit;">可用于采样符合蓝牙 5.1 标准的 IQ 数据。角度计算的实现取决于所选天线板的特性</font></font><code>rtls_coordinator</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font><code>rtls_passive</code><font style="vertical-align: inherit;"></font></p>
+</div>
+<div class="bs-callout bs-callout-success "><h4><span class="glyphicon glyphicon-ok-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">就这些了，朋友们！
+</font></font></span></h4>
+<p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您赢得了一杯咖啡☕。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+现在请务必查看实验室，了解如何开发</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoA 目标</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+和</font></font><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_locator.html"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AoA 定位器</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+</div>
+<!-- Actual references -->
+<div align="center" style="margin-top: 4em; font-size: smaller;">
+<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="知识共享许可" style="border-width:0" src="./cc_license_icon.png"></a><br><font style="vertical-align: inherit;"></font><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本作品采用Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 国际许可协议</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">进行授权</font><font style="vertical-align: inherit;">。</font></font></div>
+
+</div><div class="col-xs-4 col-sm-2 sidebar-offcanvas bs-docs-sidebar hidden-print" id="sidebar-overview"><ul class="nav nav-stacked fixed" id="sidebar"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#introduction"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">介绍</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#prerequisites"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">先决条件</font></font></a><ul class="nav nav-stacked"><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#hardware-required"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所需硬件</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#recommended-reading"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">推荐阅读</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#software-for-desktop-development"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">桌面开发软件</font></font></a></li></ul></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-1-ndash-prepare-your-environment"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 1 – 准备环境</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#install-the-software"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装软件</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#load-the-software"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">加载软件</font></font></a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-2-ndash-discover-the-rtls-toolbox"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 2 – 探索 RTLS 工具箱</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#localization-techniques"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">定位技术</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-toolbox-introduction"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 工具箱介绍</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-roles-and-topology"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 角色和拓扑</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#connection-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接方式</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#connection-less-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接模式</font></font></a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#running-the-rtls-visual-demo"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行 RTLS 可视化演示</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#running-the-rtls-non-visual-demo"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行 RTLS 非视觉演示</font></font></a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-3-ndash-deep-dive-in-the-rtls-python-scripts"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 3 – 深入研究 RTLS Python 脚本</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-node-manager-python-overview"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 节点管理器 Python 概述</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-python-program-template"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS Python 程序模板</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtlsutils-initialization"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RtlsUtils 初始化</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RTLS 网络设置程序</font></font></a><ul class="nav nav-stacked"><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure-for-connection-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接 AoA 的 RTLS 网络设置程序</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#rtls-network-setup-procedure-for-connectionless-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">无连接模式的 RTLS 网络设置程序</font></font></a></li></ul></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#setting-up-rtls-network"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设置 RTLS 网络</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#setting-up-rtls-network-in-python-for-connection-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 Python 设置 RTLS 网络以进行连接-AoA</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#scanning-for-devices"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描设备</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#connecting-to-a-device"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连接到设备</font></font></a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#setting-up-rtls-network-in-python-for-connectionless-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 Python 设置 RTLS 网络以实现无连接模式</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#scanning-for-devices-connectionless-mode-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">扫描设备（无连接模式）</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#select-a-periodic-advertiser-to-synchronize-with"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">选择要同步的定期广告商</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#create-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建与定期广告商的同步</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#establish-the-synchronization-with-a-periodic-advertiser"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">与定期广告商建立同步</font></font></a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#in-summary-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">总之...</font></font></a></li></ul></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-data-collection"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用数据收集</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-data-collection-with-connection-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用连接模式启用数据收集</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-connection-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用连接-AoA</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#continuous-connection-information-to-be-used-with-connection-aoa-"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">连续连接信息（与连接 AoA 一起使用）</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#stopping-the-example"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止示例</font></font></a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-data-collection-with-connectionless-mode"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用无连接模式启用数据收集</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#enabling-connectionless-aoa"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">启用无连接 AoA</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#stopping-the-example"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">停止示例</font></font></a></li></ul></li></ul></li></ul></li><li class="active"><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#task-4-ndash-introduction-to-aoa-theory"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任务 4 – AoA 理论简介</font></font></a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#1-collect-phase-information-by-sampling-the-i-q"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1. 通过采样 I/Q 来收集相位信息</font></font></a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#2-calculate-the-phase-difference-among-the-antennas"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2. 计算天线间的相位差</font></font></a></li><li class="active"><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html#3-convert-the-phase-difference-into-angle-of-arrival"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3. 将相位差转换为到达角</font></font></a></li></ul></li></ul></div></div></div></div>
+
+<link rel="stylesheet" href="./zenburn.css">
+<script src="./utag.js.下载" type="text/javascript" async=""></script><script type="text/javascript" async="" src="./metrics-min.js.下载"></script><script src="./jquery-1.11.2.min.js.下载"></script>
+<script src="./bootstrap.min.js.下载"></script>
+<script src="./highlight.pack.js.下载"></script>
+<script type="text/javascript">document.isPreRendered = true;</script><script src="./strapdown.js.下载"></script>      <div class="modal" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">        <div class="vertical-alignment-helper">          <div class="modal-dialog vertical-align-center">             <div class="modal-dialog">               <div class="modal-content" style="margin-left: auto;margin-right: auto;">                 <div class="modal-body">                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">×</font></font></span><span class="sr-only"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">关闭</font></font></span></button>                   <img src="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_rtls.html" class="imagepreview img-responsive">                 </div>              </div>            </div>          </div>        </div>      </div>
+
+
+<script src="./analytics.js.下载" charset="utf-8"></script><div style="position: fixed; top: 0px; left: 0px;"><img src="./pxPixel.gif"></div><iframe alt="" aria-hidden="true" width="0" height="0" sandbox="" id="db-sync" src="./sync(1).html" style="display: none; border: 0px;"></iframe><img alt="" aria-hidden="true" width="0" height="0" id="db_lr_pixel_ad" src="./464526.gif" style="display: none;"></body></html>

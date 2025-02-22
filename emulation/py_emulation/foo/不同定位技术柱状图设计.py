@@ -50,6 +50,6 @@ ani = animation.FuncAnimation(fig, update, frames=100, interval=10, repeat=False
 ani.save("indoor_positioning_comparison_slow_to_fast.gif", writer="pillow", fps=100)
 
 # 保存图表
-plt.savefig("indoor_positioning_comparison.png")
+plt.savefig("../assets/indoor_positioning_comparison.png")
 # 显示图表
 plt.show()

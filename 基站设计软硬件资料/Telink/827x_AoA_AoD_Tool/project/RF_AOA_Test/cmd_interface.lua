@@ -1,0 +1,395 @@
+
+VI_TRUE =  1
+VI_FALSE = 0
+DEBUG_LOG = 1
+PATH = ".//AutoTest_Report//"
+--frequency spectrum
+ANALYZER_FSQ8_NAME = "TCPIP0::192.168.48.248::inst0::INSTR"
+ANALYZER_FSQ26_NAME = "TCPIP0::192.168.48.234::inst0::INSTR"
+--signal generator
+SMJ100A_NAME = "TCPIP0::192.168.48.45::inst0::INSTR"
+SMBV100A_NAME = "TCPIP0::192.168.48.62::inst0::INSTR"
+E443C_NAME = "TCPIP0::192.168.48.90::inst0::INSTR"
+N5182B1 = "TCPIP0::192.168.48.141::inst0::INSTR"
+N5182B2 = "TCPIP0::192.168.49.84::inst0::INSTR"
+
+Generator1 = N5182B1
+Generator2 = N5182B1
+Generator3 = N5182B2
+ANALYZER = ANALYZER_FSQ8_NAME
+
+				  
+function printf(Log_switch,str_s)
+	if(DEBUG_LOG==1) then
+		if Log_switch == 1 then
+			print(str_s)
+		end
+	end
+end
+
+
+function Sleep(n)
+   local t0 = os.clock()
+   while os.clock() - t0 <= n do end
+end
+
+function Get_Dut_Handle(id)
+	local h
+	h = tl_usb_init2(id)
+	
+	if(h ~= NULL)then
+		os.execute('tcdb sp 5')
+		os.execute('tcdb wc b2 2')
+		return h
+	else
+		tl_stop()
+	end
+end
+
+function Get_Dut_Handle_From_USB(id)
+	local h
+	h = tl_usb_init2(id)
+	
+	if(h ~= NULL)then
+		os.execute('tcdb sp 5')
+		--os.execute('tcdb wc b2 2')
+		return h
+	else
+		tl_stop()
+	end
+end
+
+function Core_write(hdev,addr,dat)
+	local dat1 = array.new(1)
+	dat1[1] = dat
+	tl_swire_write(hdev, addr, dat1, 1, 1, 0xb0)
+end
+
+function USB_write(hdev,addr,dat)
+	local dat1 = array.new(1)
+	dat1[1] = dat
+	tl_usb_write2(hdev,addr,dat1,1)
+end
+
+function Core_read(hdev,addr)
+	local r1
+	local r1_len
+	
+	r1,r1_len = tl_swire_read(hdev,addr,1, 1, 0xb0)
+	return(r1[1]) 
+end
+
+function Usb_read(hdev,addr)
+	local r1
+	local r1_len
+	
+	r1,r1_len = tl_usb_read2(hdev,addr,1)
+	return(r1[1]) 
+end
+
+function Mem_write(hdev,addr,array, Len)
+	tl_swire_write(hdev, addr, array, Len, 1, 0xb0)
+end
+
+function Mem_read(hdev,addr, Len)
+	return tl_swire_read(hdev, addr, Len, 1, 0xb0)
+end
+	
+	
+function Ana_write(hdev,addr,dat)
+	local dat1 = array.new(1)
+	dat1[1] = dat
+	tl_analog_write(hdev,addr,dat1,1,6)
+end
+	
+function Ana_read(hdev,addr)
+	local r1
+	local r1_len
+	
+	r1,r1_len = tl_analog_read(hdev,addr,1,6)
+	
+	return(r1[1])	
+end
+
+
+
+function Send_Cmd_To_DUT_Through_USB(handle, CmdBuff, size)
+	local param = {}
+	local overtime = 0
+	local paramAddr,paramSize,paramCnt,paramWP,paramRP, l
+	repeat
+		param,l = tl_usb_read2(handle, 0x40004, 6)
+		
+		if(l>=6) then
+			paramAddr = param[1] + param[2]*2^8
+			paramSize = param[3]
+			paramCnt  = param[4]
+			paramWP   = param[5]
+			paramRP   = param[6]
+		else
+			print("parament size error!")
+			tl_stop()
+		end
+		--print( paramWP, paramRP)
+		tl_sleep_ms(1)
+		overtime = overtime + 1
+		if overtime > 50 then
+			print("write data over time")
+			tl_stop()
+			break
+		end
+	until ((paramWP+1)%paramCnt) ~= paramRP
+	usb_WriteCmdAddr = 0x40000 + paramAddr + paramWP*paramSize
+
+	tl_usb_write2(handle,usb_WriteCmdAddr,CmdBuff,size) --
+	
+	paramWP = (paramWP+1)%paramCnt
+	USB_write(handle, 0x40008, paramWP)
+end 
+
+
+
+function Send_Cmd_To_DUT(handle, CmdBuff, size)
+	local param = {}
+	local overtime = 0
+	local paramAddr,paramSize,paramCnt,paramWP,paramRP, l
+	
+	repeat
+		param,l = Mem_read(handle, 0x40004, 6)
+		
+		if(l>=6) then
+			paramAddr = param[1] + param[2]*2^8
+			paramSize = param[3]
+			paramCnt  = param[4]
+			paramWP   = param[5]
+			paramRP   = param[6]
+		else
+			print("parament size error!")
+			tl_stop()
+		end
+		--print( paramWP, paramRP)
+		tl_sleep_ms(1)
+		overtime = overtime + 1
+		if overtime > 50 then
+			print("write data over time")
+			tl_stop()
+			break
+		end
+	until ((paramWP+1)%paramCnt) ~= paramRP
+	usb_WriteCmdAddr = 0x40000 + paramAddr + paramWP*paramSize
+
+	Mem_write(handle,usb_WriteCmdAddr,CmdBuff,size) --
+	
+	paramWP = (paramWP+1)%paramCnt
+	Core_write(handle, 0x40008, paramWP)
+	
+end
+
+
+function Is_Result_Empty_Judge_By_USB(handle, timeout)
+	local  overtime = 0
+	local resultBuf = {}
+	local resultLen,resultAddr,resultSize,resultCnt,resultWP,resultRP, read_addr
+
+	repeat
+		resultBuf,resultLen = tl_usb_read2(handle, 0x4000a, 6)
+		if (resultLen>=6) then
+			resultAddr = resultBuf[1] + resultBuf[2]*2^8
+			resultSize = resultBuf[3]
+			resultCnt  = resultBuf[4]
+			resultWP   = resultBuf[5]
+			resultRP   = resultBuf[6]
+		else
+			print("parament size error!")
+			tl_stop()
+		end
+		tl_sleep_ms(1)
+		overtime = overtime + 1
+		if (overtime > timeout) then
+			return 0
+		end
+	until (((resultWP+1)%resultCnt) ~= resultRP)
+	
+	return 1
+end 
+
+
+
+function Is_Result_Empty(handle, timeout)
+
+	local  overtime = 0
+	local resultBuf = {}
+	local resultLen,resultAddr,resultSize,resultCnt,resultWP,resultRP, read_addr
+
+	repeat
+		resultBuf,resultLen = Mem_read(handle, 0x4000a, 6)
+		if (resultLen>=6) then
+			resultAddr = resultBuf[1] + resultBuf[2]*2^8
+			resultSize = resultBuf[3]
+			resultCnt  = resultBuf[4]
+			resultWP   = resultBuf[5]
+			resultRP   = resultBuf[6]
+		else
+			print("parament size error!")
+			tl_stop()
+		end
+		tl_sleep_ms(1)
+		overtime = overtime + 1
+		if (overtime > timeout) then
+			return 0
+		end
+	until (((resultWP+1)%resultCnt) ~= resultRP)
+	
+	return 1
+end
+
+
+function Read_Result_From_USB(handle , size)
+
+	local overtime = 0
+	local resultBuf = {}
+	local resultLen,resultAddr,resultSize,resultCnt,resultWP,read_addr
+	local resultRP
+	resultRP = array.new(1)
+	
+
+	repeat
+		resultBuf,resultLen = tl_usb_read2(handle,0x84000a,6)
+		if (resultLen>=6) then
+			resultAddr = resultBuf[1] + resultBuf[2]*2^8
+			resultSize = resultBuf[3]
+			resultCnt  = resultBuf[4]
+			resultWP   = resultBuf[5]
+			resultRP[1]= resultBuf[6]
+		else
+			print("parament size error!")
+			--tl_stop()
+		end
+		
+		tl_sleep_ms(40)
+		overtime = overtime + 1
+		if overtime > 100 then
+			print("read result over time")
+			break
+		end
+	until resultRP[1] ~= resultWP
+
+	if(resultRP[1] ~= resultWP)then
+
+		read_addr = resultAddr + resultRP[1]*resultSize
+		resultRP[1] = (resultRP[1] + 1)%resultCnt
+		tl_usb_write2(handle,0x84000f,resultRP,1)
+
+		--print(string.format("%X ", read_addr))
+		return tl_usb_read2(handle,0x840000+read_addr, size)
+	else
+		return 0,0
+	end
+end
+
+
+-- function Read_Result_From_DUT(handle , size)
+
+-- 	local  overtime = 0
+-- 	local resultBuf = {}
+-- 	local resultLen,resultAddr,resultSize,resultCnt,resultWP,resultRP, read_addr
+
+
+-- 	repeat
+-- 		resultBuf,resultLen = Mem_read(handle,0x84000a,6)
+-- 		if (resultLen>=6) then
+-- 			resultAddr = resultBuf[1] + resultBuf[2]*2^8
+-- 			resultSize = resultBuf[3]
+-- 			resultCnt  = resultBuf[4]
+-- 			resultWP   = resultBuf[5]
+-- 			resultRP   = resultBuf[6]
+-- 		else
+-- 			--print("parament size error!")
+-- 			--tl_stop()
+-- 		end
+		
+-- 		tl_sleep_ms(20)
+-- 		overtime = overtime + 1
+-- 		if overtime > 200 then
+-- 			print("read result over time")
+-- 			--tl_stop()
+-- 			break
+-- 		end
+-- 	until resultRP ~= resultWP
+
+-- 	if(resultRP ~= resultWP)then
+
+-- 		--print(resultWP,resultRP)
+-- 		-- print(resultSize)
+-- 		read_addr = resultAddr + resultRP*resultSize
+-- 		resultRP = (resultRP + 1)%resultCnt
+-- 		Core_write(handle,0x84000f,resultRP)
+
+-- 		print(string.format("%X ", read_addr))
+-- 		return Mem_read(handle,0x840000+read_addr, size)
+-- 	else
+-- 		return 0,0
+-- 	end
+-- end
+
+function Read_Result_From_DUT(handle , size)
+
+	local  overtime = 0
+	local resultBuf = {}
+	local resultLen,resultAddr,resultSize,resultCnt,resultWP,resultRP, read_addr
+
+
+	repeat
+		resultBuf,resultLen = Mem_read(handle,0x84000a,6)
+		if (resultLen>=6) then
+			resultAddr = resultBuf[1] + resultBuf[2]*2^8
+			resultSize = resultBuf[3]
+			resultCnt  = resultBuf[4]
+			resultWP   = resultBuf[5]
+			resultRP   = resultBuf[6]
+		else
+			--print("parament size error!")
+			--tl_stop()
+		end
+		
+		tl_sleep_ms(20)
+		overtime = overtime + 1
+		if overtime > 200 then
+			print("read result over time")
+			--tl_stop()
+			break
+		end
+	until resultRP ~= resultWP
+
+	if(resultRP ~= resultWP)then
+
+		--print(resultWP,resultRP)
+		-- print(resultSize)
+		read_addr = resultAddr + resultRP*resultSize
+		resultRP = (resultRP + 1)%resultCnt
+		
+
+		--print(string.format("%X ", read_addr))
+		para,l = Mem_read(handle,0x840000+read_addr, size)
+		Core_write(handle,0x84000f,resultRP)
+		return para,l
+	else
+		return 0,0
+	end
+end
+
+
+function rst_alg(handle)
+	Core_write(handle, 0x6f, 0x20)
+	tl_sleep_ms(100)
+end
+
+function usb_rst_alg(handle)
+	USB_write(handle, 0x6f, 0x20)
+	tl_sleep_ms(100)
+end
+
+function print_date()
+	local current_time = os.date("*t", os.time());
+	print(string.format("times location 4: %d m %d s",current_time.min,current_time.sec ))
+end

@@ -1,0 +1,481 @@
+
+--仪器误差3dBm，，线损2.5dBm
+dofile("cmd_interface.lua")
+
+
+cycle_point1 = 
+{	180,190,177,190,175,190,172,190,170,190,167,191,164,191,162,191,159,191,157,192,154,192,151,193,149,193,146,194,144,194,141,195,139,196,136,197,134,197,
+	131,198,129,199,126,200,124,201,121,202,119,203,117,204,114,205,112,206,110,208,107,209,105,210,103,211,101,213,98 ,214,96 ,216,94 ,217,92 ,219,90 ,220,
+	88 ,222,86 ,223,84 ,225,82 ,227,80 ,228,78 ,230,76 ,232,74 ,234,72 ,236,70 ,238,69 ,240,67 ,242,65 ,244,63 ,246,62 ,248,60 ,250,59 ,252,57 ,254,56 ,256,
+	54 ,258,53 ,260,51 ,263,50 ,265,49 ,267,48 ,270,46 ,272,45 ,274,44 ,277,43 ,279,42 ,281,41 ,284,40 ,286,39 ,289,38 ,291,37 ,294,37 ,296,36 ,299,35 ,301,
+	34 ,304,34 ,306,33 ,309,33 ,311,32 ,314,32 ,316,31 ,319,31 ,322,31 ,324,31 ,327,30 ,329,30 ,332,30 ,335,30 ,337,30 ,340,180,340,}
+
+cycle_point2 = 
+   {180,190,183,190,185,190,188,190,190,190,193,191,196,191,198,191,201,191,203,192,206,192,209,193,211,193,214,194,216,194,219,195,221,196,224,197,226,197,
+	229,198,231,199,234,200,236,201,239,202,241,203,243,204,246,205,248,206,250,208,253,209,255,210,257,211,259,213,262,214,264,216,266,217,268,219,270,220,
+	272,222,274,223,276,225,278,227,280,228,282,230,284,232,286,234,288,236,290,238,291,240,293,242,295,244,297,246,298,248,300,250,301,252,303,254,304,256,
+	306,258,307,260,309,263,310,265,311,267,312,270,314,272,315,274,316,277,317,279,318,281,319,284,320,286,321,289,322,291,323,294,323,296,324,299,325,301,
+	326,304,326,306,327,309,327,311,328,314,328,316,329,319,329,322,329,324,329,327,330,329,330,332,330,335,330,337,330,340,180,340,}
+
+
+function RF_PER_Run_AOA(hDut)
+	local distance = PowMax
+	local para
+	local Rate
+	local IQ_square = {}
+	local Reference = {}
+	local maxvalue
+	local minvalue
+	local cycle_times
+	local current_time
+	local start_en
+	local stop_en
+	local continue_en
+	local recode_pkt_num
+	local temp3 = array.new(1)
+	local rx_cnt = 0
+	local count = 0
+	local angle_table = array.new(15)
+	local rssi_table  = array.new(15)
+	local angle_aver_old = 0
+    local ang_pos_or_neg_old = 0
+	
+	--local para= {}
+	seq =0xff
+	local pkt_cnt=0
+	start_en     = 0 
+	stop_en      = 0 
+	save_en  	 = 0 
+	
+	--pkt_addr = 0x41c9c --需要 根据code编译出来的backup 地址改写
+	position =1
+	
+	result_tbl = {};
+	idx=1
+	
+	--reset chip
+	--usb_rst_alg(hDut)
+	
+	local dut_chip_id	= 0xffff
+	cycle_times = 1
+	pkt_cnt = 0xffff	
+	
+	local trans_num
+	trans,trans_num = tl_usb_read2(hDut,0x4c350,6)	
+	
+	chn = trans[2] + 2400
+	accesscod = trans[3] + trans[4]*256 + trans[5]*256*256 + trans[6]*256*256*256
+--	for i = 1,6,1 do
+--		print(string.format("%x",trans[i]))
+--	end
+--	print(string.format("%d",chn))
+--	print(string.format("%x",accesscod))	
+	
+	Draw_Interface()
+	
+	while(1)
+	do
+	
+		print(string.format"Wait for button ")
+		result_tbl,btn_idx = tl_message_get();
+		if btn_idx == 3 then
+			save_en = 1						
+			pkt_cnt =0
+			temp3[1] = 0x86
+			tl_usb_write2(hDut,0xf00,temp3,1)
+			recode_pkt_num = result_tbl[2]
+			local t = type(recode_pkt_num)
+			if t == "string" then
+				recode_pkt_num= tonumber(recode_pkt_num)
+			end 
+			FileName = string.format("%s", result_tbl[1])
+			str =string.format("%s.txt",PATH..FileName)			
+			str1 =string.format("%s_backup.txt",PATH..FileName)
+			print(string.format("**********Start TestCase %s*********************", FileName))
+			print("Creat File "..FileName)
+			
+			fback = assert(io.open(str1,'w+'))
+			f = assert(io.open(str,'w+'))
+			
+		elseif btn_idx == 1 then
+		print(string.format("button = 1"))
+			start_en = 1
+			temp3[1] = 0x86
+			tl_usb_write2(hDut,0xf00,temp3,1)
+		elseif btn_idx == 2 then
+			stop_en = 1
+		end
+			
+		--tl_sleep_ms(10)
+		
+		---------------------------------------save------------------------------------------
+		if save_en == 1 then
+			while(1)
+			do
+			
+--				tl_sleep_ms(5)
+				if(pkt_cnt<recode_pkt_num)then
+					para,l = Read_Result_From_USB(hDut , 128)			
+					s= " "
+					if((l==128) and (para[1]==0x7a) and (para[5] ==0xed) and (para[126] ==0x10) and (para[8]~=seq)) then
+
+						pkt_cnt = pkt_cnt+1
+						seq = para[8]
+						f:write("\n")
+						
+						for i=1,90,1 do
+							if(para[i+28]>128)then
+								f:write(string.format("-%d ", 256-para[i+28]))
+							elseif(para[i+28]<128)then
+								f:write(string.format("%d ", para[i+28]))
+							else
+								f:write(string.format("0 "))
+							end
+							
+							if(i%16==0)then
+								f:write(string.format("\n"))
+							end
+						end
+						
+						for i=1,16,1 do
+							if((para[i+28]>128) and (para[i+28] ~= 256))then
+								Reference[i] = 256 - para[i+28]
+							elseif((para[i+28]<128) and (para[i+28] ~= 0))then
+								Reference[i] = para[i+28]
+							else
+								Reference[i] = 0
+							end
+						end
+						
+						IQ_square[1] = Reference[1]  * Reference[1]  + Reference[2]  * Reference[2] 
+						IQ_square[2] = Reference[3]  * Reference[3]  + Reference[4]  * Reference[4] 
+						IQ_square[3] = Reference[5]  * Reference[5]  + Reference[6]  * Reference[6] 
+						IQ_square[4] = Reference[7]  * Reference[7]  + Reference[8]  * Reference[8] 
+						IQ_square[5] = Reference[9]  * Reference[9]  + Reference[10] * Reference[10]
+						IQ_square[6] = Reference[11] * Reference[11] + Reference[12] * Reference[12]
+						IQ_square[7] = Reference[13] * Reference[13] + Reference[14] * Reference[14]
+						IQ_square[8] = Reference[15] * Reference[15] + Reference[16] * Reference[16]
+						
+						maxvalue = IQ_square[1]
+						minvalue = IQ_square[1]
+						
+						for i=1,16,1 do
+							if(IQ_square[i] ~= nail)then
+								if(IQ_square[i]>maxvalue)	then 
+									maxvalue = IQ_square[i]
+								elseif(IQ_square[i]<minvalue)then	
+									minvalue = IQ_square[i]
+								end
+							end
+						end
+						Rate = maxvalue/minvalue
+						
+						f:write(string.format("\n"))
+						f:write("frequency offset :")
+						f_off_h = para[124]
+						f_off_l = para[123]
+						if(f_off_h<128)then
+							f_off = f_off_h*256+f_off_l
+							f_off_real = f_off * 400000000/(256*2*314159)
+							f:write(string.format("%d",f_off_real))
+						elseif(f_off_h>128)then
+							f_off = (256-f_off_h)*256 + f_off_l
+							f_off_real = f_off * 400000000/(256*2*314159)
+							f:write(string.format("-%d",f_off_real))
+						else
+							f_off = f_off_l
+							f_off_real = f_off * 400000000/(256*2*314159)
+							f:write(string.format("-%d",f_off_real))
+						end	
+						f:write(string.format("Hz"))
+						f:write(string.format("\n"))
+						f:write("RSSI :")
+						f:write(string.format("%d \n",(para[125]-110)))
+						
+						f:write(string.format("Max IQ square value:"))
+						f:write(string.format("%d \n",maxvalue))
+						f:write(string.format("Min IQ square value:"))
+						f:write(string.format("%d \n",minvalue))
+						f:write(string.format("max/min Rate:"))
+						f:write(string.format("%d \n",Rate))
+						
+						
+						--add input phase
+						f:write(string.format("Input phase :"))
+						input_phase =  para[128]
+						if(input_phase<128)then
+							f:write(string.format("%d",input_phase))
+							f:write(string.format("\n"))
+						elseif(input_phase>128)then
+							input_phase = 256-input_phase
+							f:write(string.format("-%d \n",input_phase))
+							f:write(string.format("\n"))
+						end
+						
+						for i=1,128,1 do
+							fback:write(string.format("%2x ", para[i]))
+							if(i%16==0)then
+								fback:write(string.format("\n"))
+							end
+						end
+						
+						fback:write("frequency offset :")
+						f_off_h = para[124]
+						f_off_l = para[123]
+						if(f_off_h<128)then
+							f_off = f_off_h*256+f_off_l
+							f_off_real = f_off * 400000000/(256*2*314159)
+							fback:write(string.format("%d",f_off_real))
+						elseif(f_off_h>128)then
+							f_off = (256-f_off_h)*256 + f_off_l
+							f_off_real = f_off * 400000000/(256*2*314159)
+							fback:write(string.format("-%d",f_off_real))
+						else
+							f_off = f_off_l
+							f_off_real = f_off * 400000000/(256*2*314159)
+							fback:write(string.format("-%d",f_off_real))
+						end	
+						fback:write(string.format("Hz"))
+						fback:write(string.format("\n"))
+						fback:write("RSSI :")
+						fback:write(string.format("%d ",(para[125]-110)))
+						fback:write(string.format("\n"))
+						
+						fback:write(string.format("Max IQ square value:"))
+						fback:write(string.format("%d \n",maxvalue))
+						fback:write(string.format("Min IQ square value:"))
+						fback:write(string.format("%d \n",minvalue))
+						fback:write(string.format("max/min Rate:"))
+						fback:write(string.format("%d \n",Rate))
+						
+														--add input phase
+						fback:write(string.format("Input phase :"))
+						input_phase =  para[128]
+						if(input_phase<128)then
+							fback:write(string.format("%d",input_phase))
+							fback:write(string.format("\n"))
+						elseif(input_phase>128)then
+							input_phase = 256-input_phase
+							fback:write(string.format("-%d",input_phase))
+							fback:write(string.format("\n"))
+						end
+						
+						fback:write(string.format("\n"))	
+						f:write(string.format("\n"))	
+						
+						print(string.format("SEQ%d, save pkt %d", position,pkt_cnt))
+						
+						s = ""
+						for i=1,128,1 do
+							s = s..string.format("%2X ", para[i])
+							
+							if(i%16==0)then
+								s = s.."\r\n"
+								print(s)
+								s = ""
+							end
+						end
+						print(s)
+						print("\n")
+						input_phase =  para[128]
+						if(input_phase<128) then
+							print(string.format("input phase: %d", input_phase))
+						elseif(input_phase>128) then
+							input_phase = 256-input_phase
+							print(string.format("input phase: -%d",input_phase))
+						end
+						print("\n")
+						if(pkt_cnt>=recode_pkt_num)then
+							local temp2 = array.new(1)
+							temp2[1] = 0x80
+							tl_usb_write2(hDut,0xf00,temp2,1)
+							io.close(f)
+							io.close(fback)
+						end	
+					end
+					
+				else
+					position = position +1					
+					save_en  = 0
+					start_en = 0
+					stop_en  = 0 
+					break
+				end
+				cycle_times= cycle_times+1
+			end
+
+		elseif start_en==1 then
+			tl_form_draw_line(180,340,180,190,0x0080ff)
+			while(1)
+			do
+				para,l = Read_Result_From_USB(hDut , 128)			
+				if((l==128) and (para[1]==0x7a) and (para[5] ==0xed) and (para[126] ==0x10) and (para[8]~=seq)) then
+					---1.window equal 10----------------------------------------------
+					count = count + 1
+					if count == 11 then
+						count = 1
+					end
+					
+					---2.get parameter------------------------------------------------
+					seq = para[8]
+					input_phase =  para[128]
+					rssi = para[125]
+					rx_cnt= rx_cnt+1
+					angle_table[count] = input_phase
+					rssi_table[count] = rssi
+					
+					-----3.change angle-----------------------------------------------
+					if(angle_table[count]<128) then
+						ang_pos_or_neg = 1					--positive
+					elseif(angle_table[count]>128) then
+						angle_table[count] = 256-angle_table[count]
+						ang_pos_or_neg = 2					--negtive
+					end			
+					
+					-----4.calculate average------------------------------------------
+					angle_sum = 0
+					rssi_sum  = 0
+					for i=1,10,1 do	
+						if ang_pos_or_neg == 1 then
+							angle_sum = angle_sum + angle_table[i]
+						elseif ang_pos_or_neg == 2 then
+							angle_sum = angle_sum - angle_table[i]
+						end
+						rssi_sum  = rssi_sum  + rssi_table[i]
+					end
+					angle_aver = math.ceil(angle_sum/10)
+					rssi_aver  = math.ceil(rssi_sum/10)
+					rssi_aver  = rssi_aver - 110
+					
+					
+					-----5.update screen-----------------------------------------------
+					update_text(415, 310, string.format("%d",rssi_aver),13,0xeafcab)
+					update_text(260, 130, string.format("%d",angle_aver),14,0xeafcab)
+					update_text(295, 65, string.format("%d",rx_cnt),10,0xeafcab)
+					change_line(angle_aver,angle_aver_old)
+					
+					-----6.record value-----------------------------------------------
+					angle_aver_old = angle_aver
+				end
+			end
+			
+		elseif stop_en == 1 then 
+			temp3 = array.new(1)
+			temp3[1] = 0x80
+			tl_usb_write2(hDut,0xf00,temp3,1)
+		end
+	end
+	tl_usb_write2(hDut,0xf00,temp2,1)
+	print(string.format("***********%s end***********\n",FileName ))
+end
+
+function Draw_Interface()
+	local point1 = array.new(184)
+	local point2 = array.new(184)
+	for i=1,184,1 do
+		point1[i] = cycle_point1[i]
+		point2[i] = cycle_point2[i]
+	end
+
+--	main interface
+	tl_form_draw_ratangle(0,0,600,400,0xffffff,0xffffff)	
+	tl_form_show(0,0,600,400)
+	
+--	Continue Mode interface
+	tl_form_draw_ratangle(10,10,350,100,0xeafcab,0x000000)
+	tl_form_draw_text(120, 20, "Continue Mode", 14, 0x0000)
+	tl_button_show(30,55,120,32,"begin",1)			--1.start
+	tl_form_draw_text(160, 65, "Recieve Data Number : 0 ",10,0x0000)			--2.stop
+	
+--	Save Mode interface	
+	tl_form_draw_ratangle(360,10,575,200,0xeafcab,0x000000)
+	tl_form_draw_text(425, 20, "Save Mode", 14, 0x0000)
+	tl_button_show(410,150,120,32,"start",3)		--3.Save start 
+	tl_edit_show(450,50,100,32, "Save File Name","AOA_1",1)
+	tl_edit_show(450,100,100,32,"Packet Number","100",2)
+	
+--	input angle interface
+	tl_form_draw_ratangle(10,110,350,350,0xeafcab,0x000000)
+	tl_form_draw_text(100, 130, "Measured  Angle : 0°", 14, 0x0000)
+	tl_form_draw_polygon(point1, 92, 0x0080ff, 0x0080ff)
+	tl_form_draw_polygon(point2, 92, 0x0080ff, 0x0080ff)
+
+--  Parameter interface 
+	tl_form_draw_ratangle(360,210,575,350,0xeafcab,0x000000)
+	tl_form_draw_text(425, 220, "Related Value  ", 14, 0x0000)
+	tl_form_draw_text(375, 250, string.format("Frequency : %d",chn),13,0x0000)
+	tl_form_draw_text(375, 280, string.format("Access Code:0x%x",accesscod),13,0x0000)	
+	tl_form_draw_text(375, 310, "RSSI:0",13,0x0000)	
+	tl_form_draw_text(14 , 281, "-75°" ,10,0x0000)
+	tl_form_draw_text(33 , 245, "-60°" ,10,0x0000)
+	tl_form_draw_text(63 , 214, "-45°" ,10,0x0000)
+	tl_form_draw_text(94 , 190, "-30°" ,10,0x0000)
+	tl_form_draw_text(131, 175, "-15°" ,10,0x0000)
+	tl_form_draw_text(175, 170, "0°"   ,10,0x0000)
+	tl_form_draw_text(214, 175, "+15°" ,10,0x0000)
+	tl_form_draw_text(250, 190, "+30°" ,10,0x0000)
+	tl_form_draw_text(281, 214, "+45°" ,10,0x0000)
+	tl_form_draw_text(305, 245, "+60°" ,10,0x0000)
+	tl_form_draw_text(320, 281, "+75°" ,10,0x0000)
+	
+-- Draw line
+	tl_form_draw_line(180,340,180,190,0x0000)
+end
+
+function update_text(x,y,str,size,bcolor)
+	if size == 13 then
+		tl_form_draw_ratangle(x,y,x+3*size,y+size+4,bcolor,bcolor)
+		tl_form_draw_text(x,y,str,size,0x0000)
+	elseif size == 14 then 
+		tl_form_draw_ratangle(x,y,x+3*size,y+size+5,bcolor,bcolor)
+		tl_form_draw_text(x,y,str,size,0x0000)
+	elseif size == 10 then
+		tl_form_draw_ratangle(x,y,x+3*size,y+size+3,bcolor,bcolor)
+		tl_form_draw_text(x,y,str,size,0x0000)		
+	end
+	
+end
+
+function change_line(angle,angle_old)
+	local x1 = 180
+	local y1 = 340
+	local point1 = array.new(184)
+	local point2 = array.new(184)
+	for i=1,184,1 do
+		point1[i] = cycle_point1[i]
+		point2[i] = cycle_point2[i]
+	end	
+	if (angle_old >0 or angle_old ==0)	   then		--positive
+		x1 = cycle_point2[angle_old * 2 + 1]
+		y1 = cycle_point2[angle_old * 2 + 2]
+		tl_form_draw_line(180,340,x1,y1,0x0080ff)
+	elseif angle_old < 0 then 	--negtive
+		x1 = cycle_point1[-angle_old * 2 + 1]
+		y1 = cycle_point1[-angle_old * 2 + 2]
+		if (x1 == nil) then
+		print(string.format("angle , ang_pos : %d,%d",angle_old,ang_pos_old))
+	end
+		tl_form_draw_line(180,340,x1,y1,0x0080ff)
+	else
+		tl_form_draw_polygon(point1, 92, 0x0080ff, 0x0080ff)
+		tl_form_draw_polygon(point2, 92, 0x0080ff, 0x0080ff)
+	end
+	
+	if (angle >0 or angle ==0)	  then		--positive
+		x1 = cycle_point2[angle * 2 + 1]
+		y1 = cycle_point2[angle * 2 + 2]
+		tl_form_draw_line(180,340,x1,y1,0x000000)
+	elseif angle < 0	  then	    --negtive
+		x1 = cycle_point1[-angle * 2 + 1]
+		y1 = cycle_point1[-angle * 2 + 2]
+		tl_form_draw_line(180,340,x1,y1,0x000000)
+	end	
+	
+end
+
+
+handle = tl_usb_init2(0xffff)
+RF_PER_Run_AOA(handle)
+
+
+

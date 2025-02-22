@@ -1,0 +1,74 @@
+id: "btmesh_stack_fw_list_cache"
+label: "Firmware List Cache for Distribution Server Model"
+package: "Btmesh"
+description: "This component provides a simplistic implementation of the Firmware Distribution Server's Firmware List -related platform APIs. The cache stores the Firmware ID's and metadata of received images, but does not actually store any image data, and is not persistent across resets. This component should be used for testing purposes only. The Distributor example provides a proper reference implementation of the Firmware List."
+category: "Bluetooth Mesh|Stack|Models|DFU"
+quality: "production"
+root_path: "protocol/bluetooth"
+
+requires:
+ - name: "btmesh_stack_fw_distribution_server"
+template_contribution:
+ - name: btmesh_bgapi_class
+   value:
+     class: "ncp_fw_list"
+   priority: 1
+ - name: component_catalog
+   value: btmesh_stack_fw_list_cache
+
+library:
+#EFR32XG12
+  - path: "lib/EFR32XG12/GCC/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg12"
+  - path: "lib/EFR32XG12/IAR/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg12"
+#EFR32XG13
+  - path: "lib/EFR32XG13/GCC/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg13"
+  - path: "lib/EFR32XG13/IAR/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg13"
+#EFR32XG21
+  - path: "lib/EFR32XG21/GCC/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg21"
+  - path: "lib/EFR32XG21/IAR/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg21"
+#EFR32XG22
+  - path: "lib/EFR32XG22/GCC/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg22"
+  - path: "lib/EFR32XG22/IAR/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg22"
+#EFR32XG24
+  - path: "lib/EFR32XG24/GCC/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg24"
+  - path: "lib/EFR32XG24/IAR/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg24"
+#EFR32XG27
+  - path: "lib/EFR32XG27/GCC/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_gcc"
+      - "device_generic_family_efr32xg27"
+  - path: "lib/EFR32XG27/IAR/libbtmesh_dfu_ncp_fw_list.a"
+    condition:
+      - "toolchain_iar"
+      - "device_generic_family_efr32xg27"
+

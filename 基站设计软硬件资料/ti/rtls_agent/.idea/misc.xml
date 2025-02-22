@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="sdkName" value="ti_rtls" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="ti_rtls" project-jdk-type="Python SDK" />
+</project>

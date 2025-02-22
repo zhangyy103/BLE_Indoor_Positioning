@@ -1,0 +1,44 @@
+id: "psstore"
+label: "PSStore"
+package: "Bluetooth"
+description: >
+  PS Store data storage driver
+
+  PS Store is a Bluetooth specific NVM solution.
+category: Bluetooth|Bluetooth Host (Stack)|Features with Commands and Events
+quality: "production"
+root_path: "protocol/bluetooth"
+include: []
+source: []
+ui_hints:
+  visibility: never
+library:
+#EFR32XG1
+  - path: "lib/EFR32XG1/GCC/libpsstore.a"
+    condition: ["toolchain_gcc","device_sdid_80"]
+  - path: "lib/EFR32XG1/IAR/libpsstore.a"
+    condition: ["toolchain_iar","device_sdid_80"]
+#EFR32XG12
+  - path: "lib/EFR32XG12/GCC/libpsstore.a"
+    condition: ["toolchain_gcc","device_generic_family_efr32xg12"]
+  - path: "lib/EFR32XG12/IAR/libpsstore.a"
+    condition: ["toolchain_iar","device_generic_family_efr32xg12"]
+#EFR32XG13
+  - path: "lib/EFR32XG13/GCC/libpsstore.a"
+    condition: ["toolchain_gcc","device_generic_family_efr32xg13"]
+  - path: "lib/EFR32XG13/IAR/libpsstore.a"
+    condition: ["toolchain_iar","device_generic_family_efr32xg13"]
+#EFR32XG14
+  - path: "lib/EFR32XG14/GCC/libpsstore.a"
+    condition: ["toolchain_gcc","device_generic_family_efr32xg14"]
+  - path: "lib/EFR32XG14/IAR/libpsstore.a"
+    condition: ["toolchain_iar","device_generic_family_efr32xg14"]
+requires:
+  - name: "emlib_msc"
+provides:
+  - name: "nvm_system"
+    condition:
+      - "bluetooth_stack"
+template_contribution:
+  - name: "nvm_flash_reserve"
+    value: 4096

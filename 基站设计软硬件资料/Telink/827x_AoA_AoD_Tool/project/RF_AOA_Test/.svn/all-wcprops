@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/prj/!svn/ver/24715/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test
+END
+E4438C.lib
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/prj/!svn/ver/24449/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/E4438C.lib
+END
+AoA_Sniffer_draw_by_usb_V1.1.lua
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/prj/!svn/ver/24715/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/AoA_Sniffer_draw_by_usb_V1.1.lua
+END
+Lua_520.dll
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/prj/!svn/ver/24449/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/Lua_520.dll
+END
+cmd_interface.lua
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/prj/!svn/ver/24449/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/cmd_interface.lua
+END
+AoA_Sniffer_draw_by_sws_V1.1.lua
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/prj/!svn/ver/24715/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/AoA_Sniffer_draw_by_sws_V1.1.lua
+END
+E4438C.dll
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/prj/!svn/ver/24449/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/E4438C.dll
+END
+SMJ100A.dll
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/prj/!svn/ver/24449/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/SMJ100A.dll
+END
+FSQ8.dll
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/prj/!svn/ver/24449/release_bin_file/drivers_tools/AOA_AOD/RF_AoA_AOD/project/RF_AOA_Test/FSQ8.dll
+END

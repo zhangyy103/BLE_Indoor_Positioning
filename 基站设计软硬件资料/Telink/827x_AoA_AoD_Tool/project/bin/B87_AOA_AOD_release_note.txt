@@ -1,0 +1,64 @@
+﻿**************************************************************************
+*                                                                        *
+*                       Telink Release Note                              *
+*                                                                        *    
+*                                                                        *
+**************************************************************************
+***************************** [v0002_20210316] **************************************	
+			
+Project Name		B85m_Driver
+Src Git Path		ssh://git@192.168.48.36:src/driver/telink_B85m_driver_src.git
+					SHA-1: 88cdff81279f9e1878da711a7609b65c6ec4e9dd
+Version				v0002
+writer              zhiwei.wang
+release date		2021/04/13         
+Change List:		1、New algorithm used.
+			2、Added calculation of height information angle.
+			
+Test bin version		AOA_AOD_Test_bin_20210316_1452
+				
+***************************** [v0001] **************************************	
+			
+Project Name		vulture_Driver
+Src Git Path		git@192.168.48.36:src/driver/telink_vulture_driver_src.git
+					SHA-1: unkonwn
+Version				v0001
+writer              	bao.yi
+release date		unkonwn        
+Change List:	
+					1、Initial Version
+
+***************************** [v0002] **************************************	
+			
+Project Name		vulture_Driver
+Src Git Path		git@192.168.48.36:src/driver/telink_vulture_driver_src.git
+					SHA-1: unkonwn
+Version				v0002
+writer              	bao.yi
+release date		unkonwn        
+Change List:	
+					
+					
+					
+***************************** [v0003] **************************************
+
+Project Name		telink_B85m_driver_src
+Src Git Path		git@192.168.48.36:src/driver/telink_B85m_driver_src.git
+					SHA-1: 7729a8711b3c3fa60de7893cb80c6ea06d4d0f22
+Version				v0003
+writer              	zhiwei.wang 
+release date		2022/11/09      
+Change List:	
+					1、This Version don't support B85 chip.
+					2、This Version don't support Triangular plate
+					3、Adaptive 8 or 20bit data processing.
+					4、If you are using telink_b85m_driver_sdk V1.5.0 or earlier, you need to make the following changes：
+					data_has_amplitude[rf_aoa_aod_iq_group_number(rx_packet)*2+rx_packet[5]+6+i] = rx_packet[rf_aoa_aod_hdinfo_offset(rx_packet)+i];
+					data_no_amplitude[rf_aoa_aod_iq_group_number(rx_packet)*2+rx_packet[5]+6+i] = rx_packet[rf_aoa_aod_hdinfo_offset(rx_packet)+i];
+					to:
+					data_has_amplitude[rf_aoa_aod_iq_group_number(rx_packet)*2+rx_packet[5]+10+i] = rx_packet[rf_aoa_aod_hdinfo_offset(rx_packet)+i];
+					data_no_amplitude[rf_aoa_aod_iq_group_number(rx_packet)*2+rx_packet[5]+10+i] = rx_packet[rf_aoa_aod_hdinfo_offset(rx_packet)+i];
+					or the last two byte data capture by Tscript will be err in the raw data file.
+					
+
+					

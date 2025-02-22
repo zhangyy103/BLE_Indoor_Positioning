@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<!-- saved from url=(0141)https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Bluetooth Low Energy Angle of Arrival (AoA) for target devices</title>
+<link rel="stylesheet" href="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/ubuntu-regular-woff.css"><link rel="stylesheet" href="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/glyphicons-halflings-regular.css"><link rel="stylesheet" href="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/united2.min.css"><link rel="stylesheet" href="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/bootstrap-responsive.min.css"><link rel="stylesheet" href="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/strapdown.css"><link rel="shortcut icon" type="image/x-icon" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/.metadata/favicon.ico"></head>
+
+<!-- START PRE -->
+
+
+
+
+
+
+<!-- END PRE -->
+
+<body style=""><div class="container"><nav class="navbar navbar-default navbar-static-top"><div class="container-fluid"> <div class="navbar-header">  <div id="headline" class="navbar-brand">Bluetooth Low Energy Angle of Arrival (AoA) for target devices</div> </div> </div></nav><div class="container"><div class="row row-offcanvas row-offcanvas-left"><div class="col-xs-12 col-sm-9" id="content"><h1 class="body-heading" id="introduction"><font _mstmutation="1">Introduction</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#introduction"></a></h1><p>This module guides you in developing Angle of Arrival (AoA) Bluetooth 5.1
+compatible targets. In a localization system, the targets are the devices
+being located by the locators.</p>
+<p>It is assumed that the reader has a basic knowledge of embedded C tool chains
+and general C and Python programming concepts.
+Knowledge of the localization techniques is a plus but is not mandatory.</p>
+<p>This lab will show how to leverage the code examples and tools provided within
+the <a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK">SimpleLink CC13XX-CC26XX SDK</a> to develop and test your Bluetooth 5.1 AoA
+target.</p>
+<h1 class="body-heading" id="prerequisites"><font _mstmutation="1">Prerequisites</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#prerequisites"></a></h1><h3 class="body-heading" id="hardware-required"><font _mstmutation="1">Hardware required</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#hardware-required"></a></h3><p>This module requires two <a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1">SimpleLink™ CC26x2R LaunchPad™</a>.</p>
+<h3 class="body-heading" id="recommended-reading"><font _mstmutation="1">Recommended reading</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#recommended-reading"></a></h3><p>These chapters in the <a href="https://dev.ti.com/tirex/explore/node?node=A__AORV2P9xKyaQCr.Dunw8Rg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">TI BLE5-Stack User's Guide</a></p>
+<ul>
+<li>TI BLE5-Stack Quick Start</li>
+<li>The CC13XX or CC26XX SDK Platform</li>
+<li>Application</li>
+<li>BLE5-Stack (especially the sections dedicated to periodic advertising)</li>
+<li>RTLS Toolbox</li>
+</ul>
+<h3 class="body-heading" id="software-for-desktop-development"><font _mstmutation="1">Software for desktop development</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#software-for-desktop-development"></a></h3><ul>
+<li><a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK">SimpleLink CC13XX-CC26XX SDK</a> and those listed under the Dependencies
+section of the <a href="https://dev.ti.com/tirex/explore/node?node=A__ADMjnimJ4C5BfFnmM3X-jg__com.ti.SIMPLELINK_CC13XX_CC26XX_SDK__BSEc4rl__LATEST">CC13XX-CC26XX SDK Release Notes</a></li>
+<li>A working Python 3.7 environment with the packages required by the RTLS Node Manager</li>
+</ul>
+<p>If you are missing one of these, please read the next section. Otherwise, you can directly start the Task 1.</p>
+<h1 class="body-heading" id="install-required-software"><font _mstmutation="1">Install required Software</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#install-required-software"></a></h1><h2 class="body-heading" id="install-the-cc13xx-cc26xx-sdk"><font _mstmutation="1">Install the CC13XX / CC26XX SDK</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#install-the-cc13xx-cc26xx-sdk"></a></h2><p>The following steps will install the SDK and all its dependencies.</p>
+<ol>
+<li>Download the <a href="https://www.ti.com/tool/download/SIMPLELINK-CC13XX-CC26XX-SDK">SimpleLink CC13XX-CC26XX SDK</a></li>
+<li>Run the SimpleLink CC13XX / CC26XX SDK installer.</li>
+</ol>
+<p><font _mstmutation="1">The SDK with TI-RTOS included is installed at 
+which defaults to .</font><code>&lt;SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR&gt;</code><code>C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx</code></p>
+<h2 class="body-heading" id="install-python-3-7"><font _mstmutation="1">Install Python 3.7</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#install-python-3-7"></a></h2><p>The following steps will install Python 3.7 and all the packages required by the
+RTLS Node Manager.</p>
+<ol>
+<li>Install Python <strong>3.7</strong> from the <a href="https://www.python.org/downloads/release/python-3710/">Python Download page</a>.</li>
+<li>Setup the Python environment as described in the README.md in
+<strong>&lt;SimpleLink CC13XX / CC26XX SDK&gt; → tools → ble5stack → rtls_agent</strong> folder.</li>
+<li>If a bash environment doesn't exist on your system, install <a href="https://git-scm.com/downloads">Git bash</a></li>
+</ol>
+<h1 class="body-heading" id="task-0-ndash-goals-setting"><font _mstmutation="1">Task 0 – Goals setting</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-0-ndash-goals-setting"></a></h1><p>Let's take a moment to understand what we need to do.</p>
+<p>The goal is to enable a device to be located using Bluetooth 5.1
+Angle of Arrival (AoA). This device will then be called <em>target</em>.
+For this lab, the <em>locator</em> - i.e. the device locating the <em>target</em> - will
+be considered as already implemented.</p>
+<p>Bluetooth 5.1 AoA requests the target to send out packet with an appended
+<strong>Constant Tone Extension (CTE)</strong>. The constant tone extension is a section
+of consecutive 1's without whitening. In the Bluetooth Core Specification
+Version 5.1, both connection packets and periodic advertising packets can
+contain a constant tone extension (CTE) after the CRC. 
+When CTEs are appended to connection packets, we talk about <em>connection AoA</em>.
+When CTEs are appended to periodic advertising packets, we talk about
+<em>connectionless AoA</em>.</p>
+<p>In this lab, we will enable the target to be localizable both using
+connection and connectionless AoA. It means we will enable the target
+to append CTEs to connection packets and to periodic advertising packets.</p>
+<h1 class="body-heading" id="task-1-ndash-load-the-rtls_responder-example"><font _mstmutation="1">Task 1 – Load the  example</font><code>rtls_responder</code><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-1-ndash-load-the-rtls_responder-example"></a></h1><p><font _mstmutation="1">The  project available in &lt;SimpleLink CC13XX / CC26XX SDK&gt;
+→ examples → rtos → CC26X2R1_LAUNCHXL → ble5stack →
+rtls_responder can be directly leveraged.</font><code>rtls_responder</code></p>
+<ol>
+<li>Open CCS.</li>
+<li><font _mstmutation="1">Import the  project.</font><code>rtls_responder</code></li>
+<li>Build the project.</li>
+<li>Flash the project on the
+<a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1">CC26x2R LaunchPad™</a>.</li>
+</ol>
+<p>You're done! The target is now configured to be localizable both in connection and
+connectionless mode.</p>
+<ul>
+<li>when in a connection, the target can answer the requests of the central device
+(acting as a locator) requiring to append a CTE to the connection packets.</li>
+<li>the target is sending out periodic advertisements with appended CTE. If a device
+ (locator) synchronize with these it will then be able to locate the target.</li>
+</ul>
+<h1 class="body-heading" id="task-2-ndash-test-the-target"><font _mstmutation="1">Task 2 – Test the target</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-2-ndash-test-the-target"></a></h1><p>In this task we will verify if the target appends CTEs to the proper Bluetooth
+LE packets.</p>
+<ul>
+<li>For connection AoA, we should verify if the CTEs are appended to the
+ connection packets after the central device (i.e. locator) requests it.</li>
+<li>For connectionless AoA, we should verify if the target sends out periodic
+ advertisements with appended CTEs.</li>
+</ul>
+<p><font _mstmutation="1">To run these tests, we are going to leverage tools provided within the
+CC13XX / CC26XX SDK, especially the RTLS python scripts. These scripts require
+to attach a device flashed with the  example to the
+computer to run properly - the way to do this is described in <em _mstmutation="1">Step 1</em>.
+<em _mstmutation="1">Step 2</em> describes how to run the python scripts. <em _mstmutation="1">Step 3</em> shows how to
+interpret the results.</font><code>rtls_coordinator</code></p>
+<h2 class="body-heading" id="step-1-ndash-setup-the-rtls_coordinator-"><font _mstmutation="1">Step 1 – Setup the </font><code>rtls_coordinator</code><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#step-1-ndash-setup-the-rtls_coordinator-"></a></h2><p><font _mstmutation="1">The  project available in &lt;SimpleLink CC13XX / CC26XX SDK&gt;
+→ examples → rtos → CC26X2R1_LAUNCHXL → ble5stack →
+rtls_coordinator can be directly leveraged.</font><code>rtls_coordinator</code></p>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Remark
+</span></h4>
+<p><font _mstmutation="1">For these tests we only want to verify if the CTEs are sent by the target.
+We will not attempt to calculate an angle based on these.
+As a result, there is no need to have several antennas attached to the
+ - even if it would not hurt.</font><code>rtls_coordinator</code></p>
+<p><font _mstmutation="1">→ In other words, for these tests, the  should be flashed on
+an unmodified <a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1" _mstmutation="1">CC26x2R LaunchPad™</a>.</font><code>rtls_coordinator</code></p>
+</div>
+<ol>
+<li>Open CCS.</li>
+<li><font _mstmutation="1">Import the  project.</font><code>rtls_coordinator</code></li>
+<li>Build the project.</li>
+<li>Flash the project on the second
+<a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1">CC26x2R LaunchPad™</a>.</li>
+<li>Reset the device (by pressing the reset button on the launchpad)</li>
+</ol>
+<p><font _mstmutation="1">By default, the  project supports both connection and
+connectionless AoA.</font><code>rtls_coordinator</code></p>
+<h2 class="body-heading" id="step-2-ndash-run-the-python-scripts"><font _mstmutation="1">Step 2 – Run the python scripts</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#step-2-ndash-run-the-python-scripts"></a></h2><div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">How to find the COM port used by the rtls_coordinator?
+</span></h4>
+<ol>
+<li><font _mstmutation="1">Un-plug all the launchpads attached to the computer expect the
+one flashed with the  example.</font><code>rtls_coordinator</code></li>
+<li>Open the <em>Device Manager</em></li>
+<li><font _mstmutation="1">Review the menu "Ports COM &amp; LPT" to find the COM port used
+by the <em _mstmutation="1">Application/User UART</em>.
+</font><div class="modal-pop" style="cursor:zoom-in;"><img src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/find_com_port.png" alt="Here COM27 should be used to communicate with the Launchpad" class="img-responsive" _mstalt="2128464"></div></li>
+</ol>
+</div>
+<h3 class="body-heading" id="for-connection-aoa"><font _mstmutation="1">For connection AoA</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#for-connection-aoa"></a></h3><ol>
+<li>Open the file &lt;SimpleLink CC13XX / CC26XX SDK&gt; → tools → ble5stack
+→ rtls_agent  → examples → rtls_connected.py with a text editor.</li>
+<li><p><font _mstmutation="1">Modify the COM port used for the </font><code>rtls_coordinator</code></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_1&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_1" class="lang-python hljs">coordinator_comport=<span class="hljs-string">"COM27"</span>,
+</code></pre></div></div>
+</li>
+<li>Save the changes and close the file.</li>
+<li><p>Open a terminal. Move to the directory &lt;SimpleLink CC13XX / CC26XX SDK&gt;
+→ tools → ble5stack → rtls_agent → examples.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_2&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_2" class="lang-bash hljs"><span class="hljs-built_in">cd</span> &lt;rtls_agent folder&gt;/examples
+</code></pre></div></div>
+</li>
+<li><p><font _mstmutation="1">Run the python script named </font><code>rtls_connected.py</code></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_3&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_3" class="lang-bash hljs">c:\Python37\python.exe rtls_connected.py
+</code></pre></div></div>
+</li>
+</ol>
+<p><font _mstmutation="1">The script will let the  and the  form
+a connection. Once the connection formed, the  asks the
+ to append a CTE to some connection packets. If the CTE is
+properly appended, the  reports IQ data (extracted from the
+CTE). Here are ways to verify if the  reports IQ data (i.e. if
+the  properly appends a CTE to the connection packets).</font><code>rtls_coordinator</code><code>rtls_responder</code><code>rtls_coordinator</code><code>rtls_responder</code><code>rtls_coordinator</code><code>rtls_coordinator</code><code>rtls_responder</code></p>
+<ul>
+<li><p>In the console, the python script displays messages telling you some IQ data
+is available.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_4&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_4" class="lang-text">[10:27:2022 10:02:54:421870] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\b   le5stack\rtls_agent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+[10:27:2022 10:02:54:786872] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\b   le5stack\rtls_agent\examples\rtls_connected_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+</code></pre></div></div>
+</li>
+<li><p>The Python script creates a log file and a .csv file containing the IQ data. 
+By default, these files are stored in &lt;SimpleLink CC13XX / CC26XX SDK&gt;
+→ tools → ble5stack → rtls_agent  → examples → 
+rtls_connected_log and are named after the date and time the script get
+executed.</p>
+<ul>
+<li><p>Here how the .csv file should looks like</p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/i_q_data_csv.png" alt="Content of the .csv" class="img-responsive" _mstalt="309881"></div><p></p>
+</li>
+<li><p><font _mstmutation="1">Here are a line in the log file showing the 
+reports some IQ data</font><code>rtls_coordinator</code></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_5&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_5" class="lang-text">[2022-10-27 10:02:53,798]      root -     INFO - COORDINATOR  : 80:6F:B0:1E:55:F7 --&gt; {'type': 'Event', 'command': 'RTLS_CMD_AOA_RESULT_RAW', 'payload': {'connHandle': 0, 'rssi': -36, 'antenna': 1, 'channel': 24, 'offset': 0, 'samplesLength': 45, 'samples': [{'i': 35, 'q': -99}, {'i': 97, 'q': 43}, {'i': -45, 'q': 98}, {'i': -95, 'q': -51}, {'i': 55, 'q': -90}, {'i': 86, 'q': 62}, {'i': -63, 'q': 89}, {'i': -91, 'q': -57}, {'i': -83, 'q': -68}, {'i': -66, 'q': -83}, {'i': -51, 'q': -94}, {'i': -31, 'q': -103}, {'i': -30, 'q': -102}, {'i': -11, 'q': -108}, {'i': 8, 'q': -106}, {'i': 17, 'q': -106}, {'i': 38, 'q': -98}, {'i': 53, 'q': -91}, {'i': 64, 'q': -87}, {'i': 66, 'q': -83}, {'i': 81, 'q': -71}, {'i': 93, 'q': -50}, {'i': 97, 'q': -41}, {'i': 104, 'q': -25}, {'i': 107, 'q': -8}, {'i': 107, 'q': 5}, {'i': 104, 'q': 18}, {'i': 97, 'q': 47}, {'i': 94, 'q': 53}, {'i': 80, 'q': 71}, {'i': 77, 'q': 74}, {'i': 66, 'q': 86}]}}
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+</ul>
+<h3 class="body-heading" id="for-connectionles-aoa"><font _mstmutation="1">For connectionles AoA</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#for-connectionles-aoa"></a></h3><ol>
+<li>Open the file &lt;SimpleLink CC13XX / CC26XX SDK&gt; → tools → ble5stack
+→ rtls_agent  → examples → rtls_connectionless.py with a text editor.</li>
+<li><p><font _mstmutation="1">Modify the COM port used for the </font><code>rtls_coordinator</code></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_6&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_6" class="lang-python hljs">coordinator_comport=<span class="hljs-string">"COM27"</span>,
+</code></pre></div></div>
+</li>
+<li>Save the changes and close the file.</li>
+<li><p>Open a terminal. Move to the directory &lt;SimpleLink CC13XX / CC26XX SDK&gt;
+→ tools → ble5stack → rtls_agent → examples.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_7&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_7" class="lang-bash hljs"><span class="hljs-built_in">cd</span> &lt;rtls_agent folder&gt;/examples
+</code></pre></div></div>
+</li>
+<li><p><font _mstmutation="1">Run the python script named </font><code>rtls_connectionless.py</code></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_8&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_8" class="lang-bash hljs">c:\Python37\python.exe rtls_connectionless.py
+</code></pre></div></div>
+</li>
+</ol>
+<p><font _mstmutation="1">The script will let the  synchronize with the periodic
+advertisements sent by the . Once the synchronization
+established the  samples the CTE appended to the
+periodic advertisement packets and report the IQ data.
+No IQ data is reported if the  does not send out
+periodic advertisement or if these are not appended with a CTE.
+Here are ways to verify if the  reports IQ data.</font><code>rtls_coordinator</code><code>rtls_responder</code><code>rtls_coordinator</code><code>rtls_responder</code><code>rtls_coordinator</code></p>
+<ul>
+<li><p>In the console, the python script displays messages telling you some IQ data
+is available.</p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_9&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_9" class="lang-text">[10:27:2022 09:57:17:289245] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+[10:27:2022 09:57:17:524198] : Added new set of IQ into C:\ti\simplelink_cc13xx_cc26xx_sdk_x_xx_xx_xx\tools\ble5stack\rtls_agent\examples\rtls_connectionless_log\rtls_raw_iq_samples_806fb01e55f7_0_loop1.csv
+</code></pre></div></div>
+</li>
+<li><p>The Python script creates a log file and a .csv file containing the IQ data. 
+By default, these files are stored in &lt;SimpleLink CC13XX / CC26XX SDK&gt;
+→ tools → ble5stack → rtls_agent  → examples → 
+rtls_connectionless_log and are named after the date and time the script get
+executed.</p>
+<ul>
+<li><p>Here how the .csv file should looks like</p>
+<p></p><div class="modal-pop" style="cursor:zoom-in;"><img src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/i_q_data_csv.png" alt="Content of the .csv" class="img-responsive" _mstalt="309881"></div><p></p>
+</li>
+<li><p><font _mstmutation="1">Here are a line in the log file showing the 
+reports some IQ data</font><code>rtls_coordinator</code></p>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_10&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_10" class="lang-text">[2022-10-27 09:57:17,134]      root -     INFO - COORDINATOR  : 80:6F:B0:1E:55:F7 --&gt; {'type': 'Event', 'command': 'RTLS_CMD_CL_AOA_RESULT_RAW', 'payload': {'syncHandle': 0, 'rssi': -35, 'antenna': 1, 'channel': 17, 'offset': 0, 'samplesLength': 45, 'samples': [{'i': 122, 'q': -17}, {'i': 19, 'q': 119}, {'i': -119, 'q': 5}, {'i': 11, 'q': -120}, {'i': 121, 'q': 22}, {'i': -26, 'q': 117}, {'i': -113, 'q': -37}, {'i': 46, 'q': -111}, {'i': 59, 'q': -102}, {'i': 93, 'q': -75}, {'i': 106, 'q': -54}, {'i': 120, 'q': -10}, {'i': 118, 'q': 20}, {'i': 106, 'q': 56}, {'i': 85, 'q': 84}, {'i': 62, 'q': 103}, {'i': 25, 'q': 118}, {'i': 2, 'q': 122}, {'i': -42, 'q': 115}, {'i': -60, 'q': 104}, {'i': -96, 'q': 73}, {'i': -114, 'q': 41}, {'i': -121, 'q': 6}, {'i': -115, 'q': -30}, {'i': -103, 'q': -60}, {'i': -87, 'q': -84}, {'i': -64, 'q': -100}, {'i': -32, 'q': -112}, {'i': 4, 'q': -116}, {'i': 43, 'q': -109}, {'i': 63, 'q': -100}, {'i': 98, 'q': -65}]}}
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+</ul>
+<div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Is that all?
+</span></h4>
+<p>Yes! Here we have verified the CTEs are sent when expected.
+The quality of the CTEs (frequency, stability, etc.) has been verified through
+the RF-PHY tests of the Bluetooth certification (see
+<a href="https://www.ti.com/ble-qualification">here</a> and
+<a href="https://launchstudio.bluetooth.com/ListingDetails/127623">here</a>).
+If you follow TI's guidelines for
+<a href="https://www.ti.com/lit/swra640">Hardware Configuration and PCB Design</a> this
+should not be a concern for you.</p>
+</div>
+<h1 class="body-heading" id="task-3-ndash-use-the-lpstk-cc1352r-as-target"><font _mstmutation="1">Task 3 – Use the LPSTK-CC1352R as target</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-3-ndash-use-the-lpstk-cc1352r-as-target"></a></h1><div class="bs-callout bs-callout-info "><h4><span class="glyphicon glyphicon-info-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">Note
+</span></h4>
+<p>This task is not mandatory. You can skip it if you prefer continuing using the
+<a href="https://www.ti.com/tool/LAUNCHXL-CC26X2R1">CC26x2R LaunchPad™</a>.</p>
+</div>
+<p>The steps below are for CCS IDE with CCS compiler.</p>
+<ol>
+<li><p><font _mstmutation="1">In your SDK, copy-paste the folder 
+ to
+.</font><code>&lt;SDK&gt;\examples\rtos\CC26X2R1_LAUNCHXL\ble5stack\rtls_responder</code><code>&lt;SDK&gt;\examples\rtos\CC1352R1_LAUNCHXL\ble5stack\rtls_responder</code></p>
+</li>
+<li><p><font _mstmutation="1">In the file
+,
+replace "-DDeviceFamily_CCCC26X2" by "-DDeviceFamily_CC13X2".</font><code>&lt;SDK&gt;\examples\rtos\CC1352R1_LAUNCHXL\ble5stack\rtls_responder\Tools\Defines\rtls_responder_app.opt</code></p>
+</li>
+<li><p><font _mstmutation="1">In 
+rename the file  into
+</font><code>&lt;SDK&gt;\examples\rtos\CC1352R1_LAUNCHXL\ble5stack\rtls_responder\tirtos7\ticlang</code><code>rtls_responder_CC26X2R1_LAUNCHXL_tirtos7_ticlang.projectspec</code><code>rtls_responder_CC1352R1_LAUNCHXL_tirtos7_ticlang.projectspec</code></p>
+</li>
+<li><p>Modify the file rtls_responder_CC1352R1_LAUNCHXL_tirtos7_ticlang.projectspec.
+The goal is to replace all the references to CC26x2 files by references
+to CC13x2 files</p>
+<ul>
+<li>Find all the occurrences of  "CC26X2R1_LAUNCHXL", replace by "CC1352R1_LAUNCHXL"</li>
+<li>Find all the occurrences of  "/cc26x2r1/", replace by "/cc13x2r1/"</li>
+<li>Find all the occurrences of  "_cc26x2.a", replace by "_cc13x2.a"</li>
+<li>Find "-DDeviceFamily_CC26X2", replace by "-DDeviceFamily_CC13X2"</li>
+</ul>
+</li>
+<li><p>Open CCS.</p>
+</li>
+<li><p><font _mstmutation="1">Import the  project from<br _mstmutation="1">. 
+Select the project using TICLANG compiler.</font><code>rtls_responder</code><code>&lt;SDK&gt;\examples\rtos\CC1352R1_LAUNCHXL\ble5stack\rtls_responder</code></p>
+</li>
+<li><p>Open the file rtls_responder.syscfg (using SysConfig)</p>
+</li>
+<li><p>In SysConfig, open the "device view".
+</p><div class="modal-pop" style="cursor:zoom-in;"><img src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/RTLS_on_LPSTK_step1.png" alt="In SysConfig, open the &quot;device view&quot;" class="img-responsive" _mstalt="865254"></div><p></p>
+</li>
+<li><p>Click on the button "Switch". A new window will appear. 
+Select the board you are using (LPSTK-CC1352R Sensors).
+</p><div class="modal-pop" style="cursor:zoom-in;"><img src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/RTLS_on_LPSTK_step2.png" alt="Select the LPSTK-CC1352R Sensors board" class="img-responsive" _mstalt="946270"></div><p></p>
+</li>
+<li><p>Confirm your choice and let SysConfig running.</p>
+</li>
+<li><p>Review the eventual errors raised by SysConfig
+</p><div class="modal-pop" style="cursor:zoom-in;"><img src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/RTLS_on_LPSTK_step3.png" alt="Review the eventual errors raised by SysConfig" class="img-responsive" _mstalt="1459679"></div><font _mstmutation="1">
+Here the error is due to an error in the device selection (here again it should be
+"LPSTK-CC1352R1"). Modify this!</font><p></p>
+</li>
+<li><p>When all the errors are cleared, save and close the file.</p>
+</li>
+<li><p>Build the project. The project should build without any warning or error.</p>
+</li>
+<li><p>Now, connect your LPSTK-CC1352R and flash the device. More guidance on the
+way to do this is provided <a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/lpstk/lpstk_oobe/lpstk_oobe.html#-debugging-the-launchpad-sensortag-">here</a>.</p>
+</li>
+</ol>
+<div class="panel-group">
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle collapsed" data-toggle="collapse" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#expandable_-here-is-the-hex-file-to-flash-on-the-lpstk-cc1352r-"><p> Here is the Hex file to flash on the LPSTK-CC1352R</p>
+</a>
+      </h4>
+    </div>
+    <div id="expandable_-here-is-the-hex-file-to-flash-on-the-lpstk-cc1352r-" class="panel-collapse collapse">
+      <div class="panel-body"><p>The folowing hex file can be flashed on the <a href="https://www.ti.com/tool/LPSTK-CC1352R">LPSTK-CC1352R</a>.
+<a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/resources/rtls_responder_CC1352R1_LAUNCHXL_SDK_5_30_tirtos_ccs.hex">rtls_responder_CC1352R1_LAUNCHXL_SDK_5_30_tirtos_ccs.hex</a>.
+<em>Right click on the file &gt; Save Link As</em></p>
+<p>You can use <a href="https://www.ti.com/tool/FLASH-PROGRAMMER">FLASH-PROGRAMMER-2</a> to flash it on the device.</p>
+<p>Note: This hex file has not been fully tested and should not be used in production.</p>
+</div>
+    </div>
+  </div>
+</div><h1 class="body-heading" id="task-4-ndash-disable-unwanted-aoa-mode"><font _mstmutation="1">Task 4 – Disable unwanted AoA mode</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-4-ndash-disable-unwanted-aoa-mode"></a></h1><p>So far, both connection and connectionless AoA are enabled.
+In general, both are not required so it might be interesting
+to disable one or the other.</p>
+<h2 class="body-heading" id="disable-connection-aoa"><font _mstmutation="1">Disable connection-AoA</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#disable-connection-aoa"></a></h2><h3 class="body-heading" id="option-1"><font _mstmutation="1">Option 1</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#option-1"></a></h3><p><font _mstmutation="1">Connection AoA can be disabled by not joining any connection
+(i.e. by not enabling any connectable advertisement).
+By default, the handle  is used for the
+connectable advertisement.</font><code>advHandleLegacy</code></p>
+<ol>
+<li>In CCS, in the rtls_responder project, open the file
+rtls_responder.c.</li>
+<li><font _mstmutation="1">Comment out all the occurences of .</font><code>GapAdv_enable(advHandleLegacy</code></li>
+<li>Save, build the code and flash the device.</li>
+</ol>
+<p><em>The solution suggested here is the one requiring the less work, but</em>
+<em>maybe not the one leading to the most optimized code.</em>
+<em>If the advertisement corresponding to the <code>advHandleLegacy</code></em>
+<em>is never used, all the code refering to it could be commented out.</em></p>
+<h3 class="body-heading" id="option-2"><font _mstmutation="1">Option 2</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#option-2"></a></h3><p>Connection AoA can be disabled by not appending CTE to the
+connection packets even if the other device requires it.
+Here how to proceed.</p>
+<ol>
+<li>In CCS, in the rtls_responder project, open the file
+rtls_responder.c.</li>
+<li><font _mstmutation="1">Find the line 
+This line enables the BLE stack to append a CTE to the connection
+packets when the connected device requires it.</font><code>RTLSSrv_setConnCteResponseEnableCmd(pPkt-&gt;connectionHandle, TRUE);</code></li>
+<li><font _mstmutation="1">Replace the line by </font><code>RTLSSrv_setConnCteResponseEnableCmd(pPkt-&gt;connectionHandle, FALSE);</code></li>
+<li>Save, build the code and flash the device.</li>
+</ol>
+<h2 class="body-heading" id="disable-connectionless-aoa"><font _mstmutation="1">Disable connectionless AoA</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#disable-connectionless-aoa"></a></h2><p><font _mstmutation="1">Connectionless AoA can be completely disabled by not sending out the periodic
+advertisements.
+This can be done by removing the line  in the file
+. Here are the detailed steps:</font><code>-DUSE_PERIODIC_ADV</code><code>rtls_responder_app.opt</code></p>
+<ol>
+<li>In CCS, in the rtls_responder project, open the file Tools →
+Defines → rtls_responder_app.opt</li>
+<li><font _mstmutation="1">In this file, find and remove the line </font><code>-DUSE_PERIODIC_ADV</code></li>
+<li>Save and close the file.</li>
+<li>Right click on the project and click "Rebuild All"</li>
+<li>Once done, re-flash the device.</li>
+</ol>
+<h1 class="body-heading" id="bonus-ndash-to-go-further-"><font _mstmutation="1">Bonus – To go further...</font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#bonus-ndash-to-go-further-"></a></h1><h2 class="body-heading" id="change-the-channel-map-connectionless-aoa-"><font _mstmutation="1">Change the channel map (connectionless AoA) </font><a class="anchor-link glyphicon glyphicon-link" aria-hidden="true" href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#change-the-channel-map-connectionless-aoa-"></a></h2><p>For connectionless AoA, CTE are appended to periodic advertising sent
+on the secondary channel (0-37).
+Channel map modification can help to avoid transmission on the busiest channels.
+It can also help estimation algorithms fine tuning.</p>
+<p>The function <a href="https://software-dl.ti.com/simplelink/esd/simplelink_cc13xx_cc26xx_sdk/6.40.00.13/exports/docs/ble5stack/ble_user_guide/doxygen/ble/html/group___h_c_i.html#ga41200c44c2cb5cd7ce482fa3a7810e91">HCI_LE_SetHostChanClassificationCmd</a>
+is used to do so.</p>
+<div class="bs-callout bs-callout-warning "><h4><span style="vertical-align: middle;">Note
+</span></h4>
+<p>Per specifications, the minimum of used channels shall be 2.</p>
+</div>
+<div style="display:inline-block"><div style="display:block"><button type="button" class="btn btn-xs btn-warning float-right select-text" style="margin: 0; position: relative;" onclick="SelectText(&#39;codeBlock_11&#39;)">Select text</button></div><div class="pre-container"><pre><code id="codeBlock_11" class="lang-c hljs cpp">      <span class="hljs-keyword">static</span> chanMap_t chanMap;
+
+      chanMap.chanMap[<span class="hljs-number">0</span>] = <span class="hljs-number">0x03</span>; <span class="hljs-comment">// Channels 0 and 1</span>
+      chanMap.chanMap[<span class="hljs-number">1</span>] = <span class="hljs-number">0x00</span>;
+      chanMap.chanMap[<span class="hljs-number">2</span>] = <span class="hljs-number">0x00</span>;
+      chanMap.chanMap[<span class="hljs-number">3</span>] = <span class="hljs-number">0x00</span>;
+      chanMap.chanMap[<span class="hljs-number">4</span>] = <span class="hljs-number">0x00</span>;
+      HCI_LE_SetHostChanClassificationCmd(chanMap.chanMap);
+</code></pre></div></div>
+<div class="bs-callout bs-callout-success "><h4><span class="glyphicon glyphicon-ok-sign gi-2x" style="vertical-align: middle; margin-right: 0.2em;"></span><span style="vertical-align: middle;">That's all folks!
+</span></h4>
+<p>You earned a coffee ☕. <br>
+Now go off and make something <em>awesome</em> with Angle Of Arrival!</p>
+</div>
+<!-- Actual references -->
+<div align="center" style="margin-top: 4em; font-size: smaller;">
+<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/cc_license_icon.png" _mstalt="517985"></a><br><font _mstmutation="1">This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" _mstmutation="1">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.</font></div>
+
+</div><div class="col-xs-4 col-sm-2 sidebar-offcanvas bs-docs-sidebar hidden-print" id="sidebar-overview"><ul class="nav nav-stacked fixed" id="sidebar"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#introduction">Introduction</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#prerequisites">Prerequisites</a><ul class="nav nav-stacked"><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#hardware-required">Hardware required</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#recommended-reading">Recommended reading</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#software-for-desktop-development">Software for desktop development</a></li></ul></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#install-required-software">Install required Software</a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#install-the-cc13xx-cc26xx-sdk">Install the CC13XX / CC26XX SDK</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#install-python-3-7">Install Python 3.7</a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-0-ndash-goals-setting">Task 0 – Goals setting</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-1-ndash-load-the-rtls_responder-example">Task 1 – Load the rtls_responder example</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-2-ndash-test-the-target">Task 2 – Test the target</a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#step-1-ndash-setup-the-rtls_coordinator-">Step 1 – Setup the rtls_coordinator</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#step-2-ndash-run-the-python-scripts">Step 2 – Run the python scripts</a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#for-connection-aoa">For connection AoA</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#for-connectionles-aoa">For connectionles AoA</a></li></ul></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-3-ndash-use-the-lpstk-cc1352r-as-target">Task 3 – Use the LPSTK-CC1352R as target</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#task-4-ndash-disable-unwanted-aoa-mode">Task 4 – Disable unwanted AoA mode</a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#disable-connection-aoa">Disable connection-AoA</a><ul class="nav nav-stacked"><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#option-1">Option 1</a></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#option-2">Option 2</a></li></ul></li><li class=""><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#disable-connectionless-aoa">Disable connectionless AoA</a></li></ul></li><li class="active"><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#bonus-ndash-to-go-further-">Bonus – To go further...</a><ul class="nav nav-stacked"><li class="active"><a href="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html#change-the-channel-map-connectionless-aoa-">Change the channel map (connectionless AoA) </a></li></ul></li></ul></div></div></div></div>
+
+<link rel="stylesheet" href="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/zenburn.css">
+<script src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/jquery-1.11.2.min.js.下载"></script>
+<script src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/bootstrap.min.js.下载"></script>
+<script src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/highlight.pack.js.下载"></script>
+<script type="text/javascript">document.isPreRendered = true;</script><script src="./Bluetooth Low Energy Angle of Arrival (AoA) for target devices_files/strapdown.js.下载"></script>      <div class="modal" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">        <div class="vertical-alignment-helper">          <div class="modal-dialog vertical-align-center">             <div class="modal-dialog">               <div class="modal-content" style="margin-left: auto;margin-right: auto;">                 <div class="modal-body">                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>                   <img src="https://dev.ti.com/tirex/explore/content/simplelink_academy_cc13xx_cc26xxsdk_6_40_00_00/modules/rtls_toolbox_ble5/ble_aoa/ble_aoa_target.html" class="imagepreview img-responsive">                 </div>              </div>            </div>          </div>        </div>      </div>
+
+
+</body></html>
