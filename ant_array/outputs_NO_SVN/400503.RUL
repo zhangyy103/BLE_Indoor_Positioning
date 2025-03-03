@@ -1,0 +1,16 @@
+DRC Rules Export File for PCB: D:\project\BLE_Indoor_Positioning\基站设计软硬件资料\Nordic Semiconductor\PCA20054-Direction Finding Antenna Board 1_0_0\PCA20054-Direction Finding Antenna Board 1_0_0\Altium Designer files\400503.PcbDoc
+RuleKind=Clearance|RuleName=Clearance_1|Scope=Board|Minimum=19.69
+RuleKind=Width|RuleName=Pow|Scope=Board|Minimum=3.94
+RuleKind=Width|RuleName=Antenna|Scope=Board|Minimum=3.94
+RuleKind=MinimumAnnularRing|RuleName=MinimumAnnularRing|Scope=Board|Minimum=6.00
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=1.97
+RuleKind=Width|RuleName=Standard|Scope=Board|Minimum=3.94
+RuleKind=Clearance|RuleName=SB_Clearance|Scope=Board|Minimum=5.00
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=Clearance|RuleName=Polygon_Clearance|Scope=Board|Minimum=9.84
+RuleKind=Clearance|RuleName=ANT_Clerance|Scope=Board|Minimum=5.91
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=5.91
+RuleKind=Clearance|RuleName=USB_Poly_Clearance|Scope=Board|Minimum=10.00
+RuleKind=Clearance|RuleName=CSP_Clearance|Scope=Board|Minimum=5.00
+RuleKind=Clearance|RuleName=USB_Clearance|Scope=Board|Minimum=6.00
+RuleKind=Clearance|RuleName=P23_Clearance|Scope=Board|Minimum=5.00
