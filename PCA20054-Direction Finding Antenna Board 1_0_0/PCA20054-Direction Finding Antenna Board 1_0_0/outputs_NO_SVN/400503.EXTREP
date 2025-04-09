@@ -1,0 +1,36 @@
+------------------------------------------------------------------------------------------
+Gerber File Extension Report For: 400503.GBR   2025/3/3  12:30:02
+------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------
+Layer Extension     Layer Description                      
+------------------------------------------------------------------------------------------
+.gbr                Top Overlay                             
+.gbr                Top Paste                               
+.gbr                Top Solder                              
+.gbr                Top Layer                               
+.gbr                Mid-Layer 1                             
+.gbr                Mid-Layer 2                             
+.gbr                Bottom Layer                            
+.gbr                Bottom Solder                           
+.gbr                Bottom Paste                            
+.gbr                Bottom Overlay                          
+.gbr                Outline                                 
+.gbr                Mechanical 2                            
+.gbr                Mechanical 3                            
+.gbr                Mechanical_input                        
+.gbr                Assembly Top                            
+.gbr                Mechanical 7                            
+.gbr                Mechanical 8                            
+.gbr                Assembly Bottom                         
+.gbr                3D Body Top                             
+.gbr                Mechanical 13                           
+.gbr                Mechanical 15                           
+.gbr                Keep-Out Layer                          
+.gbr                Top Pad Master                          
+.gbr                Bottom Pad Master                       
+.gbr                Drill Drawing                           
+.gbr                Drill Guide                             
+.gbr                Profile                                 
+------------------------------------------------------------------------------------------
