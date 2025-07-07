@@ -37,10 +37,12 @@ if iq_samples.size == 0:
 
 # 数据归一化（幅度归一化）
 amplitudes, phases = calculate_amplitude_and_phase(iq_samples)
-normalized_iq_samples = iq_samples / amplitudes[:, None]
+print(amplitudes)
+print(phases)
+normalized_iq_samples = iq_samples
 
 # 可视化：归一化后的散点图
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 10))
 plt.scatter(normalized_iq_samples[:, 0], normalized_iq_samples[:, 1], alpha=0.6, label="Normalized IQ Points")
 plt.title("Normalized IQ Samples Scatter Plot")
 plt.xlabel("I (In-phase)")
